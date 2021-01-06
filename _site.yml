@@ -1,0 +1,33 @@
+name: Data Visualization in R
+output_dir: '.'
+navbar:
+  title: Data Visualization in R
+  left:
+  - text: Welcome
+    href: index.html
+  - text: Introduction to R
+    menu:
+    - text: Introduction to R
+      href: APS2018_Tidyverse.html
+  - text: Networks in R
+    menu:
+    - text: Networks in R
+      href: Describing_Networks.html
+    - text: Epidemic Networks
+      href: EpidemicNetworks.html
+    - text: Microbiome Networks 
+      href: Microbiome_network_ICPP2018_v2.html
+  - text: Additional Resources
+    menu:
+    - text: Resources
+      href: Resources.html
+output:
+  html_document:
+    theme: flatly
+    highlight: monochrome
+    css: styles.css
+    toc: yes
+    toc_float: yes
+    lib_dir: site_libs
+    self_contained: no
+
