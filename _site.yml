@@ -16,7 +16,7 @@ navbar:
     - text: Plot types
       href: 
     - text: Combining plots and saving
-      href: Microbiome_network_ICPP2018_v2.html
+      href: 
   - text: Network graphs
     menu:
     - text: Resources
