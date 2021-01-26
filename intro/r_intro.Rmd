@@ -1,0 +1,328 @@
+---
+title: "R intro!"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Things to note: Everything can be done in a number of ways - we are
+showing only one way here.
+
+data frame is a list
+
+
+
+## Why R?
+
+-   **Performance**: stable, light and fast
+
+-   **Support network**: documentation, community, developers
+
+-   **Reproducibility**: anyone anywhere can reproduce results
+
+-   **Versatility**: unified solution to *almost* any numerical problem and 
+    graphical capabilities
+
+-   **Ethics**: open source, removes economic barrier to data analysis
+
+<http://www.r-project.org/>
+
+R console is basic...
+
+```{r R, echo=FALSE,purl = FALSE}
+knitr::include_graphics("img/R.png")
+```
+
+### RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
+
+-   Integrated Development Environment (IDE) for R
+-   Separate program, developed by a company but also free and open source.
+-   By far the best thing to use when learning R.
+
+#### RStudio orientation
+
+Four panes (positions can be changed)
+
+-   Scripts (top-left)
+-   R console (bottom-left)
+-   Environment/history (top-right)
+-   Files/plots/help/etc (bottom-right)
+
+```{r IDE, echo=FALSE,purl = FALSE}
+knitr::include_graphics("img/RStudio-console.png")
+```
+
+### RStudio Projects
+
+Projects in RStudio create a folder for storing all of our files (data,
+scripts, images)\
+Eliminates the need for setting our working directory with setwd()\
+It is useful to created individual folders within the project for
+storing data, scripts, images, etc.\
+When you want to open your project to a new computer, just copy this
+entire folder onto the new machine
+
+### Getting help
+
+Help:
+* **Google**: just add "with R" at the end of any search
+* **Stack Overflow**: programming questions
+* **Cross Validated**: scientific questions  
+
+Learning:
+* "R for Data Science" → <https://r4ds.had.co.nz>
+* R4DS Learning Community → <https://rfordatasci.com>
+
+
+## Basic concepts
+
+In R, We have  *objects*, where the data is stored.  
+*Functions* are applied on these objects to analyze the data.  
+We create scripts which are like kitchen recipes.  
+This collection of recipes stored in an R project.
+
+### Objects
+
+We can assign values to objects using the assignment operator, and use R
+to do useful things: You may come across code that assigns values using
+= instead of \<-, which can have some slight differences It is good
+practice to stick with \<- for assigning values
+
+```{r }
+1+3
+x_one <- 1
+y <- 2
+x_one + y
+```
+```{r eval=FALSE}
+x_1 + y #numbers
+x_one + Y #case sensitive
+```
+
+*pro tip: Stick to small letters and underscores + avoid numbers when naming objects.*
+
+### Functions
+
+Functions are "canned scripts" which automate series of commands on one
+or more inputs called arguments
+
+```{r custom_functions}
+addition <- function(argument_one, argument_two){
+  argument_one + argument_two
+}
+addition(argument_one = x_one,argument_two = y)
+args(addition)
+```
+
+```{r functions}
+#read_csv
+round(3.14159)
+round(3.14159, digits = 2)
+```
+Arguments can be anything (numbers, file names, variables), options are
+arguments that take on default values which can be altered by the user
+It is also possible (and very useful) to create your own functions.
+
+Some useful functions
+
+```{r}
+# length(weight_g) # Counts the number of elements in the vector
+# class(weight_g) # Identifies the type of elements
+# str(weight_g) # Display structure of object
+```
+
+# Workspace environment
+
+-   You should now have 4 objects in your global environment
+-   History tab will show your recent code
+-   To list and remove these objects from your global environment:
+
+```{r, eval=FALSE}
+# list all objects
+ls()
+## [1] "D" "h" "K" "Q"
+# remove a single object from Environment
+rm(D)
+```
+
+### Object types  
+#### Vectors
+We can save multiple values into a single 
+variable, called **vector**, using the `c()` function:
+
+```{r}
+weight_g <- c(50, 60, 65, 82)
+weight_g
+
+```
+
+
+Vectors can also contain characters:
+
+```{r}
+animals <- c("mouse", "rat", "dog", "cat")
+animals
+```
+Note the quotation marks!  
+
+#### Data frames
+
+
+A **data frame** is the most common way of storing **data** in **R**
+and, generally, is the **data** structure most often used for **data**
+analyses. Under the hood, a **data frame** is a list of equal-length
+vectors. Each element of the list can be thought of as a column and the
+length of each element of the list is the number of rows.
+
+We can make our own data frames
+```{r make_data_frame}
+custom_data <- 
+  data.frame( 
+    column_one = animals,
+    column_two = weight_g
+  )
+custom_data
+```
+Notice different data types in table header.
+Datatypes in R:
+int stands for integers.
+
+`dbl` stands for doubles, or real numbers.
+
+`chr` stands for character vectors, or strings.
+
+`dttm` stands for date-times (a date + a time).
+
+`lgl` stands for logical, vectors that contain only TRUE or FALSE.
+
+`fctr` stands for factors, which R uses to represent categorical variables
+with fixed possible values.
+
+We can also load external data using a function. 
+```{r read_data}
+surveys <- read.csv("https://ndownloader.figshare.com/files/2292169")
+```
+
+We can subset on multiple conditions using & for AND conditions (ie.
+both are TRUE), and \| for OR conditions (ie. either are TRUE):
+
+```{r}
+weight_g[weight_g > 57 | weight_g <71]
+weight_g[weight_g >= 30 & weight_g == 21]
+```
+
+Notice that we use == when subsetting instead of =, which is an
+assigning operator.\
+Same operations work on other types of vectors.
+
+```{r}
+animals[animals == "dog"]
+```
+### Indexing and subsetting dataframes
+
+Dataframes are also subsetted or indexed with square brackets, expect we
+must specify rows then columns[row,column]:
+
+```{r eval = FALSE}
+surveys[1, 1] # first element in the first column of the data frame (as a vector)
+surveys[1, 6] # first element in the 6th column (as a vector)
+surveys[, 1] # first column in the data frame (as a vector)
+surveys[1] # first column in the data frame (as a data.frame)
+surveys[1:3, 7] # first three elements in the 7th column (as a vector)
+surveys[3, ] # the 3rd element for all columns (as a data.frame)
+head_surveys <- surveys[1:6, ] # equivalent to head(surveys)
+
+```
+
+Use the - sign to exclude certain sections:
+
+```{r}
+surveys[,-1] # The whole data frame, except the first column
+surveys[-c(7:34786),] # Equivalent to head(surveys)
+```
+
+Columns can be selected by name using the these operators:
+
+```{r}
+surveys["species_id"] # Result is a data.frame
+surveys[, "species_id"] # Result is a vector
+surveys[["species_id"]] # Result is a vector
+surveys$species_id # Result is a vector
+```
+
+
+# What is tidyverse?
+
+`tidyverse` is a "package of packages" which includes these packages:
+
+```{r what-is-tidyverse, echo=FALSE}
+knitr::include_graphics("img/tidyverse.png")
+```
+
+...designed to make the data analysis easier.
+
+```{r tidyverse-process, echo=FALSE}
+knitr::include_graphics("img/tidyverse-process.png")
+```
+
+Hence
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+Is same as:
+
+```{r, eval=FALSE}
+library(ggplot2) 
+library(tibble) 
+library(tidyr) 
+library(readr) 
+library(purrr) 
+library(dplyr) 
+library(stringr) 
+library(forcats) 
+```
+
+# dplyr
+
+six key `dplyr` functions that allow you to solve the vast majority of
+your data manipulation challenges:
+
+`filter`: pick observations based on values
+
+`select`: pick variables
+
+`summarize`: compute statistical summaries
+
+`group_by`: perform operations at different levels of your data
+
+`arrange`: reorder data
+
+`mutate`: create new variables
+
+Traditional approach:\
+`function(**data**, argument_one, argument_two,...)`\
+pipe(%\>%) approach:\
+`data %>% function( ., argument_one, argument_two,...)`
+
+|         Function          | Description                 |
+|:-------------------------:|-----------------------------|
+|        `+,-,*,/,^`        | arithmetic                  |
+|       `x / sum(x)`        | arithmetic w/aggregation    |
+|         `%/%, %%`         | modular arithmetic          |
+|     `log, exp, sqrt`      | transformations             |
+|        `lag, lead`        | offsets                     |
+| `cumsum, cumprod, cum...` | cum/rolling aggregates      |
+|  `>, >=, <, <=, !=, ==`   | logical comparisons         |
+|  `min_rank, dense_rank`   | ranking                     |
+|         `between`         | are values between a and b? |
+|          `ntile`          | bin values into n buckets   |
+
+
+
+
+```{r}
+sessionInfo()
+```
+

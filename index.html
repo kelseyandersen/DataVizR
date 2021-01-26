@@ -13,6 +13,7 @@
 
 <title>Welcome!</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -23,6 +24,15 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
@@ -53,6 +63,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -334,17 +345,8 @@ div.tocify {
         <li>
   <a href="index.html">Welcome</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Introduction to R
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="APS2018_Tidyverse.html">Introduction to R</a>
-    </li>
-  </ul>
+<li>
+  <a href="intro/r_intro.html">R intro</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -353,8 +355,12 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Structure of ggplots</li>
-    <li class="dropdown-header">Plot types</li>
+    <li>
+      <a href="r_intro.html">Structure of ggplots</a>
+    </li>
+    <li>
+      <a href="r_intro.html">Plot types</a>
+    </li>
     <li class="dropdown-header">Combining plots and saving</li>
   </ul>
 </li>
@@ -414,10 +420,17 @@ div.tocify {
 <div id="pre-workshop-set-up" class="section level3">
 <h3>Pre-Workshop Set Up</h3>
 <p>Make sure you have the most recent versions of R and R Studio Installed on your computer.</p>
-<ul>
-<li>R can be downloaded at <a href="https://cran.r-project.org/">cran.r-project.org</a></li>
-<li>R Studio can be downloaded for free at <a href="https://www.rstudio.com/products/rstudio/download/">www.rstudio.com</a></li>
-</ul>
+<p>To download R:<br />
+1. Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a><br />
+2. Click “Download R for Mac/Windows”<br />
+3. Download the appropriate file:<br />
+- Windows users click Base, and download the installer for the latest R version<br />
+- Mac users select the file R-3.X.X that aligns with your OS version<br />
+4. Follow the instructions of the installer</p>
+<p>To download RStudio:<br />
+1. Go to RStudio for desktop <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a><br />
+2. Select the install file for your OS<br />
+3. Follow the instructions of the installer</p>
 <p>Also, it would be useful to download the following R packages prior to the workshop:</p>
 <ul>
 <li>ggplot2</li>
@@ -442,6 +455,8 @@ library(Hmisc)
 install.packages(&quot;Matrix&quot;)
 
 library(Matrix)  </code></pre>
+<p>It is higly recomended to go through materials for the Intro to R for Plant Pathologists course: <a href="https://everhartlab.github.io/APS_IntroR_2020/" class="uri">https://everhartlab.github.io/APS_IntroR_2020/</a><br />
+and video can be found on: <a href="https://www.apsnet.org/edcenter/resources/Webinars/ondemand/Pages/Part_1_IntroToR.aspx" class="uri">https://www.apsnet.org/edcenter/resources/Webinars/ondemand/Pages/Part_1_IntroToR.aspx</a></p>
 </div>
 <div id="insert-logo-from-institutions-sponsoring-this-workship-k-state-penn-state-k-state" class="section level2">
 <h2>insert logo from institutions sponsoring this workship (K-State, Penn State, K-State)</h2>
@@ -458,7 +473,7 @@ library(Matrix)  </code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -497,7 +512,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
