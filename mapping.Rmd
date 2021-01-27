@@ -5,9 +5,7 @@ title: "Creating Maps with ggplot2"
 ## Introduction
 
 In this exercise we will use [_rnaturalearth_](https://github.com/ropenscilabs/rnaturalearth), [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and
-_ggplot2_ to create a map of the USA and then a map of Kansas and highlight Kansas within a larger map of the USA.
-
-Once we have the base maps of the country and state(s) we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
+_ggplot2_ to create a map of the USA and then a map of Kansas and highlight Kansas within a larger map of the USA. Once we have the base maps of the country and state(s) we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
 
 ```{r libraries, message=FALSE}
 library(dplyr)
@@ -24,7 +22,7 @@ This is our base layer, USA, of the map from [Naturalearth.com](https://naturale
 Using `ne_states()` will return an _sf_ object with state level information.
 There is also a `ne_countries()` to download country level outlines only as well.
 
-```{r USA-base, message=FALSE}
+```{r USA-base, message=FALSE, warning=FALSE}
 usa_sf <- ne_states(geounit = "United States of America",
                     returnclass = "sf")
 
@@ -41,8 +39,7 @@ To find out what the column names are in the dataset that we can filter on we ca
 colnames(usa_sf)
 ```
 
-We see that a column named "name" exists, with the state names.
-
+We see that a column named `name` exists, with the state names.
 We can use this to `filter()` the data so that it only represents the continental 48 states and use that to make a map.
 
 For more on filtering or sub-setting _sf_ objects, see: <https://cran.rstudio.com/web/packages/sf/vignettes/sf4.html>.
@@ -69,6 +66,7 @@ usa
 
 #### Projecting map data
 
+That map works, but commonly maps should be projected and it is not.
 Projections are used to reduce the distortion in the data that are displayed in a map.
 There are [several types of map projections](https://imgs.xkcd.com/comics/map_projections.png) available.
 For this map of the US we will use the U.S. National Atlas Equal Area projection, which has a EPSG (European Petroleum Survey Group) number of 2163 and is well suited to the continental USA.
@@ -84,7 +82,7 @@ usa
 
 #### Add labels to the states
 
-The naturalearth data have several columns to work with.
+The Natural Earth data have several columns to work with as we've already seen.
 One of them is the two letter postal code for the states, `postal`.
 Using `geom_sf_text()`, we can add this information to the map labelling the states.
 
@@ -178,7 +176,7 @@ Since we're just mapping a single state, Kansas, we'll reproject the `ks_sf` obj
 Previously, we used this projection for the Kansas map but we only specified it in the `coord_sf()` when we created the map.
 Here, we will modify the _sf_ object by transforming it to the new projection.
 
-```{r transform_ks_sf, message=FALSE, include=TRUE, echo=FALSE}
+```{r transform_ks_sf, message=FALSE}
 ks_sf <- st_transform(ks_sf, crs = 6922)
 ```
 
