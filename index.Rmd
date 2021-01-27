@@ -55,5 +55,10 @@ install.packages("Matrix")
 library(Matrix)
 ```
 
-## insert logo from institutions sponsoring this workship (K-State, Penn State, K-State)
+## Sponsoring Institutions
 
+<!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
+
+<img src="image_files/USQ_international.png" style="padding:90.71px 90.71px 0 90.71px;">
+
+<img src="image_files/DPIRD.png" style="padding:132px 132px 132px 132px;">
