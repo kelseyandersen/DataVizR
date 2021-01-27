@@ -1,96 +1,277 @@
 ---
-title: "Maps in R!"
+title: "Creating Maps with ggplot2"
 ---
-**Workshop Organizers:** Kelsey Andersen Onofre, Rodrigo Onofre, Karen Garrett, Felipe Dalla Lana, Adam Sparks, Mladen Cucak
 
-## Create a Map of Kansas and Add Sample Collection Points to the Map
+## Introduction
 
-### Setup
+In this exercise we will use [_rnaturalearth_](https://github.com/ropenscilabs/rnaturalearth), [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and
+_ggplot2_ to create a map of the USA and then a map of Kansas and highlight Kansas within a larger map of the USA.
 
-To do this you'll need a few packages from CRAN:
+Once we have the base maps of the country and state(s) we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
 
-```{r pkg-load, eval=TRUE, messages=FALSE, warning=FALSE}
-if (!require("pacman"))
-  install.packages("pacman")
-pacman::p_load(readr,
-               ggplot2,
-               rnaturalearth,
-               rnaturalearthdata,
-               sf,
-               rgeos,
-               lwgeom
-)
+```{r libraries, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
 ```
 
-And one from the rOpenSci Labs.
+## Create Country Level Map of USA
 
-```{r github-install}
-if (!require("rnaturalearthhires"))
-  pacman::p_install_gh("ropenscilabs/rnaturalearthhires")
-```
+This is our base layer, USA, of the map from [Naturalearth.com](https://naturalearth.com/) using the base `plot()` to display these data.
 
-### Add a Simple Features Object of Kansas
+Using `ne_states()` will return an _sf_ object with state level information.
+There is also a `ne_countries()` to download country level outlines only as well.
 
-This is our base layer, Australia, of the map from (Naturalearth.com)[https://naturalearth.com/].
+```{r USA-base, message=FALSE}
+usa_sf <- ne_states(geounit = "United States of America",
+                    returnclass = "sf")
 
-```{r australia}
-usa_sf <- rnaturalearth::ne_states(geounit = "United States of America",
-                                   returnclass = "sf")
 plot(usa_sf)
 ```
 
-However, it includes several islands and ocean that are not of interest to us.
-To fix this, crop it down to just the mainland plus Tasmania and remove Jervis Bay so that the labels on the final map product are cleaner.
+That returns a map that's probably not what we think of when we think of a map of the US.
+To clean it up, we'll filter Alaska, Hawaii and Puerto Rico just for the purposes of this exercise.
+If you would like to include Alaska and Hawaii in your map, have a look at the [albersusa package](https://github.com/hrbrmstr/albersusa).
 
-```{r crop_sf}
-usa_sf <- st_crop(x = usa_sf,
-                 y = c(
-                   xmin = 114,
-                   xmax = 155,
-                   ymin = -45,
-                   ymax = -9
-                 ))
-usa_sf <- usa_sf[usa_sf$abbrev != "J.B.T.", ]
-plot(usa_sf)
+To find out what the column names are in the dataset that we can filter on we can use, `colnames()`.
+
+```{r colnames}
+colnames(usa_sf)
 ```
 
-## Import Collection Point Data
+We see that a column named "name" exists, with the state names.
 
-If you have your own data in a .csv file, import it using `read_csv()`.
-These are just random points that I generated and saved as a .csv file for this work to illustrate how to add points to a map.
+We can use this to `filter()` the data so that it only represents the continental 48 states and use that to make a map.
 
-```{r collection_data, eval=TRUE}
-point_data <- read_csv("sample_points.csv",
-                       col_types = cols(col_double(),
-                                        col_double(),
-                                        col_factor()))
+For more on filtering or sub-setting _sf_ objects, see: <https://cran.rstudio.com/web/packages/sf/vignettes/sf4.html>.
+
+```{r filter-USA}
+usa_sf <- usa_sf %>%
+   filter(!(
+     name %in% c("Alaska", "Hawaii", "Puerto Rico")
+   ))
 ```
 
-## Plot Using ggplot2
+## Create a map using _ggplot2_
 
-Plot the final combination of data with the Naturalearthdata Australia data and state outlines with the sampling location points overplayed and colour-coded by the state where they were sampled.
+Using _ggplot2_, we have more control over how the data are displayed than using the base `plot()` command.
 
-```{r plot, eval=TRUE}
-oz <- ggplot(usa_sf) +
-  geom_sf(fill = "white") +
-  geom_text(
+First, plot the whole country using _ggplot2_'s `geom_sf()`.
+
+```{r plot_level1}
+usa <- ggplot(usa_sf) +
+  geom_sf(fill = "white")
+
+usa
+```
+
+#### Projecting map data
+
+Projections are used to reduce the distortion in the data that are displayed in a map.
+There are [several types of map projections](https://imgs.xkcd.com/comics/map_projections.png) available.
+For this map of the US we will use the U.S. National Atlas Equal Area projection, which has a EPSG (European Petroleum Survey Group) number of 2163 and is well suited to the continental USA.
+
+```{r transform_sf}
+usa_sf <- st_transform(usa_sf, crs = 2163)
+
+usa <- ggplot(usa_sf) +
+  geom_sf(fill = "white")
+
+usa
+```
+
+#### Add labels to the states
+
+The naturalearth data have several columns to work with.
+One of them is the two letter postal code for the states, `postal`.
+Using `geom_sf_text()`, we can add this information to the map labelling the states.
+
+```{r plot_level2}
+usa <-
+  usa +
+  geom_sf_text(
     data = usa_sf,
     aes(x = longitude,
         y = latitude,
-        label = abbrev),
+        label = postal),
+    size = 2.5,
+    hjust = 1
+  )
+
+usa
+```
+
+#### Final touches
+
+Properly label the x and y-axis and set the theme.
+The _ggplot2_ theme, `theme_bw()` is nice to use with maps, so we will apply that here as well.
+
+```{r plot_level3}
+usa <- 
+  usa +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  theme_bw()
+
+usa
+```
+
+## Creating maps of individual states
+
+To create a map of only Kansas, subset the _sf_ object, `usa_sf` such that it contains only the data for Kansas.
+
+### Filter Kansas
+
+```{r subset-ks}
+ks_sf <- filter(usa_sf, name_pt == "Kansas")
+
+ks_sf
+```
+
+### Plot Kansas
+
+After filtering Kansas and creating a new object, we can plot it now using the EPSG specification NAD83 / Kansas LCC for the projection.
+
+```{r ggplot-ks}
+ggplot(data = ks_sf) +
+  geom_sf() +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  theme_bw() +
+  coord_sf(crs = 6922)
+```
+
+## Highlighting states within the country
+
+Using the `usa_sf` and `ks` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Kansas.
+Note that we use the `data` argument twice here.
+Once for the base USA map and once for the map of Kansas that we use to highlight the state on the map.
+
+```{r hightlight-ks}
+ggplot(data = usa_sf) +
+  geom_sf(fill = "white") +
+  geom_sf(data = ks_sf,
+          fill = "#512888") +
+  geom_sf_text(
+    data = ks_sf,
+    aes(x = longitude,
+        y = latitude,
+        label = postal),
+    colour = "white",
     size = 2.5,
     hjust = 1
   ) +
-  geom_point(data = point_data,
-             aes(x = Longitude,
-                 y = Latitude,
-                 colour = class),
-             size = 2) +
-  theme_bw() +
-  scale_colour_brewer(type = "Qualitative", palette = "Set1") +
   xlab("Longitude") +
   ylab("Latitude") +
-  coord_sf()
-oz
+  theme_bw()
 ```
 
+## Adding and labelling points on a map
+
+Now we will build on the maps we created by adding points to a map of Kansas with latitude and longitude values.
+
+### Reprojecting Kansas
+
+Since we're just mapping a single state, Kansas, we'll reproject the `ks_sf` object to EPSG 6922 before proceeding to add points to this base layer of data.
+Previously, we used this projection for the Kansas map but we only specified it in the `coord_sf()` when we created the map.
+Here, we will modify the _sf_ object by transforming it to the new projection.
+
+```{r transform_ks_sf, message=FALSE, include=TRUE, echo=FALSE}
+ks_sf <- st_transform(ks_sf, crs = 6922)
+```
+
+### Create data.frame of town and city locations
+
+Using the previously created `ks_sf` object, we will plot the locations of cities or towns in Kansas.
+Here we will create a `data.frame()` of the geographic locations of some selected cities or towns in Kansas to illustrate how to add points to a base map created in the previous section.
+However, you will probably have your own points in a spreadsheet or .CSV file that you can import to a `data.frame()` when you are creating your own maps.
+Aside from importing, rather than creating the data in your R session, the steps are the same.
+
+```{r ks-towns, message=FALSE}
+ks_towns <- data.frame(
+  stringsAsFactors = FALSE,
+  town = c(
+    "Bellville",
+    "Colby",
+    "Dodge City",
+    "Emporia",
+    "Goodland",
+    "Hays",
+    "Hesston",
+    "Manhattan",
+    "Pittsburg"
+  ),
+  latitude = c(
+    39.8245,
+    39.3958,
+    37.7528,
+    38.4039,
+    39.3508,
+    38.8792,
+    38.1383,
+    39.183609,
+    37.4109
+  ),
+  longitude = c(
+    -97.6325,
+    -101.0524,
+    -100.0171,
+    -96.1817,
+    -101.7102,
+    -99.3268,
+    -97.4314,
+    -96.571671,
+    -94.705
+  )
+)
+
+ks_towns
+```
+
+### Converting sites to an sf object
+
+While we could plot everything using `geom_point()`, if we convert the `data.frame` to an `sf` type object, it is much more flexible and allows us to project the data for a more attractive map.
+We will use the coordinate reference system (CRS) 6922, NAD83 / Kansas LCC, for Kansas here.
+
+```{r convert-sf}
+ks_towns <-
+  st_as_sf(ks_towns,
+           coords = c("longitude", "latitude"),
+           crs = 4326)
+ks_towns <- st_transform(ks_towns, crs = 6922)
+```
+
+Now we're ready to add the points to the map!
+
+### Adding town locations to map
+
+Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
+You start with the base layer, in this case Kansas, and add a layer with the points and another with the labels for the points.
+
+```{r add-points}
+ggplot() +
+  geom_sf(data = ks_sf,
+          fill = "white") +
+  geom_sf(data = ks_towns,
+          size = 2) +
+  geom_sf_label(
+    data = ks_towns,
+    aes(label = town),
+    size = 2.5,
+    hjust = 0.5,
+    vjust = 1.5
+  ) +
+  theme_bw() +
+  xlab("Longitude") +
+  ylab("Latitude")
+```
+
+## Further reading and resources
+
+[Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 1: Basics](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html)
+
+[Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 2: Layers](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-2.html)
+
+[Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 3: Layouts](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-3.html)
