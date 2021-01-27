@@ -64,39 +64,39 @@ entire folder onto the new machine
 
 ### Getting help
 
-Help:
-* **Google**: just add "with R" at the end of any search
-* **Stack Overflow**: programming questions
-* **Cross Validated**: scientific questions  
-
-Learning:
-* "R for Data Science" → <https://r4ds.had.co.nz>
-* R4DS Learning Community → <https://rfordatasci.com>
+Help:  
+- **Google**: just add "with R" at the end of any search  
+- **Stack Overflow**: programming questions  
+- **Cross Validated**: scientific questions  
+ 
+Learning:  
+- "R for Data Science" → <https://r4ds.had.co.nz>  
+- R4DS Learning Community → <https://rfordatasci.com>  
 
 
 ## Basic concepts
 
 In R, We have  *objects*, where the data is stored.  
-*Functions* are applied on these objects to analyze the data.  
-We create scripts which are like kitchen recipes.  
-This collection of recipes stored in an R project.
+**Functions** which are applied on objects or another functions (i.e. to analyze the data)
+We create scripts which are something like kitchen recipes.  
+This collection of recipes is stored in an R project.
 
 ### Objects
 
 We can assign values to objects using the assignment operator, and use R
 to do useful things: You may come across code that assigns values using
-= instead of \<-, which can have some slight differences It is good
-practice to stick with \<- for assigning values
+= instead of `<-`, which can have some slight differences It is good
+practice to stick with `<-` for assigning values
 
 ```{r }
 1+3
-x_one <- 1
+x <- 1
 y <- 2
-x_one + y
+x + y
 ```
+But be careful...
 ```{r eval=FALSE}
-x_1 + y #numbers
-x_one + Y #case sensitive
+x + Y #case sensitive
 ```
 
 *pro tip: Stick to small letters and underscores + avoid numbers when naming objects.*
@@ -107,15 +107,19 @@ Functions are "canned scripts" which automate series of commands on one
 or more inputs called arguments
 
 ```{r custom_functions}
-addition <- function(argument_one, argument_two){
-  argument_one + argument_two
-}
-addition(argument_one = x_one,argument_two = y)
-args(addition)
+addition <- function(argument_one, argument_two){ 
+  argument_one + argument_two 
+} 
+addition(argument_one = x,
+         argument_two = y)
+# Notice the difference?!
+addition(x, y)
+addition(x, y) == x+y #notice double "="
+all.equal(addition(x, y), x+y) #Same as above, but pre-made
 ```
+Other useful functions. 
 
 ```{r functions}
-#read_csv
 round(3.14159)
 round(3.14159, digits = 2)
 ```
@@ -126,9 +130,9 @@ It is also possible (and very useful) to create your own functions.
 Some useful functions
 
 ```{r}
-# length(weight_g) # Counts the number of elements in the vector
-# class(weight_g) # Identifies the type of elements
-# str(weight_g) # Display structure of object
+length(x) # Counts the number of elements in the vector
+class(x) # Identifies the type of elements
+str(x) # Display structure of object
 ```
 
 # Workspace environment
@@ -142,7 +146,7 @@ Some useful functions
 ls()
 ## [1] "D" "h" "K" "Q"
 # remove a single object from Environment
-rm(D)
+rm(some_object)
 ```
 
 ### Object types  
@@ -151,17 +155,22 @@ We can save multiple values into a single
 variable, called **vector**, using the `c()` function:
 
 ```{r}
-weight_g <- c(50, 60, 65, 82)
-weight_g
+num <- c(50, 60, 65) 
+num
 
 ```
 
 
-Vectors can also contain characters:
+Vectors can also contain other types of data:
 
 ```{r}
-animals <- c("mouse", "rat", "dog", "cat")
-animals
+char <- c("mouse", "rat", "dog") 
+
+fct <- factor("low", "med", "high")
+
+dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
+
+logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
 ```
 Note the quotation marks!  
 
@@ -176,12 +185,13 @@ length of each element of the list is the number of rows.
 
 We can make our own data frames
 ```{r make_data_frame}
-custom_data <- 
-  data.frame( 
-    column_one = animals,
-    column_two = weight_g
-  )
-custom_data
+df <- data.frame(
+  col_one = num,
+  col_two = char,
+  col_three = dates
+)
+print(df)
+head(df,1)
 ```
 Notice different data types in table header.
 Datatypes in R:
@@ -198,62 +208,51 @@ int stands for integers.
 `fctr` stands for factors, which R uses to represent categorical variables
 with fixed possible values.
 
-We can also load external data using a function. 
-```{r read_data}
-surveys <- read.csv("https://ndownloader.figshare.com/files/2292169")
-```
 
 We can subset on multiple conditions using & for AND conditions (ie.
-both are TRUE), and \| for OR conditions (ie. either are TRUE):
+both are TRUE), and | for OR conditions (ie. either are TRUE):
 
 ```{r}
-weight_g[weight_g > 57 | weight_g <71]
-weight_g[weight_g >= 30 & weight_g == 21]
+char[char == "mouse"|char == "rat"]
+num[num >= 30 & num == 21]
 ```
 
-Notice that we use == when subsetting instead of =, which is an
-assigning operator.\
-Same operations work on other types of vectors.
+Notice that we use == when subsetting instead of =.  
 
-```{r}
-animals[animals == "dog"]
-```
 ### Indexing and subsetting dataframes
 
-Dataframes are also subsetted or indexed with square brackets, expect we
+Dataframes are also subsetted or indexed with square brackets. We
 must specify rows then columns[row,column]:
 
 ```{r eval = FALSE}
-surveys[1, 1] # first element in the first column of the data frame (as a vector)
-surveys[1, 6] # first element in the 6th column (as a vector)
-surveys[, 1] # first column in the data frame (as a vector)
-surveys[1] # first column in the data frame (as a data.frame)
-surveys[1:3, 7] # first three elements in the 7th column (as a vector)
-surveys[3, ] # the 3rd element for all columns (as a data.frame)
-head_surveys <- surveys[1:6, ] # equivalent to head(surveys)
-
+df[1, 1] # first element in the first column of the data frame (as a vector)
+df[1, 3] # first element in the third column (as a vector)
+df[, 1] # first column in the data frame (as a vector)
+df[1] # first column in the data frame (as a data.frame)
+df[1:2, 3] # first two elements in the third column (as a vector)
+df[3, ] # the 3rd element for all columns (as a data.frame)
 ```
 
 Use the - sign to exclude certain sections:
 
 ```{r}
-surveys[,-1] # The whole data frame, except the first column
-surveys[-c(7:34786),] # Equivalent to head(surveys)
+df[,-1] # The whole data frame, except the first column
+df[-c(2:3),] # remove a sequence of rows
 ```
 
 Columns can be selected by name using the these operators:
 
 ```{r}
-surveys["species_id"] # Result is a data.frame
-surveys[, "species_id"] # Result is a vector
-surveys[["species_id"]] # Result is a vector
-surveys$species_id # Result is a vector
+df["col_one"] # Result is a data.frame
+df[, "col_one"] # Result is a vector
+df[["col_one"]] # Result is a vector
+df$col_one # Result is a vector
 ```
 
 
-# What is tidyverse?
+# `tidyverse`
 
-`tidyverse` is a "package of packages" which includes these packages:
+`tidyverse` is a "package of packages" which includes several packages:
 
 ```{r what-is-tidyverse, echo=FALSE}
 knitr::include_graphics("img/tidyverse.png")
@@ -265,13 +264,13 @@ knitr::include_graphics("img/tidyverse.png")
 knitr::include_graphics("img/tidyverse-process.png")
 ```
 
-Hence
+Hence by loading `tidyverse`
 
-```{r, eval=FALSE}
+```{r, load_tidyverse, warning=FALSE, message = FALSE}
 library(tidyverse)
 ```
 
-Is same as:
+Replaces loading all these packages:
 
 ```{r, eval=FALSE}
 library(ggplot2) 
@@ -284,29 +283,46 @@ library(stringr)
 library(forcats) 
 ```
 
-# dplyr
+## Data import
+Number of functions within `readr` and `readxl` for different types of files.
 
-six key `dplyr` functions that allow you to solve the vast majority of
-your data manipulation challenges:
+For this workshop, we will use [coffee leaf rust data from Ethiopia](https://osf.io/xejaz/) provided by Emerson M. Del Ponte and Kifle Belachew.
 
-`filter`: pick observations based on values
+```{r load_workshop_data, echo=FALSE, warning=FALSE, message = FALSE}
+library("here")
+dt <- read_csv(here::here("data", "survey_clean.csv"))
+head(dt)
+```
 
-`select`: pick variables
+## Data transformation
 
-`summarize`: compute statistical summaries
+All that bracket-based selecting can be a bit cumbersome.
+Add-on package `dplyr` greatly simplifies the process; inspired by SQL.
 
-`group_by`: perform operations at different levels of your data
+### Key functions
 
-`arrange`: reorder data
+There is six key `dplyr` functions that allow you to solve the vast majority of
+your data transformation challenges:
 
-`mutate`: create new variables
+|Function| Description|
+|:-------------------------:|-----------------------------|
+|`filter`| pick observations based on values|
+|`select`| pick variables|
+|`summarize`| compute statistical summaries|
+|`group_by`| perform operations at different levels of your data|
+|`arrange`| reorder data|
+|`mutate`| create new variables|
 
+### Pipes 
+From `magrittr` package.  
 Traditional approach:\
 `function(**data**, argument_one, argument_two,...)`\
-pipe(%\>%) approach:\
+pipe(%>%) approach:
 `data %>% function( ., argument_one, argument_two,...)`
 
-|         Function          | Description                 |
+### Common operators
+
+|         Operator          | Description                 |
 |:-------------------------:|-----------------------------|
 |        `+,-,*,/,^`        | arithmetic                  |
 |       `x / sum(x)`        | arithmetic w/aggregation    |
@@ -321,7 +337,99 @@ pipe(%\>%) approach:\
 
 
 
+### Let's test these
+Let us make a smaller subset of data to use for explaining concepts. 
+```{r}
+dt_small <- 
+dt %>%
+  select(cultivar, zone, inc) %>% 
+  group_by(cultivar, zone) %>%
+  slice(head(row_number(), 1)) %>% 
+  filter(zone =="Sheka" |zone ==  "Sidama") %>% 
+  ungroup()
+dt_small
+```
 
+Select to grab columns.
+
+```{r select}
+dt_small %>% 
+  select(cultivar, zone)
+```
+
+
+Filter to grab rows.
+
+```{r filter}
+dt_small %>% 
+  filter(cultivar== "Local")
+```
+
+
+Output of one function becomes the input to the next.  
+*Ctrl* + *Shift* + *M* to insert `%>%`  
+```{r}
+dt_small %>%
+  filter(cultivar== "Local") 
+```
+
+`mutate()` to make a new column.
+
+```{r}
+dt_small %>%
+  mutate(double_inc = inc * 2)
+```
+
+Count number of observations by cultivar:
+
+```{r}
+dt_small %>%
+  group_by(zone) %>%
+  tally()
+```
+
+Average inc by cultivar(remove missing values if there are any):
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc, na.rm = TRUE))
+```
+
+Also note that you can include multiple summaries and arrange order of rows 
+based on sove variable.
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc),
+            min_weight = min(inc)) %>%
+    arrange(desc(mean_inc))
+```
+
+## Reshaping the data with `tidyr`
+
+`pivot_wider()` makes dataframes wider by increasing the number of columns and decreasing the number of rows.  
+Generates multiple columns from two columns:  
+1. each unique value in the key column becomes a column name  
+2. each value in the value column becomes a cell in the new columns  
+
+```{r}
+dt_small_wide <- 
+dt_small %>%
+  pivot_wider(names_from = "cultivar", 
+              values_from = "inc")
+```
+
+`pivot_longer()` makes dataframes longer by increasing the number of rows and decreasing the number of columns.
+```{r}
+dt_small_wide %>% 
+  pivot_longer( cols = c("Improved", "Local", "Mixture"), # columns to gather  
+                names_to = "cultivar", # spread across the column names
+                values_to = "inc")
+
+```
+More detailed guides 
 ```{r}
 sessionInfo()
 ```

@@ -10,9 +10,9 @@ navbar:
   - text: Data Visualization - ggplot
     menu:
      - text: Structure of ggplots 
-       href: r_intro.html
+       href: 
      - text: Plot types
-       href: r_intro.html
+       href: 
      - text: Combining plots and saving
        href: 
   - text: Network graphs

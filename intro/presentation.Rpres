@@ -29,6 +29,20 @@
   color: red;
   text-align: center;
 }
+/* titles */
+.reveal h3 { 
+  font-size: 140%;
+  color: gray;
+}
+/* body text, ordered and unordered list styles */
+.reveal ul, 
+.reveal ol, 
+.reveal p{
+    font-size: 120%;
+    line-height: 105%;
+    list-style-type: disc;
+}
+
 </style>
 
 ========================================================
@@ -83,7 +97,7 @@ Be strong!
 Transition from "point and click" is tough but rewarding
 
 <div align="center">
-<img src="img/progres_curves.png" width=900 height=480>
+<img src="img/progres_curves.png" width=1450 height=750>
 </div>
 
 Baby steps
@@ -105,7 +119,7 @@ Your new best friends
 ====================================
 autosize: small
 Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
-<center><img src="img/cheatsheet.PNG"></center>
+<center><img src="img/cheatsheet.PNG" width = 1200></center>
 
 
 ====================================
@@ -114,7 +128,8 @@ left: 50%
 <br><br>
 **R** – programming language for statistical computing, data manipulation, and graphics  
 <br><br>
-![alt text](img/Rlogo.png)
+![alt text](img/Rlogo.png)  
+<br>
 </http://www.r-project.org/>
 
 ***
@@ -141,7 +156,7 @@ left: 50%
 R interface 
 ====================================
 <center>
-...*is not the fiendliest one*...
+...*is not the friendliest one*...
 </center>
 <div class="midcenter" style="margin-left:-300px; margin-top:-200px;">
 <img src="img/R.png"></img>
@@ -154,12 +169,27 @@ RStudio (IDE)
 </center>
 
 
+Move onto some coding
+====================================
+- Move the cursor onto a line with R code and pres (Win)*Ctrl* + *Enter* or (MAC)*Cmd* + *Return*.  
+<br>
+<div align="justify">
+*Challenge: Do it with one hand you are not using to hold the mouse!*
+<div>
+
+Tip for later:
+- To run an entire script (Win)*Ctrl* + *Shift* + *Enter* or (MAC)*Cmd* + *Shift* +
+*Return*
+- Many other keyboard shortcuts in RStudio (Win)*Alt*+*Shift*+*K* or (MAC)*Option*+*Shift*+*K*
+
+
 R basics: In R, we have...
 ====================================
 left: 35%
 class: small-code
 
-**Objects**, where the data is stored.
+**Objects**, where the data is stored.  
+Data is assigned using `<-`
 ```{r }
 x <- 1
 y <- 2
@@ -176,7 +206,8 @@ R basics: In R, we have...
 left: 35%
 class: small-code
 
-**Objects**, where the data is stored.
+**Objects**, where the data is stored.  
+Data is assigned using `<-`
 ```{r }
 x <- 1
 y <- 2
@@ -190,21 +221,25 @@ the same result if:
 ***
 **Functions** are applied on these objects to analyze the data. 
 ```{r custom_functions}
-addition <- 
-  function(argument_one, argument_two){
-  argument_one + argument_two
-}
-addition(
-  argument_one = x,
-  argument_two = y)
+# I am a comment!!! Just here to help jog the memory later on...
+# Let us make a function!
+addition <- function(argument_one,
+                     argument_two){ 
+  argument_one + argument_two # operations
+} # curly brackets define operations
+
+ls() # check content of the environment
+addition(argument_one = x,
+         argument_two = y)
 ```
 
 R basics: In R, we have...
 ====================================
-left: 35%
+left: 28%
 class: small-code
 
-**Objects**, where the data is stored.
+**Objects**, where the data is stored.  
+Data is assigned using `<-`
 ```{r }
 x <- 1
 y <- 2
@@ -216,24 +251,49 @@ the same result if:
 ```
 
 ***
-**Functions** are applied on these objects to analyze the data. 
+**Functions** which are applied on objects or another functions (i.e. to analyze the data) 
 ```{r }
-# I am a comment!!! Just here to help jog the memory later on...
-addition <- 
-  function(argument_one, argument_two){
-  argument_one + argument_two
-}
-addition(
-  argument_one = x,
-  argument_two = y)
-# Notice the difference
+addition <- function(argument_one, argument_two){ 
+  argument_one + argument_two 
+} 
+addition(argument_one = x,
+         argument_two = y)
+# Notice the difference?!
 addition(x, y)
+addition(x, y) == x+y #notice double "="
+all.equal(addition(x, y), x+y) #Same as above, but pre-made
 ```
 
 
 Objects: Vectors
 ====================================
 left: 50%
+class: small-code
+
+*Vectors* store data of the same type  
+(a column of an excel table)
+<center>
+<img src="img/vector.png" width=90 height=60>
+</center>
+Types of data:
+```{r}
+num <- c(50, 60, 65) 
+
+char <- c("mouse", "rat", "dog") 
+
+fct <- factor("low", "med", "high")
+
+dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
+
+logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
+```
+
+***
+
+
+Objects: Vectors
+====================================
+left: 47%
 class: small-code
 
 *Vectors* store data of the same type  
@@ -270,19 +330,17 @@ char[char == "dog"]
 
 Objects: Dataframes
 ====================================
-left: 40%
+left: 44%
 class: small-code
 
 *Dataframe* is a set of vectors of same length(an entire excel table) 
 <center>
 <img src="img/dataframes.png" width=210 height=110>
 </center>
-Creating data frames
+Creating and viewing data frames
 ```{r}
-df <- data.frame(
-  col_one = num,
-  col_two = char
-)
+df <- data.frame(col_one = num,
+                 col_two = char)
 print(df)
 head(df,1)
 ```
@@ -306,29 +364,107 @@ Pre-made set of functions for common (and not so common) tasks
 <img src="img/Rand_apps.png"></img>
 </center>
 
+A package of R packages: tidyverse
+====================================
+Think of something like Microsoft Office suite
+<center>
+<img src="img/tidyverse.png"></img>
+</center>
+
 Data analysis with tidyverse 
 ====================================
-Another level: *A package of packages*  
-Think something like Microsoft Office suite
+`tidyverse` and data analysis cycle
 <center>
 <img src="img/tidyverse-process.png"></img>
 </center>
 
+Data import
+====================================
+Number of functions within `readr` and `readxl` for different types of files.  
+<br>
+Here we will use the 
 
 
-Move onto some coding
+
+Data transformation
+====================================
+**Functions**  
+<br>
+Six key `dplyr` functions that allow you to solve the vast majority of your data transformation challenges:
+
+|Function| Description|
+|:-------------------------:|-----------------------------|
+|`filter`| pick observations based on values|
+|`select`| pick variables|
+|`summarize`| compute statistical summaries|
+|`group_by`| perform operations at different levels of your data|
+|`arrange`| reorder data|
+|`mutate`| create new variables|
+***
+**Piping**  
+<br>
+From `magrittr` package.  
+Traditional approach:  
+```{r eval = FALSE}
+function(argument_one, argument_two,...)  
+```
+pipe `%\>%` approach:  
+```{r eval = FALSE}
+argument_one %>% 
+  function(., argument_two,...)  
+```
+
+
+```{r libs, echo = FALSE}
+library("tidyverse")
+library("here")
+dt <- read_csv(here::here("data", "survey_clean.csv"))
+
+```
+
+Test these
+====================================
+left: 50%
+```{r }
+(dt_small <- 
+dt %>%
+  select(cultivar, zone, inc) %>% 
+  group_by(cultivar, zone) %>%
+  slice(head(row_number(), 1)) %>% 
+  filter(zone =="Sheka" |zone ==  "Sidama") %>% 
+  ungroup())
+```
+***
+```{r select}
+dt_small %>% 
+  select(cultivar, zone)
+```
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc),
+            min_weight = min(inc)) %>%
+    arrange(desc(mean_inc))
+```
+
+Reshaping data
 ====================================
 
+```{r}
 
-- Move the cursor onto a line with R code and pres (Win)*Ctrl* + *Enter* or (MAC)*Cmd* + *Return*.  
-<br>
-<div align="justify">
-*Challenge: Do it with one hand you are not using to hold the mouse!*
-<div>
+(dt_small_wide <- 
+dt_small %>%
+  pivot_wider(names_from = "cultivar", 
+              values_from = "inc"))
+```
 
-Tip for later:
-- To run an entire script (Win)*Ctrl* + *Shift* + *Enter* or (MAC)*Cmd* + *Shift* +
-*Return*
-- Many other keyboard shortcuts in RStudio (Win)*Alt*+*Shif*+*K* or (MAC)*Option*+*Shif*+*K*
+***
+`pivot_longer()` makes dataframes longer by increasing the number of rows and decreasing the number of columns.
+```{r}
+dt_small_wide %>% 
+  pivot_longer( cols = c("Improved", "Local", "Mixture"), # columns to gather  
+                names_to = "cultivar", # spread across the column names
+                values_to = "inc")
 
-
+```
