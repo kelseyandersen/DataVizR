@@ -528,7 +528,7 @@ div.tocify {
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   ))</span></code></pre></div>
 </div>
 <div id="create-a-map-using-ggplot2" class="section level2">
-<h2>Create a map using <em>ggplot2</em></h2>
+<h2>Create a Map Using <em>ggplot2</em></h2>
 <p>Using <em>ggplot2</em>, we have more control over how the data are displayed than using the base <code>plot()</code> command.</p>
 <p>First, plot the whole country using <em>ggplot2</em>’s <code>geom_sf()</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(usa_sf) <span class="sc">+</span></span>
@@ -537,7 +537,7 @@ div.tocify {
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>usa</span></code></pre></div>
 <p><img src="mapping_files/figure-html/plot_level1-1.png" width="672" /></p>
 <div id="projecting-map-data" class="section level4">
-<h4>Projecting map data</h4>
+<h4>Projecting Map Data</h4>
 <p>That map works, but commonly maps should be projected and it is not. Projections are used to reduce the distortion in the data that are displayed in a map. There are <a href="https://imgs.xkcd.com/comics/map_projections.png">several types of map projections</a> available. For this map of the US we will use the U.S. National Atlas Equal Area projection, which has a EPSG (European Petroleum Survey Group) number of 2163 and is well suited to the continental USA.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>usa_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(usa_sf, <span class="at">crs =</span> <span class="dv">2163</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -548,7 +548,7 @@ div.tocify {
 <p><img src="mapping_files/figure-html/transform_sf-1.png" width="672" /></p>
 </div>
 <div id="add-labels-to-the-states" class="section level4">
-<h4>Add labels to the states</h4>
+<h4>Add Labels to the States</h4>
 <p>The Natural Earth data have several columns to work with as we’ve already seen. One of them is the two letter postal code for the states, <code>postal</code>. Using <code>geom_sf_text()</code>, we can add this information to the map labelling the states.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  usa <span class="sc">+</span></span>
@@ -564,8 +564,8 @@ div.tocify {
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>usa</span></code></pre></div>
 <p><img src="mapping_files/figure-html/plot_level2-1.png" width="672" /></p>
 </div>
-<div id="final-touches" class="section level4">
-<h4>Final touches</h4>
+<div id="proper-labels-and-theme" class="section level4">
+<h4>Proper Labels and Theme</h4>
 <p>Properly label the x and y-axis and set the theme. The <em>ggplot2</em> theme, <code>theme_bw()</code> is nice to use with maps, so we will apply that here as well.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span> </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  usa <span class="sc">+</span></span>
@@ -578,7 +578,7 @@ div.tocify {
 </div>
 </div>
 <div id="creating-maps-of-individual-states" class="section level2">
-<h2>Creating maps of individual states</h2>
+<h2>Creating maps of Individual States</h2>
 <p>To create a map of only Kansas, subset the <em>sf</em> object, <code>usa_sf</code> such that it contains only the data for Kansas.</p>
 <div id="filter-kansas" class="section level3">
 <h3>Filter Kansas</h3>
@@ -628,7 +628,7 @@ div.tocify {
 </div>
 </div>
 <div id="highlighting-states-within-the-country" class="section level2">
-<h2>Highlighting states within the country</h2>
+<h2>Highlighting States Within the Country</h2>
 <p>Using the <code>usa_sf</code> and <code>ks</code> objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Kansas. Note that we use the <code>data</code> argument twice here. Once for the base USA map and once for the map of Kansas that we use to highlight the state on the map.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> usa_sf) <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
@@ -649,7 +649,7 @@ div.tocify {
 <p><img src="mapping_files/figure-html/hightlight-ks-1.png" width="672" /></p>
 </div>
 <div id="adding-and-labelling-points-on-a-map" class="section level2">
-<h2>Adding and labelling points on a map</h2>
+<h2>Adding and Labelling Points on a Map</h2>
 <p>Now we will build on the maps we created by adding points to a map of Kansas with latitude and longitude values.</p>
 <div id="reprojecting-kansas" class="section level3">
 <h3>Reprojecting Kansas</h3>
@@ -657,7 +657,7 @@ div.tocify {
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ks_sf <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(ks_sf, <span class="at">crs =</span> <span class="dv">6922</span>)</span></code></pre></div>
 </div>
 <div id="create-data.frame-of-town-and-city-locations" class="section level3">
-<h3>Create data.frame of town and city locations</h3>
+<h3>Create data.frame of Town and City Locations</h3>
 <p>Using the previously created <code>ks_sf</code> object, we will plot the locations of cities or towns in Kansas. Here we will create a <code>data.frame()</code> of the geographic locations of some selected cities or towns in Kansas to illustrate how to add points to a base map created in the previous section. However, you will probably have your own points in a spreadsheet or .CSV file that you can import to a <code>data.frame()</code> when you are creating your own maps. Aside from importing, rather than creating the data in your R session, the steps are the same.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ks_towns <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
@@ -709,7 +709,7 @@ div.tocify {
 ## 9  Pittsburg    37.41    -94.70</code></pre>
 </div>
 <div id="converting-sites-to-an-sf-object" class="section level3">
-<h3>Converting sites to an sf object</h3>
+<h3>Converting Sites to an <em>sf</em> Object</h3>
 <p>While we could plot everything using <code>geom_point()</code>, if we convert the <code>data.frame</code> to an <code>sf</code> type object, it is much more flexible and allows us to project the data for a more attractive map. We will use the coordinate reference system (CRS) 6922, NAD83 / Kansas LCC, for Kansas here.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ks_towns <span class="ot">&lt;-</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(ks_towns,</span>
@@ -719,7 +719,7 @@ div.tocify {
 <p>Now we’re ready to add the points to the map!</p>
 </div>
 <div id="adding-town-locations-to-map" class="section level3">
-<h3>Adding town locations to map</h3>
+<h3>Adding Town Locations to Map</h3>
 <p>Adding the points to the map works in the same fashion as adding layers in other <em>ggplot2</em> objects. You start with the base layer, in this case Kansas, and add a layer with the points and another with the labels for the points.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ks_sf,</span>
@@ -740,7 +740,7 @@ div.tocify {
 </div>
 </div>
 <div id="further-reading-and-resources" class="section level2">
-<h2>Further reading and resources</h2>
+<h2>Further Reading and Resources</h2>
 <p><a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 1: Basics</a></p>
 <p><a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-2.html">Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 2: Layers</a></p>
 <p><a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-3.html">Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 3: Layouts</a></p>

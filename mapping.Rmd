@@ -51,7 +51,7 @@ usa_sf <- usa_sf %>%
    ))
 ```
 
-## Create a map using _ggplot2_
+## Create a Map Using _ggplot2_
 
 Using _ggplot2_, we have more control over how the data are displayed than using the base `plot()` command.
 
@@ -64,7 +64,7 @@ usa <- ggplot(usa_sf) +
 usa
 ```
 
-#### Projecting map data
+#### Projecting Map Data
 
 That map works, but commonly maps should be projected and it is not.
 Projections are used to reduce the distortion in the data that are displayed in a map.
@@ -80,7 +80,7 @@ usa <- ggplot(usa_sf) +
 usa
 ```
 
-#### Add labels to the states
+#### Add Labels to the States
 
 The Natural Earth data have several columns to work with as we've already seen.
 One of them is the two letter postal code for the states, `postal`.
@@ -101,7 +101,7 @@ usa <-
 usa
 ```
 
-#### Final touches
+#### Proper Labels and Theme
 
 Properly label the x and y-axis and set the theme.
 The _ggplot2_ theme, `theme_bw()` is nice to use with maps, so we will apply that here as well.
@@ -116,7 +116,7 @@ usa <-
 usa
 ```
 
-## Creating maps of individual states
+## Creating maps of Individual States
 
 To create a map of only Kansas, subset the _sf_ object, `usa_sf` such that it contains only the data for Kansas.
 
@@ -141,7 +141,7 @@ ggplot(data = ks_sf) +
   coord_sf(crs = 6922)
 ```
 
-## Highlighting states within the country
+## Highlighting States Within the Country
 
 Using the `usa_sf` and `ks` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Kansas.
 Note that we use the `data` argument twice here.
@@ -166,7 +166,7 @@ ggplot(data = usa_sf) +
   theme_bw()
 ```
 
-## Adding and labelling points on a map
+## Adding and Labelling Points on a Map
 
 Now we will build on the maps we created by adding points to a map of Kansas with latitude and longitude values.
 
@@ -180,7 +180,7 @@ Here, we will modify the _sf_ object by transforming it to the new projection.
 ks_sf <- st_transform(ks_sf, crs = 6922)
 ```
 
-### Create data.frame of town and city locations
+### Create data.frame of Town and City Locations
 
 Using the previously created `ks_sf` object, we will plot the locations of cities or towns in Kansas.
 Here we will create a `data.frame()` of the geographic locations of some selected cities or towns in Kansas to illustrate how to add points to a base map created in the previous section.
@@ -228,7 +228,7 @@ ks_towns <- data.frame(
 ks_towns
 ```
 
-### Converting sites to an sf object
+### Converting Sites to an _sf_ Object
 
 While we could plot everything using `geom_point()`, if we convert the `data.frame` to an `sf` type object, it is much more flexible and allows us to project the data for a more attractive map.
 We will use the coordinate reference system (CRS) 6922, NAD83 / Kansas LCC, for Kansas here.
@@ -243,7 +243,7 @@ ks_towns <- st_transform(ks_towns, crs = 6922)
 
 Now we're ready to add the points to the map!
 
-### Adding town locations to map
+### Adding Town Locations to Map
 
 Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
 You start with the base layer, in this case Kansas, and add a layer with the points and another with the labels for the points.
@@ -266,7 +266,7 @@ ggplot() +
   ylab("Latitude")
 ```
 
-## Further reading and resources
+## Further Reading and Resources
 
 [Drawing beautiful maps programmatically with R, sf and ggplot2 — Part 1: Basics](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html)
 
