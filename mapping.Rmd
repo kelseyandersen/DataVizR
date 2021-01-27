@@ -5,7 +5,7 @@ title: "Creating Maps with ggplot2"
 ## Introduction
 
 In this exercise we will use [_rnaturalearth_](https://github.com/ropenscilabs/rnaturalearth), [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and
-_ggplot2_ to create a map of the USA and then a map of Kansas and highlight Kansas within a larger map of the USA. Once we have the base maps of the country and state(s) we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
+_ggplot2_ to create a map of Ethiopia and then a map of Oromia and highlight Oromia within a larger map of the USA. Once we have the base maps of the country and state(s) we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
 
 ```{r libraries, message=FALSE}
 library(dplyr)
@@ -23,32 +23,10 @@ Using `ne_states()` will return an _sf_ object with state level information.
 There is also a `ne_countries()` to download country level outlines only as well.
 
 ```{r USA-base, message=FALSE, warning=FALSE}
-usa_sf <- ne_states(geounit = "United States of America",
+ethiopia_sf <- ne_states(geounit = "Ethiopia",
                     returnclass = "sf")
 
-plot(usa_sf)
-```
-
-That returns a map that's probably not what we think of when we think of a map of the US.
-To clean it up, we'll filter Alaska, Hawaii and Puerto Rico just for the purposes of this exercise.
-If you would like to include Alaska and Hawaii in your map, have a look at the [albersusa package](https://github.com/hrbrmstr/albersusa).
-
-To find out what the column names are in the dataset that we can filter on we can use, `colnames()`.
-
-```{r colnames}
-colnames(usa_sf)
-```
-
-We see that a column named `name` exists, with the state names.
-We can use this to `filter()` the data so that it only represents the continental 48 states and use that to make a map.
-
-For more on filtering or sub-setting _sf_ objects, see: <https://cran.rstudio.com/web/packages/sf/vignettes/sf4.html>.
-
-```{r filter-USA}
-usa_sf <- usa_sf %>%
-   filter(!(
-     name %in% c("Alaska", "Hawaii", "Puerto Rico")
-   ))
+plot(ethiopia_sf)
 ```
 
 ## Create a Map Using _ggplot2_
@@ -58,10 +36,10 @@ Using _ggplot2_, we have more control over how the data are displayed than using
 First, plot the whole country using _ggplot2_'s `geom_sf()`.
 
 ```{r plot_level1}
-usa <- ggplot(usa_sf) +
+ethiopia <- ggplot(ethiopia_sf) +
   geom_sf(fill = "white")
 
-usa
+ethiopia
 ```
 
 #### Projecting Map Data
@@ -69,15 +47,15 @@ usa
 That map works, but commonly maps should be projected and it is not.
 Projections are used to reduce the distortion in the data that are displayed in a map.
 There are [several types of map projections](https://imgs.xkcd.com/comics/map_projections.png) available.
-For this map of the US we will use the U.S. National Atlas Equal Area projection, which has a EPSG (European Petroleum Survey Group) number of 2163 and is well suited to the continental USA.
+For this map of Ethiopia we will use the Adindan projection, which has a EPSG (European Petroleum Survey Group) number of 4201 and is well suited for this part of the African continent.
 
 ```{r transform_sf}
-usa_sf <- st_transform(usa_sf, crs = 2163)
+ethiopia_sf <- st_transform(ethiopia_sf, crs = 4201)
 
-usa <- ggplot(usa_sf) +
+ethiopia <- ggplot(ethiopia_sf) +
   geom_sf(fill = "white")
 
-usa
+ethiopia
 ```
 
 #### Add Labels to the States
@@ -87,18 +65,18 @@ One of them is the two letter postal code for the states, `postal`.
 Using `geom_sf_text()`, we can add this information to the map labelling the states.
 
 ```{r plot_level2}
-usa <-
-  usa +
+ethiopia <-
+  ethiopia +
   geom_sf_text(
-    data = usa_sf,
+    data = ethiopia_sf,
     aes(x = longitude,
         y = latitude,
-        label = postal),
+        label = name_en),
     size = 2.5,
     hjust = 1
   )
 
-usa
+ethiopia
 ```
 
 #### Proper Labels and Theme
@@ -107,56 +85,55 @@ Properly label the x and y-axis and set the theme.
 The _ggplot2_ theme, `theme_bw()` is nice to use with maps, so we will apply that here as well.
 
 ```{r plot_level3}
-usa <- 
-  usa +
+ethiopia <- 
+  ethiopia +
   xlab("Longitude") +
   ylab("Latitude") +
   theme_bw()
 
-usa
+ethiopia
 ```
 
 ## Creating maps of Individual States
 
-To create a map of only Kansas, subset the _sf_ object, `usa_sf` such that it contains only the data for Kansas.
+To create a map of only Oromia, subset the _sf_ object, `ethiopia_sf` such that it contains only the data for Oromia.
 
-### Filter Kansas
+### Filter Oromia
 
 ```{r subset-ks}
-ks_sf <- filter(usa_sf, name_pt == "Kansas")
+oromia_sf <- filter(ethiopia_sf, name_en == "Oromia Region")
 
-ks_sf
+oromia_sf
 ```
 
-### Plot Kansas
+### Plot Oromia
 
-After filtering Kansas and creating a new object, we can plot it now using the EPSG specification NAD83 / Kansas LCC for the projection.
+After filtering Oromia and creating a new object, we can plot it now.
 
 ```{r ggplot-ks}
-ggplot(data = ks_sf) +
+ggplot(data = oromia_sf) +
   geom_sf() +
   xlab("Longitude") +
   ylab("Latitude") +
-  theme_bw() +
-  coord_sf(crs = 6922)
+  theme_bw()
 ```
 
-## Highlighting States Within the Country
+## Highlighting Regions Within the Country
 
-Using the `usa_sf` and `ks` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Kansas.
+Using the `ethiopia_sf` and `oromia_sf` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Oromia.
 Note that we use the `data` argument twice here.
-Once for the base USA map and once for the map of Kansas that we use to highlight the state on the map.
+Once for the base Ethipia map and once for the map of Oromia that we use to highlight the state on the map.
 
 ```{r hightlight-ks}
-ggplot(data = usa_sf) +
+ggplot(data = ethiopia_sf) +
   geom_sf(fill = "white") +
-  geom_sf(data = ks_sf,
+  geom_sf(data = oromia_sf,
           fill = "#512888") +
   geom_sf_text(
-    data = ks_sf,
+    data = oromia_sf,
     aes(x = longitude,
         y = latitude,
-        label = postal),
+        label = name_en),
     colour = "white",
     size = 2.5,
     hjust = 1
@@ -168,22 +145,12 @@ ggplot(data = usa_sf) +
 
 ## Adding and Labelling Points on a Map
 
-Now we will build on the maps we created by adding points to a map of Kansas with latitude and longitude values.
-
-### Reprojecting Kansas
-
-Since we're just mapping a single state, Kansas, we'll reproject the `ks_sf` object to EPSG 6922 before proceeding to add points to this base layer of data.
-Previously, we used this projection for the Kansas map but we only specified it in the `coord_sf()` when we created the map.
-Here, we will modify the _sf_ object by transforming it to the new projection.
-
-```{r transform_ks_sf, message=FALSE}
-ks_sf <- st_transform(ks_sf, crs = 6922)
-```
+Now we will build on the maps we created by adding points to a map of Oromia with latitude and longitude values.
 
 ### Create data.frame of Town and City Locations
 
-Using the previously created `ks_sf` object, we will plot the locations of cities or towns in Kansas.
-Here we will create a `data.frame()` of the geographic locations of some selected cities or towns in Kansas to illustrate how to add points to a base map created in the previous section.
+Using the previously created `oromia_sf` object, we will plot the locations of cities or towns in Oromia.
+Here we will create a `data.frame()` of the geographic locations of some selected cities or towns in Oromia to illustrate how to add points to a base map created in the previous section.
 However, you will probably have your own points in a spreadsheet or .CSV file that you can import to a `data.frame()` when you are creating your own maps.
 Aside from importing, rather than creating the data in your R session, the steps are the same.
 
@@ -231,7 +198,7 @@ ks_towns
 ### Converting Sites to an _sf_ Object
 
 While we could plot everything using `geom_point()`, if we convert the `data.frame` to an `sf` type object, it is much more flexible and allows us to project the data for a more attractive map.
-We will use the coordinate reference system (CRS) 6922, NAD83 / Kansas LCC, for Kansas here.
+We will use the coordinate reference system (CRS) 6922, NAD83 / Oromia LCC, for Oromia here.
 
 ```{r convert-sf}
 ks_towns <-
@@ -246,11 +213,11 @@ Now we're ready to add the points to the map!
 ### Adding Town Locations to Map
 
 Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
-You start with the base layer, in this case Kansas, and add a layer with the points and another with the labels for the points.
+You start with the base layer, in this case Oromia, and add a layer with the points and another with the labels for the points.
 
 ```{r add-points}
 ggplot() +
-  geom_sf(data = ks_sf,
+  geom_sf(data = oromia_sf,
           fill = "white") +
   geom_sf(data = ks_towns,
           size = 2) +
