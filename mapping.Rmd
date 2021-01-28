@@ -4,51 +4,42 @@ title: "Creating Maps with ggplot2"
 
 ## Introduction
 
-In this exercise we will use [_rnaturalearth_](https://github.com/ropenscilabs/rnaturalearth), [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and
-_ggplot2_ to create a map of Ethiopia and then a map of Oromia and highlight Oromia within a larger map of Ethiopia. Once we have the base maps of the country and regions we will add points to a map as commonly done to indicate sampling sites or plot locations, etc.
+In this exercise we will use [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and
+_ggplot2_ to create a map of Ethiopia and then a map of two regions highlighting the regions within a larger map of Ethiopia.
+Once we have the base maps of the country and regions we will add points and zones to the map to indicate survey sites.
 
 ```{r libraries, message=FALSE}
 library(dplyr)
+library(GADMTools)
 library(ggplot2)
 library(readr)
-library(rnaturalearth)
-library(rnaturalearthdata)
 library(sf)
+library(stringr)
 ```
 
 ## Create Country Level Map of Ethiopia
 
-This is our base layer, Ethiopia, of the map using the shapefile from Del Ponte and Belachew's repository.
+This is our base layer, Ethiopia, downloaded from <https://www.gadm.org>.
+GADM is a free resource to use for non-commercial and research purposes.
+You can find out more at <https://gadm.org/about.html>.
 
-Using `download.file()`, we will download all the files necessary for the shapefile to create the base map of Ethiopia with internal zones and then load into our R session.
+Using `download.file()`, we will download an _sf`_ file.
 
 ```{r ethiopia-base, message=FALSE, warning=FALSE}
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.CPG?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.CPG"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.dbf?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.dbf"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.prj?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.prj"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.sbn?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.sbn"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.sbx?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.sbx"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.shp?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.shp"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.shp.xml?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.shp.xml"),
-              mode = "wb")
-download.file("https://github.com/emdelponte/paper-coffee-rust-Ethiopia/blob/master/data/ethiopia-zone/Eth_Zone_2013.shx?raw=true",
-              destfile = file.path(tempdir(), "Eth_Zone_2013.shx"),
-              mode = "wb")
+ethiopia_rds <-
+  "https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_ETH_3_sf.rds"
+ethiopia_sf <- file.path(tempdir(), "gadm36_ETH_3_sf.rds")
 
-ethiopia_sf <- st_read(dsn = tempdir(), "Eth_Zone_2013")
+if (toupper(Sys.info()["sysname"]) == "WINDOWS") {
+  download.file(ethiopia_rds,
+                ethiopia_sf,
+                method = "wininet",
+                mode = "wb")
+} else {
+  download.file(ethiopia_rds, ethiopia_sf, method = "auto")
+}
+
+ethiopia_sf <- readRDS(ethiopia_sf)
 
 plot(ethiopia_sf)
 ```
@@ -60,45 +51,51 @@ Using _ggplot2_, we have more control over how the data are displayed than using
 First, plot the whole country using _ggplot2_'s `geom_sf()` and the `ethiopia_sf` object.
 
 ```{r plot_level1}
-ethiopia <- ggplot(ethiopia_sf) +
+ethiopia_ggplot <- ggplot(ethiopia_sf) +
   geom_sf(fill = "white")
 
-ethiopia
+ethiopia_ggplot
 ```
 
-#### Projecting Map Data
+We can see that there are several zones, shown as the smaller polygons within the larger country outline, in this data set.
 
-That map works, but commonly maps should be projected and it is not.
-Projections are used to reduce the distortion in the data that are displayed in a map.
-There are [several types of map projections](https://imgs.xkcd.com/comics/map_projections.png) available.
-For this map of Ethiopia we will use the Adindan projection, which has a EPSG (European Petroleum Survey Group) number of 4201 and is well suited for this part of the African continent.
+#### Add Labels to the Regions
 
-```{r transform_sf}
-ethiopia_sf <- st_transform(ethiopia_sf, crs = 4201)
+The GADM data have several columns to work with.
+You can find out what these are by using the `names()`.
 
-ethiopia <- ggplot(ethiopia_sf) +
-  geom_sf(fill = "white")
-
-ethiopia
+```{r colnames}
+names(ethiopia_sf)
 ```
 
-#### Add Labels to the States
+We can group the GADM data using `dplyr::group_by()` to group the polygons into larger regions and add labels to them.
+In this data set, there are three levels and three columns we might be interested in.
 
-The Natural Earth data have several columns to work with as we've already seen.
-One of them is the two letter postal code for the states, `postal`.
-Using `geom_sf_text()`, we can add this information to the map labelling the states.
+* `NAME_0` refers to the country level and gives a whole country outline,
+* `NAME_1` refers to the second level of administrative boundaries, _e.g._ states within the USA,
+* `NAME_2` refers to the third level of administrative boundaries, _e.g._ counties or parishes within a US state, and
+* `NAME_3` refers to the fourth level of administrative boundaries, _e.g._ districts within counties in a US state.
 
-```{r plot_level2}
-ethiopia <-
-  ethiopia +
+Grouping by any value, 0 - 2 will aggregate or dissolve the lines within the map producing larger polygons.
+Here we will group by `NAME_1` for the regions.
+
+```{r plot_level2, warning=FALSE, message=FALSE}
+ethiopia_regions_sf <-
+  ethiopia_sf %>% 
+  group_by(NAME_1) %>%
+  summarise() %>%
+  ungroup() %>% st_as_sf()
+
+ethiopia_regions_ggplot <- 
+  ggplot(ethiopia_regions_sf) +
+  geom_sf(fill = "white") +
   geom_sf_text(
-    data = ethiopia_sf,
-    aes(label = REGIONNAME),
+    aes(label = NAME_1),
     size = 2.5,
     hjust = 1
   )
 
-ethiopia
+ethiopia_regions_ggplot
 ```
 
 #### Proper Labels and Theme
@@ -106,35 +103,36 @@ ethiopia
 Properly label the x and y-axis and set the theme.
 The _ggplot2_ theme, `theme_bw()` is nice to use with maps, so we will apply that here as well.
 
-```{r plot_level3}
-ethiopia <- 
-  ethiopia +
+```{r plot_level3, warning=FALSE, message=FALSE}
+ethiopia_regions_ggplot <- 
+  ethiopia_regions_ggplot +
   xlab("Longitude") +
   ylab("Latitude") +
   theme_bw()
 
-ethiopia
+ethiopia_regions_ggplot
 ```
 
-## Creating maps of Individual States
+## Creating maps of Individual Regions
 
-To create a map of only Oromia, subset the _sf_ object, `ethiopia_sf` such that it contains only the data for Oromia.
+To create a map of only Oromia and Southern Nations, Nationalities and Peoples' Region (SNNP), subset the _sf_ object, `ethiopia_sf` such that it contains only the data for Oromia and SNNP.
 
-### Filter Oromia
+### Filter Oromia and SNNP
 
-```{r subset-oromia}
-regions_sf <- filter(ethiopia_sf, REGIONNAME == "Oromia" |
-                      REGIONNAME == "SNNPR")
+```{r subset-oromia, warning=FALSE, message=FALSE}
+ethiopia_regions_sf <- filter(ethiopia_sf,
+                     NAME_1 == "Oromia" |
+                       NAME_1 == "Southern Nations, Nationalities and Peoples")
 
-regions_sf
+ethiopia_regions_sf
 ```
 
-### Plot Oromia AND SNNPR (Southern Nations, Nationalities and Peoples' Region)
+### Plot Oromia AND SNNP 
 
-After filtering Oromia SNNPR and creating a new object, we can plot it now.
+After filtering Oromia and SNNP and creating a new object, we can plot it now.
 
-```{r ggplot-oromia}
-ggplot(data = regions_sf) +
+```{r ggplot-oromia, warning=FALSE, message=FALSE}
+ggplot(data = ethiopia_regions_sf) +
   geom_sf() +
   xlab("Longitude") +
   ylab("Latitude") +
@@ -143,22 +141,16 @@ ggplot(data = regions_sf) +
 
 ## Highlighting Regions Within the Country
 
-Using the `ethiopia_sf` and `regions_sf` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Oromia and SNNPR.
+Using the `ethiopia_sf` and `ethiopia_regions_sf` objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Oromia and SNNP.
 Note that we use the `data` argument twice here.
-Once for the base Ethipia map and once for the map of Oromia and SNNPR that we use to highlight the regions on the map.
+Once for the base Ethiopia map and once for the map of Oromia and SNNP that we use to highlight the regions on the map.
 
-```{r hightlight-oromia}
+```{r hightlight-oromia, warning=FALSE, message=FALSE}
 ggplot(data = ethiopia_sf) +
   geom_sf(fill = "white") +
-  geom_sf(data = regions_sf,
-          fill = "#512888") +
-  geom_sf_text(
-    data = regions_sf,
-    aes(label = ZONENAME),
-    colour = "white",
-    size = 2.5,
-    hjust = 1
-  ) +
+  geom_sf(data = ethiopia_regions_sf,
+          aes(fill = NAME_1)) +
+  scale_fill_brewer(palette = "Dark2") +
   xlab("Longitude") +
   ylab("Latitude") +
   theme_bw()
@@ -166,11 +158,11 @@ ggplot(data = ethiopia_sf) +
 
 ## Adding and Labelling Points on a Map
 
-Now we will build on the maps we created by adding points to a map of Oromia with latitude and longitude values.
+Now we will build on the maps we created by adding points to a map of Oromia and SNNP with latitude and longitude values.
 
 ### Create data.frame of Sampling Locations
 
-Using the previously created `regions_sf` object, we will plot the locations of cities or towns in Oromia.
+Using the previously created `ethiopia_regions_sf` object, we will plot the locations of cities or towns in Oromia.
 Now we will download the cleaned survey data from Del Ponte and Belechew (2020) directly into our R session.
 
 ```{r coffee-sampling, message=FALSE}
@@ -182,14 +174,13 @@ coffee_sampling <-
 
 ### Converting Sites to an _sf_ Object
 
-While we could plot everything using `geom_point()`, if we convert the `data.frame` to an `sf` type object, it is much more flexible and allows us to project the data for a more attractive map.
+While we could plot everything using `geom_point()`, if we convert the `data.frame` to an `sf` type object, it is much more flexible for mapping with other _sf_ objects.
 
-```{r convert-sf}
-coffee_sampling <-
+```{r convert-sf, warning=FALSE, message=FALSE}
+coffee_sampling_sf <-
   st_as_sf(coffee_sampling,
            coords = c("lon", "lat"),
            crs = 4326)
-coffee_sampling <- st_transform(coffee_sampling, crs = 4201)
 ```
 
 Now we're ready to add the points to the map!
@@ -197,19 +188,72 @@ Now we're ready to add the points to the map!
 ### Adding Sampling Locations to Map
 
 Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
-You start with the base layer, in this case Oromia and SNNPR.
-The zones are and add a layer with the points and another with the labels for the points.
+For this final map, we will create some new layers to display.
+First, we will create a layer of the zones that where surveys were conducted by filtering the zone names.
+Second, we will create a new layer of the regions that contatain the zones that were surveyed, Orima and Southern Nations, Nationalities and Peoples, and rename Southern Nations, Nationalities and Peoples to SNNP to clean up the legend in the figure.
+Next we will create the base Ethiopia layer to display a sillhouette of the country for the base layer.
 
-```{r add-points}
+Then we will build the map using _ggplot2_.
+
+```{r add-points, warning=FALSE, message=FALSE}
+ethiopia_zones_sf <- ethiopia_regions_sf %>%
+  filter(
+    NAME_2 %in% c(
+      "Jimma",
+      "Mirab Welega",
+      "Sidama",
+      "Sheka",
+      "Keffa",
+      "Bench Maji",
+      "Bale",
+      "Gedeo",
+      "Ilubabor"
+    )
+  )
+
+ethiopia_regions_sf <-
+  ethiopia_regions_sf %>%
+  group_by(NAME_1) %>%
+  summarise() %>%
+  mutate(NAME_1 = gsub("Southern Nations, Nationalities and Peoples", "SNNP",
+                       NAME_1)) %>%
+  ungroup() %>% st_as_sf()
+
+ethiopia_sf <-
+  ethiopia_sf %>%
+  group_by(NAME_0) %>%
+  summarise() %>%
+  ungroup() %>% st_as_sf()
+
 ggplot() +
-  geom_sf(data = regions_sf,
-          aes(fill = ZONENAME)) +
-  geom_sf(data = coffee_sampling,
-          size = 2) +
-  theme_bw() +
+  geom_sf(data = ethiopia_sf,
+          col = NA) +
+  geom_sf(data = ethiopia_regions_sf,
+          aes(linetype = NAME_1),
+          fill = "white") +
+  geom_sf(data = ethiopia_zones_sf,
+          aes(fill = NAME_2),
+          col = NA) +
+  scale_linetype(
+    labels = function(x)
+      str_wrap(x, width = 5)
+  ) +
+  scale_fill_brewer(palette = "Set3") +
+  geom_sf(data = coffee_sampling_sf,
+          size = 2,
+          color = alpha("black", 0.35)) +
   xlab("Longitude") +
-  ylab("Latitude")
+  ylab("Latitude") +
+  labs(
+    title = "Ethiopian Coffee Leaf Rust Survey Sites",
+    caption = "Data from GADM, gadm.org, and Del Ponte and Belachew (2020)",
+    fill = "Zone",
+    linetype = "Region"
+  ) +
+  theme_bw()
 ```
+
+The final figure includes a title, a data acknowledgement and clearly labeled legend describing the map.
 
 ## Further Reading and Resources
 
