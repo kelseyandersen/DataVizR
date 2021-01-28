@@ -3,6 +3,7 @@ title: "R intro!"
 editor_options: 
   markdown: 
     wrap: 72
+    toc: true
 ---
 
 Things to note: Everything can be done in a number of ways - we are
@@ -264,7 +265,7 @@ knitr::include_graphics("img/tidyverse.png")
 knitr::include_graphics("img/tidyverse-process.png")
 ```
 
-Hence by loading `tidyverse`
+Hence loading `tidyverse`
 
 ```{r, load_tidyverse, warning=FALSE, message = FALSE}
 library(tidyverse)
@@ -337,8 +338,8 @@ pipe(%>%) approach:
 
 
 
-### Let's test these
-Let us make a smaller subset of data to use for explaining concepts. 
+### Put this to practice
+`tidyverse` makes code readibility much easier, and you an write long sequences in a much freindlier manner thatn what we have seen above. We will take a smaller subset of our data to make explanation these concepts easier. As, this is slightly more complicated example, so move on and come back to this later to see if you can understand what was done. 
 ```{r}
 dt_small <- 
 dt %>%
@@ -349,8 +350,8 @@ dt %>%
   ungroup()
 dt_small
 ```
-
-Select to grab columns.
+Try some of functions.   
+`select()` to grab columns.  
 
 ```{r select}
 dt_small %>% 
@@ -358,19 +359,11 @@ dt_small %>%
 ```
 
 
-Filter to grab rows.
+`filter()` to grab rows.
 
 ```{r filter}
 dt_small %>% 
   filter(cultivar== "Local")
-```
-
-
-Output of one function becomes the input to the next.  
-*Ctrl* + *Shift* + *M* to insert `%>%`  
-```{r}
-dt_small %>%
-  filter(cultivar== "Local") 
 ```
 
 `mutate()` to make a new column.
@@ -380,7 +373,7 @@ dt_small %>%
   mutate(double_inc = inc * 2)
 ```
 
-Count number of observations by cultivar:
+Count number of observations by variable `cultivar`:
 
 ```{r}
 dt_small %>%
@@ -388,7 +381,7 @@ dt_small %>%
   tally()
 ```
 
-Average inc by cultivar(remove missing values if there are any):
+Average inc by cultivar and remove missing values if there are any:
 
 ```{r}
 dt_small %>%
@@ -397,7 +390,7 @@ dt_small %>%
 ```
 
 Also note that you can include multiple summaries and arrange order of rows 
-based on sove variable.
+based on some variable.
 
 ```{r}
 dt_small %>%
@@ -408,28 +401,29 @@ dt_small %>%
 ```
 
 ## Reshaping the data with `tidyr`
-
-`pivot_wider()` makes dataframes wider by increasing the number of columns and decreasing the number of rows.  
+It is often necessary to change the structure of data for different types of analysis, and especially for visualization.  
+Let us start with `pivot_wider()`, which makes dataframes wider by increasing the number of columns and decreasing the number of rows.  
 Generates multiple columns from two columns:  
-1. each unique value in the key column becomes a column name  
-2. each value in the value column becomes a cell in the new columns  
+1. each unique value in the key column - `zone` becomes a column name  
+2. each value in the value column `inc` becomes a cell in the new columns  
 
 ```{r}
-dt_small_wide <- 
+(dt_small_wide <- 
 dt_small %>%
-  pivot_wider(names_from = "cultivar", 
-              values_from = "inc")
+  pivot_wider(names_from = "zone", 
+              values_from = "inc"))
 ```
 
 `pivot_longer()` makes dataframes longer by increasing the number of rows and decreasing the number of columns.
 ```{r}
 dt_small_wide %>% 
-  pivot_longer( cols = c("Improved", "Local", "Mixture"), # columns to gather  
-                names_to = "cultivar", # spread across the column names
-                values_to = "inc")
+  pivot_longer(cols = 
+                 c("Sheka", "Sidama"), 
+               names_to = "zone",
+               values_to = "inc")
 
 ```
-More detailed guides 
+
 ```{r}
 sessionInfo()
 ```

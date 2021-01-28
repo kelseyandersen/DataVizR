@@ -4,35 +4,55 @@
   -moz-hyphens: none;
 }
 
+/* code */
 .small-code pre code {
   font-size: 1.4em;
 }
+.font50 {
+  font-size: 50%;
+}
+/* footer */
 .footer {
-    color: black; background: #E8E8E8;
-    position: fixed; top: 90%;
-    text-align:center; width:100%;
+    font-size: 0.3em;
+    color: black; 
+    background: #E8E8E8;
+    position: fixed; 
+    top: 100%;
+    text-align:center; 
+    width:100%;
 }
 .midcenter {
     position: fixed;
     top: 50%;
     left: 50%;
 }
+/* first slide titles */
 .title {
   font-size: 0.3em;
   font-style: italic;
   color: white;
   text-align: center;
 }
+.section .reveal h1, h2{
+    color: black;
+    font-weight: bold;
+  }
+
+/* first slide titles */
 .centeremp {
   font-size: 0.3em;
   font-style: italic;
   color: red;
   text-align: center;
 }
-/* titles */
+
+/* slide titles */
 .reveal h3 { 
-  font-size: 140%;
+  font-size: 160%;
   color: gray;
+  top: 150%;
+  font-family: 'Montserrat';
+  line-height: 105%;
 }
 /* body text, ordered and unordered list styles */
 .reveal ul, 
@@ -42,23 +62,31 @@
     line-height: 105%;
     list-style-type: disc;
 }
-
+/* first slide titles */
+.empred {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+  font-size: 0.3em;
+  font-style: bold;
+  color: red;
+  text-align: center;
+}
 </style>
 
 ========================================================
 author: 
-date: 
+class: title-slide
 font-family: 'Helvetica'
 css: custom.css
 width: 1540
 height: 900
 
-<br><br>
+<br><br><br><br>
 <div class="title" style="font-size: .8em;">A very brief..</div>
 
 <div class="title" style="font-size: 2.5em": ">Intro to R</div>
 
-<br><br><br>
+<br><br><br><br><br>
 <hr />
 <p style="text-align: center;"><a href="https://github.com/mladencucak/">Mladen Čučak</a></p>
 <p style="text-align: center;"><span style="color: #808080;"><em>mladencucak@gmail.com</em></span></p>
@@ -70,16 +98,17 @@ Topics
 - About R/RStudio
 - Basics of programming with R
 - Data analysis with `tidyverse`
-  
-<br><br><br><br><br>
-These materials are based on the APS's "R for Plant Pathologists", a more comprehensive 
-workshop available [here](https://everhartlab.github.io/APS_IntroR_2020/index.html)
  
+<br><br><br><br><br><br><br><br>
+These materials are based on the APS's "R for Plant Pathologists" ["R for Plant Pathologists"](https://everhartlab.github.io/APS_IntroR_2020/index.html)    
+Some inspiration from [J. Bryan's Stat545](https://stat545.com/) and  [B. Bohemke's Intro to R](https://github.com/uc-r)  
+<u>*All highly recommended*</u>
+
 
 
 Why R 
 ========================================================
-<br>
+  <br>
 -   **Performance**: stable, light and fast
 
 -   **Support network**: documentation, community, developers
@@ -87,20 +116,20 @@ Why R
 -   **Reproducibility**: anyone anywhere can reproduce results
 
 -   **Versatility**: unified solution to *almost* any numerical problem and 
-    graphical capabilities
+graphical capabilities
 
 -   **Ethics**: accessible to anyone as it is free and open source
 
 
 Be strong! 
 ====================================
-Transition from "point and click" is tough but rewarding
+  Transition from "point and click" is tough but rewarding
 
 <div align="center">
-<img src="img/progres_curves.png" width=1450 height=750>
-</div>
-
-Baby steps
+  <img src="img/progres_curves.png" width=1450 height=750>
+  </div>
+  
+  Baby steps
 ====================================
 <!-- I am decent programmer now. I know what to type in search box! -->
 Help:
@@ -109,10 +138,26 @@ Help:
 * **Cross Validated**: scientific questions  
 
 Learning:
-* "R for Data Science" → <https://r4ds.had.co.nz>
-* R4DS Learning Community → <https://rfordatasci.com>
+  * "R for Data Science" → <https://r4ds.had.co.nz>
+  * R4DS Learning Community → <https://rfordatasci.com>
+  
+  Baby steps
+====================================
+<!-- I am decent programmer now. I know what to type in search box! -->
+Help:
+* **Google**: just add "with R" at the end of any search
+* **Stack Overflow**: programming questions
+* **Cross Validated**: scientific questions  
 
-<div class="centeremp" style="font-size: 1.3em;">Stay focused! Don't get overwhelmed!</div>
+Learning:
+  * "R for Data Science" → <https://r4ds.had.co.nz>
+  * R4DS Learning Community → <https://rfordatasci.com>
+  <br><br>
+  <div class="centeremp" style="font-size: 1.1em;">
+  There are (too) many resources! So...
+<br><br>Stay focused! <br><br>
+  Don't get overwhelmed!
+</div>
 
 
 Your new best friends
@@ -126,7 +171,7 @@ Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
 transition: linear
 left: 50%
 <br><br>
-**R** – programming language for statistical computing, data manipulation, and graphics  
+**R** – Statistical programming language  
 <br><br>
 ![alt text](img/Rlogo.png)  
 <br>
@@ -139,49 +184,56 @@ left: 50%
 ![alt text](img/Rstudio_logo.png)
 <https://rstudio.com/>
 
-How is that? 
+It may be described as...
 ====================================
-left: 50%
-<br><br>
+left: 45%
+<br>
+<center>
 **R** – Engine  
 <br>
-![alt text](img/rengine.png)
+<center>
+ ![](https://media.giphy.com/media/lrDKaXdgYqwKwArGUA/giphy.gif)
+<center>
 
 ***
 <br>
-**RStudio** – Dashboard  
-   
-![alt text](img/dashboard.png)
+<center>
+
+**RStudio** – Dashboard 
+<br><br><br><br>
+ ![](https://media.giphy.com/media/MCcKeI1d0NE7wQdUt3/giphy.gif)
+<center>
 
 R interface 
 ====================================
 <center>
 ...*is not the friendliest one*...
+<center>
+<img src="img/R.png" width=1000 height=800>
 </center>
-<div class="midcenter" style="margin-left:-300px; margin-top:-200px;">
-<img src="img/R.png"></img>
-</div>
 
 RStudio (IDE) 
 ====================================
 <center>
-<img src="img/RStudio-console.png" width=1000 height=500>
+<img src="img/RStudio-console.png" width=1450 height=750>
 </center>
 
 
 Move onto some coding
 ====================================
-- Move the cursor onto a line with R code and pres (Win)*Ctrl* + *Enter* or (MAC)*Cmd* + *Return*.  
+<br><br>
+Move the cursor onto a line with R code and pres:
+- (Win)*Ctrl* + *Enter* or 
+- (MAC)*Cmd* + *Return*.  
 <br>
 <div align="justify">
 *Challenge: Do it with one hand you are not using to hold the mouse!*
 <div>
-
-Tip for later:
-- To run an entire script (Win)*Ctrl* + *Shift* + *Enter* or (MAC)*Cmd* + *Shift* +
-*Return*
+<br><br>
+Tips for later:
 - Many other keyboard shortcuts in RStudio (Win)*Alt*+*Shift*+*K* or (MAC)*Option*+*Shift*+*K*
-
+- For example, to run an entire script (Win)*Ctrl* + *Shift* + *Enter* or (MAC)*Cmd* + *Shift* +
+*Return*
 
 R basics: In R, we have...
 ====================================
@@ -189,7 +241,8 @@ left: 35%
 class: small-code
 
 **Objects**, where the data is stored.  
-Data is assigned using `<-`
+<br>
+Assign with `<-`
 
 ```r
 x <- 1
@@ -217,7 +270,8 @@ left: 35%
 class: small-code
 
 **Objects**, where the data is stored.  
-Data is assigned using `<-`
+<br>
+Assign with `<-`
 
 ```r
 x <- 1
@@ -238,8 +292,9 @@ the same result if:
 [1] 4
 ```
 
+
 ***
-**Functions** are applied on these objects to analyze the data. 
+**Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
 
 ```r
 # I am a comment!!! Just here to help jog the memory later on...
@@ -267,11 +322,12 @@ addition(argument_one = x,
 
 R basics: In R, we have...
 ====================================
-left: 28%
+left: 30%
 class: small-code
 
 **Objects**, where the data is stored.  
-Data is assigned using `<-`
+<br>
+Assign with `<-`
 
 ```r
 x <- 1
@@ -293,14 +349,13 @@ the same result if:
 ```
 
 ***
-**Functions** which are applied on objects or another functions (i.e. to analyze the data) 
+**Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
 
 ```r
 addition <- function(argument_one, argument_two){ 
   argument_one + argument_two 
 } 
-addition(argument_one = x,
-         argument_two = y)
+addition(argument_one = x,argument_two = y)
 ```
 
 ```
@@ -308,8 +363,7 @@ addition(argument_one = x,
 ```
 
 ```r
-# Notice the difference?!
-addition(x, y)
+addition(x, y)# Notice the difference?!
 ```
 
 ```
@@ -335,7 +389,7 @@ all.equal(addition(x, y), x+y) #Same as above, but pre-made
 
 Objects: Vectors
 ====================================
-left: 50%
+left: 47%
 class: small-code
 
 *Vectors* store data of the same type  
@@ -385,7 +439,7 @@ logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
 ```
 
 ***
-Subsetting and Indexing
+Subsetting - <u>square brackets</u>
 
 ```r
 num[1] # 1st element
@@ -523,7 +577,7 @@ Think of something like Microsoft Office suite
 <img src="img/tidyverse.png"></img>
 </center>
 
-Data analysis with tidyverse 
+
 ====================================
 `tidyverse` and data analysis cycle
 <center>
@@ -532,15 +586,40 @@ Data analysis with tidyverse
 
 Data import
 ====================================
-Number of functions within `readr` and `readxl` for different types of files.  
-<br>
-Here we will use the 
+Several functions within `readr` and `readxl` for different types of files.  
+For this workshop, we will use data on [coffee leaf rust from Ethiopia](https://osf.io/xejaz/)  
 
 
 
+```r
+dt <- read_csv(here::here("data", "survey_clean.csv"))
+tibble::glimpse(dt, 70)
+```
+
+```
+Rows: 405
+Columns: 13
+$ farm            <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13...
+$ region          <chr> "SNNPR", "SNNPR", "SNNPR", "SNNPR", "SNNP...
+$ zone            <chr> "Bench Maji", "Bench Maji", "Bench Maji",...
+$ district        <chr> "Debub Bench", "Debub Bench", "Debub Benc...
+$ lon             <dbl> 35.44250, 35.44250, 35.42861, 35.42861, 3...
+$ lat             <dbl> 6.904722, 6.904722, 6.904444, 6.904444, 6...
+$ altitude        <dbl> 1100, 1342, 1434, 1100, 1400, 1342, 1432,...
+$ cultivar        <chr> "Local", "Mixture", "Mixture", "Local", "...
+$ shade           <chr> "Sun", "Mid shade", "Mid shade", "Sun", "...
+$ cropping_system <chr> "Plantation", "Plantation", "Plantation",...
+$ farm_management <chr> "Unmanaged", "Minimal", "Minimal", "Unman...
+$ inc             <dbl> 86.70805, 51.34354, 43.20000, 76.70805, 4...
+$ sev2            <dbl> 55.57986, 17.90349, 8.25120, 46.10154, 12...
+```
+<div class="footer" style="font-size: .7em": "> 
+Del Ponte, E. M., & Belachew, K. (2020, June 14). Research Compendium: Altitude is the main driver of coffee leaf rust epidemic - a large-scale survey in Ethiopia. https://doi.org/10.17605/OSF.IO/XEJAZ
+</div>
 Data transformation
 ====================================
-**Functions**  
+left: 45
+`dplyr` **Functions**  
 <br>
 Six key `dplyr` functions that allow you to solve the vast majority of your data transformation challenges:
 
@@ -570,10 +649,11 @@ argument_one %>%
 
 
 
-
-Test these
+Lets test these
 ====================================
 left: 50%
+
+Make small subset of data 
 
 ```r
 (dt_small <- 
@@ -581,7 +661,8 @@ dt %>%
   select(cultivar, zone, inc) %>% 
   group_by(cultivar, zone) %>%
   slice(head(row_number(), 1)) %>% 
-  filter(zone =="Sheka" |zone ==  "Sidama") %>% 
+  filter(
+    zone =="Sheka" |zone ==  "Sidama") %>% 
   ungroup())
 ```
 
@@ -600,19 +681,15 @@ dt %>%
 
 ```r
 dt_small %>% 
-  select(cultivar, zone)
+  select(cultivar, inc) %>% 
+  filter(inc <= 17)
 ```
 
 ```
-# A tibble: 6 x 2
-  cultivar zone  
-  <chr>    <chr> 
-1 Improved Sheka 
-2 Improved Sidama
-3 Local    Sheka 
-4 Local    Sidama
-5 Mixture  Sheka 
-6 Mixture  Sidama
+# A tibble: 1 x 2
+  cultivar   inc
+  <chr>    <dbl>
+1 Improved  16.5
 ```
 
 
@@ -633,43 +710,131 @@ dt_small %>%
 3 Mixture      24.1       18.6
 ```
 
-Reshaping data
+Reshaping data: wide
 ====================================
+left:45%
 
-
-```r
-(dt_small_wide <- 
-dt_small %>%
-  pivot_wider(names_from = "cultivar", 
-              values_from = "inc"))
-```
-
-```
-# A tibble: 2 x 4
-  zone   Improved Local Mixture
-  <chr>     <dbl> <dbl>   <dbl>
-1 Sheka      33.2  81.8    29.5
-2 Sidama     16.5  35.2    18.6
-```
-
-***
-`pivot_longer()` makes dataframes longer by increasing the number of rows and decreasing the number of columns.
+__Important__ for data visualization  
+<br>
+Our data subset is in __long format__
+<br>
 
 ```r
-dt_small_wide %>% 
-  pivot_longer( cols = c("Improved", "Local", "Mixture"), # columns to gather  
-                names_to = "cultivar", # spread across the column names
-                values_to = "inc")
+dt_small
 ```
 
 ```
 # A tibble: 6 x 3
-  zone   cultivar   inc
-  <chr>  <chr>    <dbl>
-1 Sheka  Improved  33.2
-2 Sheka  Local     81.8
-3 Sheka  Mixture   29.5
-4 Sidama Improved  16.5
-5 Sidama Local     35.2
-6 Sidama Mixture   18.6
+  cultivar zone     inc
+  <chr>    <chr>  <dbl>
+1 Improved Sheka   33.2
+2 Improved Sidama  16.5
+3 Local    Sheka   81.8
+4 Local    Sidama  35.2
+5 Mixture  Sheka   29.5
+6 Mixture  Sidama  18.6
 ```
+
+***
+
+
+Reshaping data: wide
+====================================
+left:45%
+
+__Important__ for data visualization  
+<br>
+Our data subset is in __long format__
+<br>
+
+```r
+dt_small
+```
+
+```
+# A tibble: 6 x 3
+  cultivar zone     inc
+  <chr>    <chr>  <dbl>
+1 Improved Sheka   33.2
+2 Improved Sidama  16.5
+3 Local    Sheka   81.8
+4 Local    Sidama  35.2
+5 Mixture  Sheka   29.5
+6 Mixture  Sidama  18.6
+```
+
+***
+Change it to **wide** format with `tidyr`   
+- `names_from`: column to columnS
+- `values_from`: column to values
+
+```r
+(dt_small_wide <- 
+dt_small %>%
+  pivot_wider(names_from = "zone", 
+              values_from = "inc"))
+```
+
+```
+# A tibble: 3 x 3
+  cultivar Sheka Sidama
+  <chr>    <dbl>  <dbl>
+1 Improved  33.2   16.5
+2 Local     81.8   35.2
+3 Mixture   29.5   18.6
+```
+
+Reshaping data: long
+====================================
+left:40%
+<br><br><br>
+Can we do it the other way around? 
+
+```r
+dt_small_wide 
+```
+
+```
+# A tibble: 3 x 3
+  cultivar Sheka Sidama
+  <chr>    <dbl>  <dbl>
+1 Improved  33.2   16.5
+2 Local     81.8   35.2
+3 Mixture   29.5   18.6
+```
+
+***
+Change it to **long** format with `pivot_longer()`   
+- `cols`: columns to column 
+- `values_from`: values to columns
+
+```r
+dt_small_wide %>% 
+  pivot_longer(cols = 
+                 c("Sheka", "Sidama"), 
+               names_to = "zone",
+               values_to = "inc")
+```
+
+```
+# A tibble: 6 x 3
+  cultivar zone     inc
+  <chr>    <chr>  <dbl>
+1 Improved Sheka   33.2
+2 Improved Sidama  16.5
+3 Local    Sheka   81.8
+4 Local    Sidama  35.2
+5 Mixture  Sheka   29.5
+6 Mixture  Sidama  18.6
+```
+
+====================================
+<br><br><br><br>
+<div class="empred" style="font-size: 2em": ">Congratulations!! </div>
+
+<center>
+ ![](https://media.giphy.com/media/YbXtbKoi2ZUOc/giphy.gif)
+
+So, the painful part is done, enjoy the rest! 
+<center>
+
