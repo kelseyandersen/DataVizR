@@ -5,7 +5,7 @@ navbar:
   left:
   - text: Welcome
     href: index.html
-  - text: R intro
+  - text: Introduction to R
     href: intro/r_intro.html
   - text: Data Visualization - ggplot
     menu:
@@ -32,4 +32,3 @@ output:
     toc_float: yes
     lib_dir: site_libs
     self_contained: no
-
