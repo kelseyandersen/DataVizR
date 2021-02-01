@@ -6,7 +6,11 @@ navbar:
   - text: Welcome
     href: index.html
   - text: Introduction to R
-    href: intro/r_intro.html
+    menu: 
+     - text: Slides
+       href: intro/presentation.html
+     - text: Code
+       href: Intro_R.html
   - text: Data Visualization - ggplot
     menu:
      - text: Structure of ggplots 
