@@ -1,12 +1,3 @@
-## --------------------------------------------------------------------------------------------
-x <- 1
-y <- 2
-x + y
-
-
-## --------------------------------------------------------------------------------------------
-1+3
-
 
 ## --------------------------------------------------------------------------------------------
 x <- 1
@@ -31,36 +22,13 @@ addition(argument_one = x,
          argument_two = y)
 
 
-## --------------------------------------------------------------------------------------------
-x <- 1
-y <- 2
-x + y
 
 
-## --------------------------------------------------------------------------------------------
-1+3
-
-
-## --------------------------------------------------------------------------------------------
-addition <- function(argument_one, argument_two){ 
-  argument_one + argument_two 
-} 
-addition(argument_one = x,argument_two = y)
 addition(x, y)# Notice the difference?!
 addition(x, y) == x+y #notice double "="
 all.equal(addition(x, y), x+y) #Same as above, but pre-made
 
 
-## --------------------------------------------------------------------------------------------
-num <- c(50, 60, 65) 
-
-char <- c("mouse", "rat", "dog") 
-
-fct <- factor("low", "med", "high")
-
-dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
-
-logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
 
 
 ## --------------------------------------------------------------------------------------------
@@ -108,14 +76,6 @@ dt <- read_csv(here::here("data", "survey_clean.csv"))
 tibble::glimpse(dt, 70)
 
 
-## ----eval = FALSE----------------------------------------------------------------------------
-## function(argument_one, argument_two,...)
-
-
-## ----eval = FALSE----------------------------------------------------------------------------
-## argument_one %>%
-##   function(., argument_two,...)
-
 
 ## --------------------------------------------------------------------------------------------
 (dt_small <- 
@@ -124,7 +84,7 @@ dt %>%
   group_by(cultivar, zone) %>%
   slice(head(row_number(), 1)) %>% 
   filter(
-    zone =="Sheka" |zone ==  "Sidama") %>% 
+    zone =="Sheka" | zone ==  "Sidama") %>% 
   ungroup())
 
 
@@ -162,6 +122,13 @@ dt_small_wide
 dt_small_wide %>% 
   pivot_longer(cols = 
                  c("Sheka", "Sidama"), 
+               names_to = "zone",
+               values_to = "inc")
+
+dt %>% 
+  select(zone, inc) %>% 
+  pivot_longer(cols = 
+                 unique(zone), 
                names_to = "zone",
                values_to = "inc")
 

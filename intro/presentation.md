@@ -118,7 +118,7 @@ Why R
 -   **Versatility**: unified solution to *almost* any numerical problem and 
 graphical capabilities
 
--   **Ethics**: accessible to anyone as it is free and open source
+-   **Accessibility**: free and open source
 
 
 Be strong! 
@@ -222,7 +222,7 @@ RStudio (IDE)
 Move onto some coding
 ====================================
 <br><br>
-Move the cursor onto a line with R code and pres:
+Move the cursor onto a line with R code and press:
 - (Win)*Ctrl* + *Enter* or 
 - (MAC)*Cmd* + *Return*.  
 <br>
@@ -519,7 +519,7 @@ head(df,1)
 ```
 
 ***
-Same logic for indexing, just in 2 dimensions
+Same logic for subsetting, just in 2 dimensions
 
 ```r
 df[1, 1] # [rows, columns]
@@ -584,11 +584,22 @@ Think of something like Microsoft Office suite
 <img src="img/tidyverse-process.png"></img>
 </center>
 
+
+Download and load packages
+====================================
+
+
+```r
+library("tidyverse")
+library("here")
+```
+
+
+
 Data import
 ====================================
 Several functions within `readr` and `readxl` for different types of files.  
 For this workshop, we will use data on [coffee leaf rust from Ethiopia](https://osf.io/xejaz/)  
-
 
 
 ```r
@@ -640,7 +651,7 @@ Traditional approach:
 ```r
 function(argument_one, argument_two,...)  
 ```
-pipe `%\>%` approach:  
+pipe `%>%` approach:  
 
 ```r
 argument_one %>% 
