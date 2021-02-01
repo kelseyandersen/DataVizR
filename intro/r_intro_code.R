@@ -125,11 +125,3 @@ dt_small_wide %>%
                names_to = "zone",
                values_to = "inc")
 
-dt %>% 
-  select(zone, inc) %>% 
-  pivot_longer(cols = 
-                 unique(zone), 
-               names_to = "zone",
-               values_to = "inc")
-
-

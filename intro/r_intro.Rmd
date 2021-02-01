@@ -6,25 +6,17 @@ editor_options:
     toc: true
 ---
 
-Things to note: Everything can be done in a number of ways - we are
-showing only one way here.
-
-data frame is a list
-
-
-
 ## Why R?
 
--   **Performance**: stable, light and fast
+-   **Performance**: stable, light and fast-parallelisation 
 
 -   **Support network**: documentation, community, developers
 
 -   **Reproducibility**: anyone anywhere can reproduce results
 
--   **Versatility**: unified solution to *almost* any numerical problem and 
-    graphical capabilities
+-   **Versatility**: solutions for *almost* any numerical problem and extensive graphical capabilities graphical capabilities
 
--   **Ethics**: open source, removes economic barrier to data analysis
+-   **Accessibility**: free and open source
 
 <http://www.r-project.org/>
 
@@ -36,8 +28,8 @@ knitr::include_graphics("img/R.png")
 
 ### RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
 
--   Integrated Development Environment (IDE) for R
--   Separate program, developed by a company but also free and open source.
+-   Integrated Development Environment (IDE) for R,
+-   Separate program, developed by a company but also free and open source, and
 -   By far the best thing to use when learning R.
 
 #### RStudio orientation
@@ -57,11 +49,12 @@ knitr::include_graphics("img/RStudio-console.png")
 
 Projects in RStudio create a folder for storing all of our files (data,
 scripts, images)\
-Eliminates the need for setting our working directory with setwd()\
+Eliminates the need for setting our working directory with `setwd()`\
 It is useful to created individual folders within the project for
 storing data, scripts, images, etc.\
 When you want to open your project to a new computer, just copy this
 entire folder onto the new machine
+
 
 ### Getting help
 
@@ -105,7 +98,8 @@ x + Y #case sensitive
 ### Functions
 
 Functions are "canned scripts" which automate series of commands on one
-or more inputs called arguments
+or more inputs called arguments. Arguments can be anything (numbers, file names, variables), options are arguments that take on default values which can be altered by the user
+
 
 ```{r custom_functions}
 addition <- function(argument_one, argument_two){ 
@@ -118,15 +112,12 @@ addition(x, y)
 addition(x, y) == x+y #notice double "="
 all.equal(addition(x, y), x+y) #Same as above, but pre-made
 ```
-Other useful functions. 
+Examples of functions and options.  
 
 ```{r functions}
 round(3.14159)
 round(3.14159, digits = 2)
 ```
-Arguments can be anything (numbers, file names, variables), options are
-arguments that take on default values which can be altered by the user
-It is also possible (and very useful) to create your own functions.
 
 Some useful functions
 
@@ -138,7 +129,6 @@ str(x) # Display structure of object
 
 # Workspace environment
 
--   You should now have 4 objects in your global environment
 -   History tab will show your recent code
 -   To list and remove these objects from your global environment:
 
@@ -196,7 +186,7 @@ head(df,1)
 ```
 Notice different data types in table header.
 Datatypes in R:
-int stands for integers.
+`int` stands for integers.
 
 `dbl` stands for doubles, or real numbers.
 
@@ -218,7 +208,6 @@ char[char == "mouse"|char == "rat"]
 num[num >= 30 & num == 21]
 ```
 
-Notice that we use == when subsetting instead of =.  
 
 ### Indexing and subsetting dataframes
 
