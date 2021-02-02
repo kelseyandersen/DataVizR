@@ -216,12 +216,7 @@ R interface
 <img src="img/R.png" width=1000 height=800>
 </center>
 
-RStudio (IDE) 
-====================================
-Take a look at RStudio. 
-
-
-Move onto some coding
+RStudio (IDE) and some coding
 ====================================
 <br><br>
 Move the cursor onto a line with R code and press:

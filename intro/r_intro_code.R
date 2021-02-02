@@ -25,7 +25,7 @@ addition(argument_one = x,
 
 
 addition(x, y)# Notice the difference?!
-addition(x, y) == x+y #notice double "="
+
 all.equal(addition(x, y), x+y) #Same as above, but pre-made
 
 
@@ -65,14 +65,21 @@ df[, -2] # Exclude 2nd column
 df[2:3, "col_two"] 
 df$col_two
 
-
-## ----libs, echo = FALSE----------------------------------------------------------------------
+#Load libraries
 library("tidyverse")
 library("here")
 
+#Path to your work directory
+getwd()
+
+#Files in your directory
+list.files(getwd())
+
+#Path to your our data
+here::here("data", "survey_clean.csv")
 
 ## --------------------------------------------------------------------------------------------
-dt <- read_csv(here::here("data", "survey_clean.csv"))
+dt <- read_csv(file = here::here("data", "survey_clean.csv"))
 tibble::glimpse(dt, 70)
 
 
