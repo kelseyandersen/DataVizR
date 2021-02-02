@@ -25,8 +25,8 @@ navbar:
        href:
   - text: Maps
     menu:
-     - text: Basic GIS
-       href: 
+    - text: Creating maps with ggplot2
+      href: mapping.html
 output:
   html_document:
     theme: flatly
