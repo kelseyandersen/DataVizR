@@ -1,0 +1,431 @@
+
+---
+title: "Introduction to R"
+---
+
+Things to note: Everything can be done in a number of ways - we are
+showing only one way here.
+
+data frame is a list
+
+
+
+## Why R?
+
+-   **Performance**: stable, light and fast
+
+-   **Support network**: documentation, community, developers
+
+-   **Reproducibility**: anyone anywhere can reproduce results
+
+-   **Versatility**: unified solution to *almost* any numerical problem and 
+    graphical capabilities
+
+-   **Ethics**: open source, removes economic barrier to data analysis
+
+<http://www.r-project.org/>
+
+R console is basic...
+
+```{r R, echo=FALSE,purl = FALSE}
+knitr::include_graphics("img/R.png")
+```
+
+### RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
+
+-   Integrated Development Environment (IDE) for R
+-   Separate program, developed by a company but also free and open source.
+-   By far the best thing to use when learning R.
+
+#### RStudio orientation
+
+Four panes (positions can be changed)
+
+-   Scripts (top-left)
+-   R console (bottom-left)
+-   Environment/history (top-right)
+-   Files/plots/help/etc (bottom-right)
+
+```{r IDE, echo=FALSE,purl = FALSE}
+knitr::include_graphics("img/RStudio-console.png")
+```
+
+### RStudio Projects
+
+Projects in RStudio create a folder for storing all of our files (data,
+scripts, images)\
+Eliminates the need for setting our working directory with setwd()\
+It is useful to created individual folders within the project for
+storing data, scripts, images, etc.\
+When you want to open your project to a new computer, just copy this
+entire folder onto the new machine
+
+### Getting help
+
+Help:  
+- **Google**: just add "with R" at the end of any search  
+- **Stack Overflow**: programming questions  
+- **Cross Validated**: scientific questions  
+ 
+Learning:  
+- "R for Data Science" → <https://r4ds.had.co.nz>  
+- R4DS Learning Community → <https://rfordatasci.com>  
+
+
+## Basic concepts
+
+In R, We have  *objects*, where the data is stored.  
+**Functions** which are applied on objects or another functions (i.e. to analyze the data)
+We create scripts which are something like kitchen recipes.  
+This collection of recipes is stored in an R project.
+
+### Objects
+
+We can assign values to objects using the assignment operator (AKA "gets arrow:), and use R
+to do useful things: You may come across code that assigns values using
+= instead of `<-`, which can have some slight differences It is good
+practice to stick with `<-` for assigning values.
+
+```{r }
+1+3 # R is a fancy calculator
+x <- 1 # assign 1 to object x
+y <- 2 # assign 2 to object y
+x + y # add 1 and 2 together 
+```
+But be careful...
+```{r eval=FALSE}
+x + Y # R is case sensitive (this will not work)
+```
+
+*pro tip: Stick to small letters and underscores + avoid numbers when naming objects.*
+
+### Functions
+
+Functions are "canned scripts" which automate series of commands on one
+or more inputs called arguments
+
+```{r custom_functions}
+addition <- function(argument_one, argument_two){ 
+  argument_one + argument_two 
+} 
+addition(argument_one = x,
+         argument_two = y)
+# Notice the difference?!
+addition(x, y)
+addition(x, y) == x+y #notice double "="
+all.equal(addition(x, y), x+y) #Same as above, but pre-made
+```
+Other useful functions. 
+
+```{r functions}
+round(3.14159)
+round(3.14159, digits = 2)
+```
+Arguments can be anything (numbers, file names, variables), options are
+arguments that take on default values which can be altered by the user
+It is also possible (and very useful) to create your own functions.
+
+Some useful functions:
+
+```{r}
+length(x) # Counts the number of elements in the vector
+class(x) # Identifies the type of elements
+str(x) # Display structure of object
+```
+
+#### *Packages* are collections of funcitions
+
+-   example of a package and how to install it. 
+
+# Workspace environment
+
+-   You should now have 4 objects in your global environment
+-   History tab will show your recent code
+-   To list and remove these objects from your global environment:
+
+```{r, eval=FALSE}
+# list all objects
+ls()
+## [1] "D" "h" "K" "Q"
+# remove a single object from Environment
+rm(some_object)
+```
+
+### Object types  
+#### Vectors
+We can save multiple values into a single 
+variable, called **vector**, using the `c()` function:
+
+```{r}
+num <- c(50, 60, 65) 
+num
+
+```
+
+
+Vectors can also contain other types of data:
+
+```{r}
+char <- c("mouse", "rat", "dog") 
+
+fct <- factor("low", "med", "high")
+
+dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
+
+logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
+```
+Note the quotation marks!  
+
+#### Data frames
+
+
+A **data frame** is the most common way of storing **data** in **R**
+and, generally, is the **data** structure most often used for **data**
+analyses. Under the hood, a **data frame** is a list of equal-length
+vectors. Each element of the list can be thought of as a column and the
+length of each element of the list is the number of rows.
+
+We can make our own data frames
+```{r make_data_frame}
+df <- data.frame(
+  col_one = num,
+  col_two = char,
+  col_three = dates
+)
+print(df)
+head(df,1)
+```
+Notice different data types in table header.
+Datatypes in R:
+int stands for integers.
+
+`dbl` stands for doubles, or real numbers.
+
+`chr` stands for character vectors, or strings.
+
+`dttm` stands for date-times (a date + a time).
+
+`lgl` stands for logical, vectors that contain only TRUE or FALSE.
+
+`fctr` stands for factors, which R uses to represent categorical variables
+with fixed possible values.
+
+
+We can subset on multiple conditions using & for AND conditions (ie.
+both are TRUE), and | for OR conditions (ie. either are TRUE):
+
+```{r}
+char[char == "mouse"|char == "rat"]
+num[num >= 30 & num == 21]
+```
+
+Notice that we use == when subsetting instead of =.  
+
+### Indexing and subsetting dataframes
+
+Dataframes are also subsetted or indexed with square brackets. We
+must specify rows then columns[row,column]:
+
+```{r eval = FALSE}
+df[1, 1] # first element in the first column of the data frame (as a vector)
+df[1, 3] # first element in the third column (as a vector)
+df[, 1] # first column in the data frame (as a vector)
+df[1] # first column in the data frame (as a data.frame)
+df[1:2, 3] # first two elements in the third column (as a vector)
+df[3, ] # the 3rd element for all columns (as a data.frame)
+```
+
+Use the - sign to exclude certain sections:
+
+```{r}
+df[,-1] # The whole data frame, except the first column
+df[-c(2:3),] # remove a sequence of rows
+```
+
+Columns can be selected by name using the these operators:
+
+```{r}
+df["col_one"] # Result is a data.frame
+df[, "col_one"] # Result is a vector
+df[["col_one"]] # Result is a vector
+df$col_one # Result is a vector
+```
+
+
+# `tidyverse`
+
+`tidyverse` is a "package of packages" which includes several packages:
+
+```{r what-is-tidyverse, echo=FALSE}
+knitr::include_graphics("img/tidyverse.png")
+```
+
+...designed to make the data analysis easier.
+
+```{r tidyverse-process, echo=FALSE}
+knitr::include_graphics("img/tidyverse-process.png")
+```
+
+Hence loading `tidyverse`
+
+```{r, load_tidyverse, warning=FALSE, message = FALSE}
+library(tidyverse)
+```
+
+Replaces loading all these packages:
+
+```{r, eval=FALSE}
+library(ggplot2) 
+library(tibble) 
+library(tidyr) 
+library(readr) 
+library(purrr) 
+library(dplyr) 
+library(stringr) 
+library(forcats) 
+```
+
+## Data import
+Number of functions within `readr` and `readxl` for different types of files.
+
+For this workshop, we will use [coffee leaf rust data from Ethiopia](https://osf.io/xejaz/) provided by Emerson M. Del Ponte and Kifle Belachew.
+
+```{r load_workshop_data, echo=FALSE, warning=FALSE, message = FALSE}
+library("here")
+dt <- read_csv(here::here("data", "survey_clean.csv"))
+head(dt)
+```
+
+## Data transformation
+
+All that bracket-based selecting can be a bit cumbersome.
+Add-on package `dplyr` greatly simplifies the process; inspired by SQL.
+
+### Key functions
+
+There is six key `dplyr` functions that allow you to solve the vast majority of
+your data transformation challenges:
+
+|Function| Description|
+|:-------------------------:|-----------------------------|
+|`filter`| pick observations based on values|
+|`select`| pick variables|
+|`summarize`| compute statistical summaries|
+|`group_by`| perform operations at different levels of your data|
+|`arrange`| reorder data|
+|`mutate`| create new variables|
+
+### Pipes 
+From `magrittr` package.  
+Traditional approach:\
+`function(**data**, argument_one, argument_two,...)`\
+pipe(%>%) approach:
+`data %>% function( ., argument_one, argument_two,...)`
+
+### Common operators
+
+|         Operator          | Description                 |
+|:-------------------------:|-----------------------------|
+|        `+,-,*,/,^`        | arithmetic                  |
+|       `x / sum(x)`        | arithmetic w/aggregation    |
+|         `%/%, %%`         | modular arithmetic          |
+|     `log, exp, sqrt`      | transformations             |
+|        `lag, lead`        | offsets                     |
+| `cumsum, cumprod, cum...` | cum/rolling aggregates      |
+|  `>, >=, <, <=, !=, ==`   | logical comparisons         |
+|  `min_rank, dense_rank`   | ranking                     |
+|         `between`         | are values between a and b? |
+|          `ntile`          | bin values into n buckets   |
+
+
+
+### Put this to practice
+`tidyverse` makes code readibility much easier, and you an write long sequences in a much freindlier manner than what we have seen above. We will take a smaller subset of our data to illustrate these concepts. As this is slightly more complicated example, we suggest comming back to this later to see if you can understand what was done. 
+```{r}
+dt_small <- 
+dt %>%
+  select(cultivar, zone, inc) %>% 
+  group_by(cultivar, zone) %>%
+  slice(head(row_number(), 1)) %>% 
+  filter(zone =="Sheka" |zone ==  "Sidama") %>% 
+  ungroup()
+dt_small
+```
+Try some of functions.   
+`select()` to grab columns.  
+
+```{r select}
+dt_small %>% 
+  select(cultivar, zone)
+```
+
+
+`filter()` to grab rows.
+
+```{r filter}
+dt_small %>% 
+  filter(cultivar== "Local")
+```
+
+`mutate()` to make a new column.
+
+```{r}
+dt_small %>%
+  mutate(double_inc = inc * 2)
+```
+
+Count number of observations by variable `cultivar`:
+
+```{r}
+dt_small %>%
+  group_by(zone) %>%
+  tally()
+```
+
+Average inc by cultivar and remove missing values if there are any:
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc, na.rm = TRUE))
+```
+
+Also note that you can include multiple summaries and arrange order of rows 
+based on some variable.
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc),
+            min_weight = min(inc)) %>%
+    arrange(desc(mean_inc))
+```
+
+## Reshaping the data with `tidyr`
+It is often necessary to change the structure of data for different types of analysis, and especially for visualization.  
+Let us start with `pivot_wider()`, which makes dataframes wider by increasing the number of columns and decreasing the number of rows.  
+Generates multiple columns from two columns:  
+1. each unique value in the key column - `zone` becomes a column name  
+2. each value in the value column `inc` becomes a cell in the new columns  
+
+```{r}
+(dt_small_wide <- 
+dt_small %>%
+  pivot_wider(names_from = "zone", 
+              values_from = "inc"))
+```
+
+`pivot_longer()` makes dataframes longer by increasing the number of rows and decreasing the number of columns.
+```{r}
+dt_small_wide %>% 
+  pivot_longer(cols = 
+                 c("Sheka", "Sidama"), 
+               names_to = "zone",
+               values_to = "inc")
+
+```
+
+```{r}
+sessionInfo()
+```
+

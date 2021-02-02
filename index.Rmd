@@ -4,12 +4,12 @@ title: "Welcome!"
 **Workshop Organizers:** Kelsey Andersen Onofre, Rodrigo Onofre, Karen Garrett, Felipe Dalla Lana, Adam Sparks, Mladen Cucak
 
 
-### Data Visualization in R
+## Welcome to Data Visualization in R
 
 
 Introductory paragraph
 
-### Workshop Logistics   
+## Workshop Logistics   
 \  
 
 #### WORKSHOP: Data Visualization in R
@@ -17,22 +17,30 @@ Introductory paragraph
 
 \  
 
-### Pre-Workshop Set Up
+## Pre-Workshop Set Up
 
 Make sure you have the most recent versions of R and R Studio installed on your computer.  
 
-* R can be downloaded at [cran.r-project.org](https://cran.r-project.org/)
-* R Studio can be downloaded for free at [www.rstudio.com](https://www.rstudio.com/products/rstudio/download/)
+To download R:  
+1. Go to https://cran.r-project.org/  
+2. Click "Download R for Mac/Windows"  
+3. Download the appropriate file:  
+   - Windows users click Base, and download the installer for the latest R version  
+   - Mac users select the file R-3.X.X that aligns with your OS version  
+4. Follow the instructions of the installer   
+
+To download RStudio:  
+1. Go to RStudio for desktop https://www.rstudio.com/products/rstudio/download/#download  
+2. Select the install file for your OS  
+3. Follow the instructions of the installer  
 
 Also, it would be useful to download the following R packages prior to the workshop:  
 
-*	ggplot2
+*	here
 *	ggpubr
 *	ggraph
-*	ggmap
+* ggsn
 *	patchwork
-* rnaturalearth
-* rnaturalearthdata
 *	sf
 *	tidyverse
 *	packages for choosing color themes

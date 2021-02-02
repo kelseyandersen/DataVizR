@@ -6,21 +6,23 @@ navbar:
   - text: Welcome
     href: index.html
   - text: Introduction to R
-    menu:
-    - text: Introduction to R
-      href: APS2018_Tidyverse.html
+    menu: 
+     - text: Slides
+       href: intro/presentation.html
+     - text: Code
+       href: Intro_R.html
   - text: Data Visualization - ggplot
     menu:
-    - text: Structure of ggplots 
-      href: 
-    - text: Plot types
-      href: 
-    - text: Combining plots and saving
-      href: 
+     - text: Structure of ggplots 
+       href: 
+     - text: Plot types
+       href: 
+     - text: Combining plots and saving
+       href: 
   - text: Network graphs
     menu:
-    - text: Resources
-      href:
+     - text: Resources
+       href:
   - text: Maps
     menu:
     - text: Creating maps with ggplot2
@@ -34,4 +36,3 @@ output:
     toc_float: yes
     lib_dir: site_libs
     self_contained: no
-
