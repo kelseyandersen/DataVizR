@@ -40,6 +40,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -486,37 +487,37 @@ div.tocify {
 <h2>Introduction</h2>
 <p>In this exercise we will use <a href="https://cran.r-project.org/web/packages/sf/vignettes/sf1.html"><em>simple features</em></a> and <em>ggplot2</em> to create a map of Ethiopia and then a map of two regions highlighting the regions within a larger map of Ethiopia. Once we have the base maps of the country and regions we will add points and zones to the map to indicate survey sites.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GADMTools)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggsn)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code></pre></div>
 </div>
 <div id="create-country-level-map-of-ethiopia" class="section level2">
 <h2>Create Country Level Map of Ethiopia</h2>
-<p>This is our base layer, Ethiopia, downloaded from <a href="https://www.gadm.org" class="uri">https://www.gadm.org</a>. GADM is a free resource to use for non-commercial and research purposes. You can find out more at <a href="https://gadm.org/about.html" class="uri">https://gadm.org/about.html</a>.</p>
-<p>Using <code>download.file()</code>, we will download an <em>sf`</em> file.</p>
+<p>Several packages offer direct access to map layers in R for use in creating maps. However, in this exercise we will download the data directly from <a href="https://www.gadm.org" class="uri">https://www.gadm.org</a>. GADM is a free resource to use for non-commercial and research purposes that provides data for mapping administrative boundaries. You can find out more at <a href="https://gadm.org/about.html" class="uri">https://gadm.org/about.html</a>.</p>
+<p>For our map we will download an <em>sf</em> object. <em>sf</em> stands for “Simple Features”, which means that geospatial data is represented as records in a <code>data.frame</code> in R, making it easier to work with than previous spatial data formats for R. <em>sf</em> plays nicely with the <em>tidyverse</em> making it ideal for using with <em>ggplot2</em> when making maps.</p>
+<div id="using-download.file-to-fetch-data" class="section level3">
+<h3>Using download.file() to Fetch Data</h3>
+<p>Using <code>download.file()</code>, we will download an <em>sf</em> file from the GADM website. <code>download.file()</code> is a base R function useful for retrieving data from a web URL and making it available in your R session. Here we will download the data to R’s <code>tempdir()</code>, a temporary directory that R uses during your session. <strong><em>Nothing here is saved after you exit R.</em></strong> If you wish to save the GADM file, you should specify another location, <em>e.g.</em> in your Documents or Home directories to save the file for later use, you can do this in the Using this method allows us to all download the file and import it into R using the same commands without worrying about usernames, operating systems, etc.</p>
+<p>This next section provides the URL to the .rds file (a native R file format) containing the data for mapping Ethiopia. Then we provide the file path to save the file in the <code>tempdir()</code>. Next, we check what operating system is being used to download the data. Windows handles the downloads differently and will corrupt the file if not properly handled. The <code>if()</code> section checks the OS and then proceeds to download the file using the proper method depending on the OS detected. Lastly using <code>readRDS()</code> we import the data and create our first plot of Ethiopia!</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ethiopia_rds <span class="ot">&lt;-</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_ETH_3_sf.rds&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ethiopia_sf <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;gadm36_ETH_3_sf.rds&quot;</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">toupper</span>(<span class="fu">Sys.info</span>()[<span class="st">&quot;sysname&quot;</span>]) <span class="sc">==</span> <span class="st">&quot;WINDOWS&quot;</span>) {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(ethiopia_rds,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                ethiopia_sf,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">&quot;wininet&quot;</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(ethiopia_rds, ethiopia_sf, <span class="at">method =</span> <span class="st">&quot;auto&quot;</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>ethiopia_sf <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(ethiopia_sf)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> ethiopia_rds,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">destfile =</span> ethiopia_sf,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;wininet&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(ethiopia_rds, ethiopia_sf, <span class="at">method =</span> <span class="st">&quot;auto&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ethiopia_sf)</span></code></pre></div>
-<p><img src="mapping_files/figure-html/ethiopia-base-1.png" width="672" /></p>
-</div>
-<div id="create-a-map-using-ggplot2" class="section level2">
-<h2>Create a Map Using <em>ggplot2</em></h2>
-<p>Using <em>ggplot2</em>, we have more control over how the data are displayed than using the base <code>plot()</code> command.</p>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>ethiopia_sf <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(ethiopia_sf)</span></code></pre></div>
+<p>Creating maps using <em>ggplot2</em> and <em>sf</em> follows the same principals that Felipe has already demonstrated with <code>geom_*()</code>s, layers, themes, colours and fills.</p>
 <p>First, plot the whole country using <em>ggplot2</em>’s <code>geom_sf()</code> and the <code>ethiopia_sf</code> object.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ethiopia_ggplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(ethiopia_sf) <span class="sc">+</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>)</span>
@@ -524,8 +525,9 @@ div.tocify {
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ethiopia_ggplot</span></code></pre></div>
 <p><img src="mapping_files/figure-html/plot_level1-1.png" width="672" /></p>
 <p>We can see that there are several zones, shown as the smaller polygons within the larger country outline, in this data set.</p>
-<div id="add-labels-to-the-regions" class="section level4">
-<h4>Add Labels to the Regions</h4>
+</div>
+<div id="add-labels-to-the-regions" class="section level3">
+<h3>Add Labels to the Regions</h3>
 <p>The GADM data have several columns to work with. You can find out what these are by using the <code>names()</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ethiopia_sf)</span></code></pre></div>
 <pre><code>##  [1] &quot;GID_0&quot;     &quot;NAME_0&quot;    &quot;GID_1&quot;     &quot;NAME_1&quot;    &quot;NL_NAME_1&quot; &quot;GID_2&quot;    
@@ -543,189 +545,229 @@ div.tocify {
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  ethiopia_sf <span class="sc">%&gt;%</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(NAME_1) <span class="sc">%&gt;%</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot <span class="ot">&lt;-</span> </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(ethiopia_regions_sf) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> NAME_1),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.5</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">1</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot</span></code></pre></div>
-<p><img src="mapping_files/figure-html/plot_level2-1.png" width="672" /></p>
-</div>
-<div id="proper-labels-and-theme" class="section level4">
-<h4>Proper Labels and Theme</h4>
-<p>Properly label the x and y-axis and set the theme. The <em>ggplot2</em> theme, <code>theme_bw()</code> is nice to use with maps, so we will apply that here as well.</p>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span></code></pre></div>
+<p>Using <code>geom_sf_text()</code> we can add labels to the map.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot <span class="ot">&lt;-</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  ethiopia_regions_ggplot <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot</span></code></pre></div>
-<p><img src="mapping_files/figure-html/plot_level3-1.png" width="672" /></p>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(ethiopia_regions_sf) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> NAME_1),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.5</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="dv">1</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot</span></code></pre></div>
+<p><img src="mapping_files/figure-html/plot-NAME_1-1.png" width="672" /></p>
+<p>The <em>ggplot2</em> theme, <code>theme_bw()</code> is nice to use with maps, so we will apply that here as well as labelling the x and y axis with “longitude” and “latitude” labels.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot <span class="ot">&lt;-</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  ethiopia_regions_ggplot <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_ggplot</span></code></pre></div>
+<p><img src="mapping_files/figure-html/theming-labelling-1.png" width="672" /></p>
 </div>
-</div>
-<div id="creating-maps-of-individual-regions" class="section level2">
-<h2>Creating maps of Individual Regions</h2>
-<p>To create a map of only Oromia and Southern Nations, Nationalities and Peoples’ Region (SNNP), subset the <em>sf</em> object, <code>ethiopia_sf</code> such that it contains only the data for Oromia and SNNP.</p>
-<div id="filter-oromia-and-snnp" class="section level3">
-<h3>Filter Oromia and SNNP</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_sf <span class="ot">&lt;-</span> <span class="fu">filter</span>(ethiopia_sf,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                     NAME_1 <span class="sc">==</span> <span class="st">&quot;Oromia&quot;</span> <span class="sc">|</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                       NAME_1 <span class="sc">==</span> <span class="st">&quot;Southern Nations, Nationalities and Peoples&quot;</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_sf</span></code></pre></div>
-<pre><code>## Simple feature collection with 396 features and 16 fields
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: 34.14 ymin: 3.51 xmax: 42.98 ymax: 10.39
-## geographic CRS: WGS 84
-## First 10 features:
-##    GID_0   NAME_0   GID_1 NAME_1 NL_NAME_1     GID_2 NAME_2 NL_NAME_2
-## 1    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 2    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 3    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 4    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 5    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 6    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 7    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 8    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 9    ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-## 10   ETH Ethiopia ETH.8_1 Oromia      &lt;NA&gt; ETH.8.1_1   Arsi      &lt;NA&gt;
-##           GID_3        NAME_3 VARNAME_3 NL_NAME_3 TYPE_3 ENGTYPE_3   CC_3
-## 1   ETH.8.1.1_1        Amigna                &lt;NA&gt; Woreda  District 040810
-## 2   ETH.8.1.2_1         Aseko                &lt;NA&gt; Woreda  District 040802
-## 3   ETH.8.1.3_1   Bele Gesgar                &lt;NA&gt; Woreda  District 040823
-## 4   ETH.8.1.4_1         Chole                &lt;NA&gt; Woreda  District 040809
-## 5   ETH.8.1.5_1 Degeluna Tijo                &lt;NA&gt; Woreda  District 040815
-## 6   ETH.8.1.6_1        Diksis                &lt;NA&gt; Woreda  District 040822
-## 7   ETH.8.1.7_1        Dodota                &lt;NA&gt; Woreda  District 040805
-## 8   ETH.8.1.8_1 Gololcha Arsi                &lt;NA&gt; Woreda  District 040803
-## 9   ETH.8.1.9_1          Guna                &lt;NA&gt; Woreda  District 040819
-## 10 ETH.8.1.10_1        Hitosa                &lt;NA&gt; Woreda  District 040807
-##    HASC_3                       geometry
-## 1    &lt;NA&gt; MULTIPOLYGON (((40.2 7.877,...
-## 2    &lt;NA&gt; MULTIPOLYGON (((40.22 8.556...
-## 3    &lt;NA&gt; MULTIPOLYGON (((40.2 7.877,...
-## 4    &lt;NA&gt; MULTIPOLYGON (((40.09 8.015...
-## 5    &lt;NA&gt; MULTIPOLYGON (((39.14 7.63,...
-## 6    &lt;NA&gt; MULTIPOLYGON (((39.43 7.91,...
-## 7    &lt;NA&gt; MULTIPOLYGON (((39.3 8.201,...
-## 8    &lt;NA&gt; MULTIPOLYGON (((40.35 8.323...
-## 9    &lt;NA&gt; MULTIPOLYGON (((39.79 8.247...
-## 10   &lt;NA&gt; MULTIPOLYGON (((39.43 7.893...</code></pre>
-</div>
-<div id="plot-oromia-and-snnp" class="section level3">
-<h3>Plot Oromia AND SNNP</h3>
-<p>After filtering Oromia and SNNP and creating a new object, we can plot it now.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ethiopia_regions_sf) <span class="sc">+</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="mapping_files/figure-html/ggplot-oromia-1.png" width="672" /></p>
-</div>
-</div>
-<div id="highlighting-regions-within-the-country" class="section level2">
-<h2>Highlighting Regions Within the Country</h2>
-<p>Using the <code>ethiopia_sf</code> and <code>ethiopia_regions_sf</code> objects that we have created, it is possible to create a map that highlights one state and labels it using the postal code, in this case Oromia and SNNP. Note that we use the <code>data</code> argument twice here. Once for the base Ethiopia map and once for the map of Oromia and SNNP that we use to highlight the regions on the map.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ethiopia_sf) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_regions_sf,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> NAME_1)) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="mapping_files/figure-html/hightlight-oromia-1.png" width="672" /></p>
 </div>
 <div id="adding-and-labelling-points-on-a-map" class="section level2">
 <h2>Adding and Labelling Points on a Map</h2>
-<p>Now we will build on the maps we created by adding points to a map of Oromia and SNNP with latitude and longitude values.</p>
+<p>Now we will build on the maps we created by adding the sampling location points that Del Ponte and Belachew (2020) used with latitude and longitude values from their CSV file.</p>
 <div id="create-data.frame-of-sampling-locations" class="section level3">
 <h3>Create data.frame of Sampling Locations</h3>
-<p>Using the previously created <code>ethiopia_regions_sf</code> object, we will plot the locations of cities or towns in Oromia. Now we will download the cleaned survey data from Del Ponte and Belechew (2020) directly into our R session.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>coffee_sampling <span class="ot">&lt;-</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv&quot;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Using the previously created <code>ethiopia_regions_sf</code> object, we will plot the locations of the survey sites from Del Ponte and Belachew (2020). We will download their CSV directly into our R session from the GitHub repository.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>coffee_sampling <span class="ot">&lt;-</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 </div>
 <div id="converting-sites-to-an-sf-object" class="section level3">
 <h3>Converting Sites to an <em>sf</em> Object</h3>
-<p>While we could plot everything using <code>geom_point()</code>, if we convert the <code>data.frame</code> to an <code>sf</code> type object, it is much more flexible for mapping with other <em>sf</em> objects.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>coffee_sampling_sf <span class="ot">&lt;-</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(coffee_sampling,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">crs =</span> <span class="dv">4326</span>)</span></code></pre></div>
-<p>Now we’re ready to add the points to the map!</p>
+<p>While we could plot everything using <code>geom_point()</code> directly from the .CSV file <code>data.frame</code>, but if we convert the <code>data.frame</code> to an <code>sf</code> type object it is much more flexible for mapping with other <em>sf</em> objects in <em>ggplot2</em>. The conversion is done using <code>st_as_sf()</code> and providing the columns that hold the coordinates (latitude and longitude). The <code>crs</code> argument tells <em>sf</em> what projection we want to use. Map projections are used to deal with the distortion of creating a flat figure to represent a spherical surface. In this case we’ll use EPSG:4326, which is only latitude and longitude values. While we won’t go into projections here, the <a href="https://r-spatial.github.io/sf/articles/sf5.html#how-does-sf-project-geographic-coordinates"><em>sf</em> vignette</a> describes some of the ideas behind this and many more web resources exist to help you pick the right projection for your map.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>coffee_sampling_sf <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(coffee_sampling,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">crs =</span> <span class="dv">4326</span>)</span></code></pre></div>
+<p>Now we’re ready to add the new <em>sf</em> object of sampling points to the map!</p>
 </div>
 <div id="adding-sampling-locations-to-map" class="section level3">
 <h3>Adding Sampling Locations to Map</h3>
-<p>Adding the points to the map works in the same fashion as adding layers in other <em>ggplot2</em> objects. For this final map, we will create some new layers to display. First, we will create a layer of the zones that where surveys were conducted by filtering the zone names. Second, we will create a new layer of the regions that contatain the zones that were surveyed, Orima and Southern Nations, Nationalities and Peoples, and rename Southern Nations, Nationalities and Peoples to SNNP to clean up the legend in the figure. Next we will create the base Ethiopia layer to display a sillhouette of the country for the base layer.</p>
-<p>Then we will build the map using <em>ggplot2</em>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ethiopia_zones_sf <span class="ot">&lt;-</span> ethiopia_regions_sf <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    NAME_2 <span class="sc">%in%</span> <span class="fu">c</span>(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Jimma&quot;</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Mirab Welega&quot;</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Sidama&quot;</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Sheka&quot;</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Keffa&quot;</span>,</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bench Maji&quot;</span>,</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bale&quot;</span>,</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Gedeo&quot;</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Ilubabor&quot;</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_sf <span class="ot">&lt;-</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  ethiopia_regions_sf <span class="sc">%&gt;%</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(NAME_1) <span class="sc">%&gt;%</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">NAME_1 =</span> <span class="fu">gsub</span>(<span class="st">&quot;Southern Nations, Nationalities and Peoples&quot;</span>, <span class="st">&quot;SNNP&quot;</span>,</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>                       NAME_1)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>ethiopia_sf <span class="ot">&lt;-</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  ethiopia_sf <span class="sc">%&gt;%</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(NAME_0) <span class="sc">%&gt;%</span></span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_sf,</span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_regions_sf,</span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">linetype =</span> NAME_1),</span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_zones_sf,</span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> NAME_2),</span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linetype</span>(</span>
-<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="cf">function</span>(x)</span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_wrap</span>(x, <span class="at">width =</span> <span class="dv">5</span>)</span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Set3&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> coffee_sampling_sf,</span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">2</span>,</span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="fu">alpha</span>(<span class="st">&quot;black&quot;</span>, <span class="fl">0.35</span>)) <span class="sc">+</span></span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Ethiopian Coffee Leaf Rust Survey Sites&quot;</span>,</span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Data from GADM, gadm.org, and Del Ponte and Belachew (2020)&quot;</span>,</span>
-<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Zone&quot;</span>,</span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">&quot;Region&quot;</span></span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>Adding the points to the map works in the same fashion as adding layers in other <em>ggplot2</em> objects.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_regions_sf,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> coffee_sampling_sf,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="fu">alpha</span>(<span class="st">&quot;black&quot;</span>, <span class="fl">0.35</span>)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Ethiopian Coffee Leaf Rust Survey Sites&quot;</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Data from GADM, gadm.org, and Del Ponte &amp; Belachew (2020)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="st">    https://doi.org/10.17605/OSF.IO/XEJAZ&quot;</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Zone&quot;</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">&quot;Region&quot;</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="mapping_files/figure-html/add-points-1.png" width="672" /></p>
-<p>The final figure includes a title, a data acknowledgement and clearly labeled legend describing the map.</p>
 </div>
+</div>
+<div id="highlighting-regions" class="section level2">
+<h2>Highlighting Regions</h2>
+<p>In some cases it is desirable to create maps highlighting certain areas, <em>e.g.</em> states, regions, counties, etc.</p>
+<p>Del Ponte and Belachew (2020) sampled in two regions of Ethiopia, Oromia and Southern Nations, Nationalities and Peoples’ Region (SNNP).</p>
+<p>To create a map that highlights Oromia and SNNP, we will dissolve internal borders leaving only the region level borders using <code>group_by()</code> and <code>summarise()</code>. For simplicity and labelling the map, we will replace Southern Nations, Nationalities and Peoples" with “SNNP”. Lastly, <code>ungroup()</code> and convert the resulting <code>tibble()</code> back to an <em>sf</em> object.</p>
+<div id="dissolving-internal-boundaries-for-region-maps" class="section level3">
+<h3>Dissolving Internal Boundaries for Region Maps</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_sf <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  ethiopia_regions_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">NAME_1 =</span> <span class="fu">gsub</span>(<span class="st">&quot;Southern Nations, Nationalities and Peoples&quot;</span>, <span class="st">&quot;SNNP&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                       NAME_1)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(NAME_1) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>ethiopia_regions_sf</span></code></pre></div>
+<pre><code>## Simple feature collection with 11 features and 1 field
+## geometry type:  GEOMETRY
+## dimension:      XY
+## bbox:           xmin: 33 ymin: 3.399 xmax: 47.96 ymax: 14.85
+## geographic CRS: WGS 84
+## # A tibble: 11 x 2
+##    NAME_1                                                               geometry
+##    &lt;chr&gt;                                                          &lt;GEOMETRY [°]&gt;
+##  1 Addis Abeba    POLYGON ((38.76 8.854, 38.76 8.853, 38.75 8.859, 38.75 8.863,…
+##  2 Afar           POLYGON ((40.16 8.949, 40.15 8.932, 40.14 8.919, 40.12 8.896,…
+##  3 Amhara         POLYGON ((39.31 8.726, 39.31 8.722, 39.3 8.719, 39.29 8.718, …
+##  4 Benshangul-Gu… POLYGON ((36.23 9.272, 36.23 9.229, 36.2 9.157, 36.17 9.108, …
+##  5 Dire Dawa      POLYGON ((41.93 9.668, 41.94 9.663, 41.95 9.655, 41.96 9.652,…
+##  6 Gambela Peopl… POLYGON ((35.19 6.49, 35.17 6.467, 35.19 6.444, 35.2 6.411, 3…
+##  7 Harari People  MULTIPOLYGON (((42.06 9.226, 42.06 9.238, 42.06 9.249, 42.06 …
+##  8 Oromia         POLYGON ((38.76 3.554, 38.74 3.56, 38.73 3.563, 38.73 3.564, …
+##  9 SNNP           POLYGON ((36.4 4.439, 36.35 4.443, 36.27 4.444, 36.24 4.455, …
+## 10 Somali         POLYGON ((39.16 3.499, 39.15 3.502, 39.15 3.503, 39.13 3.511,…
+## 11 Tigray         POLYGON ((39.76 12.32, 39.75 12.32, 39.74 12.31, 39.73 12.31,…</code></pre>
+<p>After grouping by <code>NAME_1</code>, we can map the new object and see how it compares to the original data with finer subnational divisions.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ethiopia_regions_sf) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="mapping_files/figure-html/ggplot-ssnp-oromia-1.png" width="672" /></p>
+</div>
+<div id="highlighting-specific-regions-within-the-country" class="section level3">
+<h3>Highlighting Specific Regions Within the Country</h3>
+<p>If you wish to highlight the regions, calling them out on the map as Del Ponte and Belechew (2020) did in their work, we can create a new object of only these two regions and plot them in a new layer.</p>
+<p>To do this we’ll create two new layers to work with. The first layer will just be Ethiopia with no regions, zones or other subdivisions. The second layer will be the layer that contains Oromia and SNNP.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First layer, country outline</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ethiopia_simple_sf <span class="ot">&lt;-</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>   ethiopia_sf <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(NAME_0) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Second layer, regions we&#39;re interested in</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>oromia_snnp_sf <span class="ot">&lt;-</span> <span class="fu">filter</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  ethiopia_regions_sf,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  NAME_1 <span class="sc">==</span> <span class="st">&quot;Oromia&quot;</span> <span class="sc">|</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    NAME_1 <span class="sc">==</span> <span class="st">&quot;SNNP&quot;</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Plot the complete map.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_simple_sf,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oromia_snnp_sf,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">linetype =</span> NAME_1,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> NAME_1)) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Data from GADM (gadm.org).&quot;</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Region&quot;</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">&quot;Region&quot;</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="mapping_files/figure-html/plot%20ssnp-oromia-1.png" width="672" /></p>
+</div>
+</div>
+<div id="going-further" class="section level2">
+<h2>Going Further</h2>
+<p>Del Ponte and Belechew (2020) display a map that highlights the two regions, Oromia and SNNP with the zones within them where surveys were conducted also coloured. We can recreate this map, but will do so without the labels that they used. Here we will only plot the points that were surveyed as before on top of the two regions and nine zones surveyed.</p>
+<p>First create another new layer of only the zones that were involved in the survey. Then construct the map using the layers we’ve already created. Lastly, using functions from <em>ggsn</em>, <code>scalebar()</code> and <code>north()</code>, add a scale bar to the bottom right and a north arrow to the upper right to orient viewers who may not be familiar with Ethiopia.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ethiopia_zones_sf <span class="ot">&lt;-</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  ethiopia_sf <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    NAME_2 <span class="sc">%in%</span> <span class="fu">c</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Jimma&quot;</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Mirab Welega&quot;</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Sidama&quot;</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Sheka&quot;</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Keffa&quot;</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bench Maji&quot;</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bale&quot;</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Gedeo&quot;</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Ilubabor&quot;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Plot the data to check.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>final_map <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_simple_sf,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;#D5C1AB&quot;</span>) <span class="sc">+</span> <span class="co"># use a coffee-ish colour background for country</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> oromia_snnp_sf, <span class="co"># add the two regions in white</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">linetype =</span> NAME_1),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ethiopia_zones_sf, <span class="co"># add zones and fill by name</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> NAME_2),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">colour =</span> <span class="cn">NA</span>) <span class="sc">+</span> <span class="co"># no outline colour</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> coffee_sampling_sf,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>          <span class="co"># add sampling points</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">colour =</span> <span class="fu">alpha</span>(<span class="st">&quot;black&quot;</span>, <span class="fl">0.35</span>))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>final_map</span></code></pre></div>
+<p><img src="mapping_files/figure-html/final-map-1.png" width="672" /></p>
+<p>Add linetype definitions for regions and add zone colours. The Colorbrewer palette offers good colours for maps, see <a href="https://colorbrewer2.org" class="uri">https://colorbrewer2.org</a> for more ideas. Here we’ll use <code>scale_fill_brewer()</code>, a built in <em>ggplot2</em> colour scale that can be used with any type of plot, not just maps.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>final_map <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  final_map <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linetype</span>( <span class="co"># define region outline linetype by region</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="cf">function</span>(x)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_wrap</span>(x, <span class="at">width =</span> <span class="dv">5</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Set3&quot;</span>) <span class="sc">+</span> <span class="co"># this colours the zones, https://colorbrewer2.org/</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Longitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Ethiopian Coffee Leaf Rust Survey Sites&quot;</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Data from GADM, gadm.org, and Del Ponte &amp; Belachew (2020)</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="st">    https://doi.org/10.17605/OSF.IO/XEJAZ&quot;</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Zone&quot;</span>,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">&quot;Region&quot;</span>,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>final_map</span></code></pre></div>
+<p><img src="mapping_files/figure-html/final-map-legend-1.png" width="672" /></p>
+<p>Lastly, add standard map items like a scale bar and north arrow using functions from <em>ggsn</em>, <code>north()</code> and <code>scalebar()</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>final_map <span class="ot">&lt;-</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  final_map <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">north</span>(ethiopia_simple_sf) <span class="sc">+</span> <span class="co"># from ggsn</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scalebar</span>( <span class="co"># from ggsn</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    ethiopia_simple_sf,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="dv">250</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">st.size =</span> <span class="fl">2.5</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist_unit =</span> <span class="st">&quot;km&quot;</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">transform =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="st">&quot;WGS84&quot;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_bw</span>()</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>final_map</span></code></pre></div>
+<p><img src="mapping_files/figure-html/final-touches-1.png" width="672" /></p>
+<p>The final map includes a title, a data acknowledgement and clearly labelled legend describing the contents. Aside from using <em>ggsn</em> functions, the map is generated using familiar <em>ggplot2</em> commands.</p>
 </div>
 <div id="further-reading-and-resources" class="section level2">
 <h2>Further Reading and Resources</h2>
