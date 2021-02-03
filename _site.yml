@@ -14,7 +14,7 @@ navbar:
   - text: Intro to ggplot2
     menu:
      - text: Slides
-       href: data_viz_Felipe.pdf
+       href: data_viz_Felipe.html
   - text: Network graphs
     menu:
      - text: Resources
