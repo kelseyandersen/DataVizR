@@ -11,14 +11,10 @@ navbar:
        href: intro/presentation.html
      - text: Code
        href: Intro_R.html
-  - text: Data Visualization - ggplot
+  - text: Intro to ggplot2
     menu:
-     - text: Structure of ggplots 
-       href: 
-     - text: Plot types
-       href: 
-     - text: Combining plots and saving
-       href: 
+     - text: Slides
+       href: data_viz_Felipe.pdf
   - text: Network graphs
     menu:
      - text: Resources
