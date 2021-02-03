@@ -40,6 +40,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -464,7 +465,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="mapping.html">Creating maps with ggplot2</a>
+      <a href="mapping/slideshow/mapping_presentation.html">Slides</a>
+    </li>
+    <li>
+      <a href="mapping/mapping.html">Code</a>
     </li>
   </ul>
 </li>
@@ -501,22 +505,27 @@ div.tocify {
 <p> </p>
 </div>
 </div>
-<div id="pre-workshop-set-up" class="section level3">
-<h3>Pre-Workshop Set Up</h3>
+<div id="pre-workshop-set-up" class="section level2">
+<h2>Pre-Workshop Set Up</h2>
 <p>Make sure you have the most recent versions of R and R Studio installed on your computer.</p>
-<ul>
-<li>R can be downloaded at <a href="https://cran.r-project.org/">cran.r-project.org</a></li>
-<li>R Studio can be downloaded for free at <a href="https://www.rstudio.com/products/rstudio/download/">www.rstudio.com</a></li>
-</ul>
+<p>To download R:<br />
+1. Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a><br />
+2. Click “Download R for Mac/Windows”<br />
+3. Download the appropriate file:<br />
+- Windows users click Base, and download the installer for the latest R version<br />
+- Mac users select the file R-3.X.X that aligns with your OS version<br />
+4. Follow the instructions of the installer</p>
+<p>To download RStudio:<br />
+1. Go to RStudio for desktop <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a><br />
+2. Select the install file for your OS<br />
+3. Follow the instructions of the installer</p>
 <p>Also, it would be useful to download the following R packages prior to the workshop:</p>
 <ul>
-<li>ggplot2</li>
+<li>here</li>
 <li>ggpubr</li>
 <li>ggraph</li>
-<li>ggmap</li>
+<li>ggsn</li>
 <li>patchwork</li>
-<li>rnaturalearth</li>
-<li>rnaturalearthdata</li>
 <li>sf</li>
 <li>tidyverse</li>
 <li>packages for choosing color themes</li>
@@ -535,8 +544,8 @@ div.tocify {
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span></code></pre></div>
 </div>
-<div id="insert-logo-from-institutions-sponsoring-this-workship-k-state-penn-state-k-state" class="section level2">
-<h2>insert logo from institutions sponsoring this workship (K-State, Penn State, K-State)</h2>
+<div id="sponsoring-institutions" class="section level2">
+<h2>Sponsoring Institutions</h2>
 <!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
 <p><img src="image_files/USQ_international.png" style="padding:90.71px 90.71px 0 90.71px;"></p>
 <p><img src="image_files/DPIRD.png" style="padding:132px 132px 132px 132px;"></p>
