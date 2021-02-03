@@ -25,7 +25,9 @@ navbar:
        href:
   - text: Maps
     menu:
-    - text: Creating maps with ggplot2
+    - text: Slides
+      href: mapping/slideshow/mapping_presentation.html
+    - text: Code
       href: mapping.html
 output:
   html_document:

@@ -42,25 +42,42 @@ Then we provide the file path to save the file in the `tempdir()`.
 Next, we check what operating system is being used to download the data.
 Windows handles the downloads differently and will corrupt the file if not properly handled.
 The `if()` section checks the OS and then proceeds to download the file using the proper method depending on the OS detected.
-Lastly using `readRDS()` we import the data and create our first plot of Ethiopia!
+Lastly using `readRDS()` we import the data and create our first plot of Ethiopia.
+
+Just for the purposes of the presentation, I've broken up the URL here so that we can fit everything on the presentation slide.
+Ordinarily there's no need to use `paste0()` to create a URL!
 
 ```{r download-GADM, message=FALSE, warning=FALSE}
-ethiopia_rds <-
-  "https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_ETH_3_sf.rds"
-ethiopia_sf <- file.path(tempdir(), "gadm36_ETH_3_sf.rds")
+# Remote file information
+u_remote <- "https://biogeo.ucdavis.edu/"
+p_remote <- "data/gadm3.6/Rsf/"
+f_name <- "gadm36_ETH_3_sf.rds"
+
+# Local file location to save to
+ethiopia_rds <- file.path(tempdir(), "gadm36_ETH_3_sf.rds")
 
 if (toupper(Sys.info()["sysname"]) == "WINDOWS") {
   download.file(
-    url = ethiopia_rds,
-    destfile = ethiopia_sf,
+    url = paste0(u_remote, p_remote, f_name),
+    destfile = ethiopia_rds,
     method = "wininet",
     mode = "wb"
   )
 } else {
-  download.file(ethiopia_rds, ethiopia_sf, method = "auto")
+  download.file(
+    url = paste0(u_remote, p_remote, f_name),
+    destfile = ethiopia_rds,
+    method = "auto"
+  )
 }
+```
 
-ethiopia_sf <- readRDS(ethiopia_sf)
+### Reading GADM Data Into R
+
+GADM distributes native R files in .rds format that we then import.
+
+```{r readRDS}
+ethiopia_sf <- readRDS(ethiopia_rds)
 ```
 
 Creating maps using _ggplot2_ and _sf_ follows the same principals that Felipe has already demonstrated with `geom_*()`s, layers, themes, colours and fills.
@@ -75,8 +92,9 @@ ethiopia_ggplot
 ```
 
 We can see that there are several zones, shown as the smaller polygons within the larger country outline, in this data set.
+It is possible to merge polygons so that we have an object with a different level of detail than what we started with.
 
-### Add Labels to the Regions
+## Selecting Regions and Adding Labels
 
 The GADM data have several columns to work with.
 You can find out what these are by using the `names()`.
@@ -95,15 +113,20 @@ In this data set, there are three levels and three columns we might be intereste
 
 Grouping by any value, 0 - 2 will aggregate or dissolve the lines within the map producing larger polygons.
 Here we will group by `NAME_1` for the regions.
+We will also rename a region using `mutate()` for a cleaner map and to illustrate how to manipulate data in an _sf_ object using _dplyr_.
 
 ```{r group-NAME_1, warning=FALSE, message=FALSE}
 ethiopia_regions_sf <-
-  ethiopia_sf %>% 
+  ethiopia_sf %>%
+  mutate(NAME_1 = gsub("Southern Nations, Nationalities and Peoples", "SNNP",
+                       NAME_1)) %>%
   group_by(NAME_1) %>%
   summarise() %>%
   ungroup() %>%
   st_as_sf()
 ```
+
+#### Labelling Regions
 
 Using `geom_sf_text()` we can add labels to the map.
 
@@ -132,7 +155,7 @@ ethiopia_regions_ggplot <-
 ethiopia_regions_ggplot
 ```
 
-## Adding and Labelling Points on a Map
+## Adding Points to the Map
 
 Now we will build on the maps we created by adding the sampling location points that Del Ponte and Belachew (2020) used with latitude and longitude values from their CSV file.
 
@@ -150,7 +173,7 @@ coffee_sampling <-
 
 ### Converting Sites to an _sf_ Object
 
-While we could plot everything using `geom_point()` directly from the .CSV file `data.frame`, but if we convert the `data.frame` to an `sf` type object it is much more flexible for mapping with other _sf_ objects in _ggplot2_.
+While we could plot everything using `geom_point()` directly from the .CSV file `data.frame`, but if we convert the `data.frame` to an _sf_ object it is much more flexible for mapping with other _sf_ objects in _ggplot2_.
 The conversion is done using `st_as_sf()` and providing the columns that hold the coordinates (latitude and longitude).
 The `crs` argument tells _sf_ what projection we want to use.
 Map projections are used to deal with the distortion of creating a flat figure to represent a spherical surface.
@@ -169,24 +192,13 @@ Now we're ready to add the new _sf_ object of sampling points to the map!
 ### Adding Sampling Locations to Map
 
 Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
+We'll use the existing `ethiopia_regions_ggplot` object and add a new layer of the point data.
 
 ```{r add-points, warning=FALSE, message=FALSE}
-ggplot() +
-  geom_sf(data = ethiopia_regions_sf,
-          fill = "white") +
+ethiopia_regions_ggplot +
   geom_sf(data = coffee_sampling_sf,
           size = 2,
-          color = alpha("black", 0.35)) +
-  labs(
-    title = "Ethiopian Coffee Leaf Rust Survey Sites",
-    caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
-    https://doi.org/10.17605/OSF.IO/XEJAZ",
-    fill = "Zone",
-    linetype = "Region",
-    x = "Longitude",
-    y = "Latitude"
-  ) +
-  theme_bw()
+          color = alpha("black", 0.35))
 ```
 
 ## Highlighting Regions
@@ -195,42 +207,11 @@ In some cases it is desirable to create maps highlighting certain areas, _e.g._ 
 
 Del Ponte and Belachew (2020) sampled in two regions of Ethiopia, Oromia and Southern Nations, Nationalities and Peoples' Region (SNNP).
 
-To create a map that highlights Oromia and SNNP, we will dissolve internal borders leaving only the region level borders using `group_by()` and `summarise()`.
-For simplicity and labelling the map, we will replace Southern Nations, Nationalities and Peoples" with "SNNP".
-Lastly, `ungroup()` and convert the resulting `tibble()` back to an _sf_ object.
-
-### Dissolving Internal Boundaries for Region Maps
-
-```{r subset-snnp-oromia, warning=FALSE, message=FALSE}
-ethiopia_regions_sf <-
-  ethiopia_regions_sf %>% 
-  mutate(NAME_1 = gsub("Southern Nations, Nationalities and Peoples", "SNNP",
-                       NAME_1)) %>%
-  group_by(NAME_1) %>%
-  summarise() %>%
-  ungroup() %>%
-  st_as_sf()
-
-ethiopia_regions_sf
-```
-
-After grouping by `NAME_1`, we can map the new object and see how it compares to the original data with finer subnational divisions.
-
-```{r ggplot-ssnp-oromia, warning=FALSE, message=FALSE}
-ggplot(data = ethiopia_regions_sf) +
-  geom_sf() +
-  labs(x = "Longitude",
-       y = "Latitude") +
-  theme_bw()
-```
-
-### Highlighting Specific Regions Within the Country
-
 If you wish to highlight the regions, calling them out on the map as Del Ponte and Belechew (2020) did in their work, we can create a new object of only these two regions and plot them in a new layer.
 
 To do this we'll create two new layers to work with.
 The first layer will just be Ethiopia with no regions, zones or other subdivisions.
-The second layer will be the layer that contains Oromia and SNNP.
+The second layer will be the layer that contains Oromia and SNNP based on the `ethiopia_regions_sf` object that we've already created.
 
 ```{r filter-ssnp-oromia, warning=FALSE, message=FALSE}
 # First layer, country outline
@@ -251,7 +232,7 @@ oromia_snnp_sf <- filter(
 
 Plot the complete map.
 
-```{r plot ssnp-oromia}
+```{r plot-ssnp-oromia}
 ggplot() +
   geom_sf(data = ethiopia_simple_sf,
           col = NA) +
@@ -318,7 +299,8 @@ final_map <- ggplot() +
 final_map
 ```
 
-Add linetype definitions for regions and add zone colours.
+### Add Linetype Definitions and Colours
+
 The Colorbrewer palette offers good colours for maps, see <https://colorbrewer2.org> for more ideas.
 Here we'll use `scale_fill_brewer()`, a built in _ggplot2_ colour scale that can be used with any type of plot, not just maps.
 
@@ -329,16 +311,24 @@ final_map <-
     labels = function(x)
       str_wrap(x, width = 5)
   ) +
-  scale_fill_brewer(palette = "Set3") + # this colours the zones, https://colorbrewer2.org/
-  xlab("Longitude") +
-  ylab("Latitude") +
+  scale_fill_brewer(palette = "Set3") # this colours the zones, https://colorbrewer2.org/
+
+final_map
+```
+
+### Add Descriptive Labelling
+
+```{r final-map-labelling}
+final_map <- 
+  final_map +
   labs(
+    x = "Longitude",
+    y = "Latitude",
     title = "Ethiopian Coffee Leaf Rust Survey Sites",
     caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
     https://doi.org/10.17605/OSF.IO/XEJAZ",
     fill = "Zone",
-    linetype = "Region",
-    colour = ""
+    linetype = "Region"
   )
 
 final_map

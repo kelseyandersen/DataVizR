@@ -8,22 +8,32 @@ library(stringr)
 
 
 ## ----download-GADM, message=FALSE, warning=FALSE--------------------------------------------------
-ethiopia_rds <-
-  "https://biogeo.ucdavis.edu/data/gadm3.6/Rsf/gadm36_ETH_3_sf.rds"
-ethiopia_sf <- file.path(tempdir(), "gadm36_ETH_3_sf.rds")
+# Remote file information
+u_remote <- "https://biogeo.ucdavis.edu/"
+p_remote <- "data/gadm3.6/Rsf/"
+f_name <- "gadm36_ETH_3_sf.rds"
+
+# Local file location to save to
+ethiopia_rds <- file.path(tempdir(), "gadm36_ETH_3_sf.rds")
 
 if (toupper(Sys.info()["sysname"]) == "WINDOWS") {
   download.file(
-    url = ethiopia_rds,
-    destfile = ethiopia_sf,
+    url = paste0(u_remote, p_remote, f_name),
+    destfile = ethiopia_rds,
     method = "wininet",
     mode = "wb"
   )
 } else {
-  download.file(ethiopia_rds, ethiopia_sf, method = "auto")
+  download.file(
+    url = paste0(u_remote, p_remote, f_name),
+    destfile = ethiopia_rds,
+    method = "auto"
+  )
 }
 
-ethiopia_sf <- readRDS(ethiopia_sf)
+
+## ----readRDS--------------------------------------------------------------------------------------
+ethiopia_sf <- readRDS(ethiopia_rds)
 
 
 ## ----plot_level1----------------------------------------------------------------------------------
@@ -39,7 +49,9 @@ names(ethiopia_sf)
 
 ## ----group-NAME_1, warning=FALSE, message=FALSE---------------------------------------------------
 ethiopia_regions_sf <-
-  ethiopia_sf %>% 
+  ethiopia_sf %>%
+  mutate(NAME_1 = gsub("Southern Nations, Nationalities and Peoples", "SNNP",
+                       NAME_1)) %>%
   group_by(NAME_1) %>%
   summarise() %>%
   ungroup() %>%
@@ -84,43 +96,10 @@ coffee_sampling_sf <-
 
 
 ## ----add-points, warning=FALSE, message=FALSE-----------------------------------------------------
-ggplot() +
-  geom_sf(data = ethiopia_regions_sf,
-          fill = "white") +
+ethiopia_regions_ggplot +
   geom_sf(data = coffee_sampling_sf,
           size = 2,
-          color = alpha("black", 0.35)) +
-  labs(
-    title = "Ethiopian Coffee Leaf Rust Survey Sites",
-    caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
-    https://doi.org/10.17605/OSF.IO/XEJAZ",
-    fill = "Zone",
-    linetype = "Region",
-    x = "Longitude",
-    y = "Latitude"
-  ) +
-  theme_bw()
-
-
-## ----subset-snnp-oromia, warning=FALSE, message=FALSE---------------------------------------------
-ethiopia_regions_sf <-
-  ethiopia_regions_sf %>% 
-  mutate(NAME_1 = gsub("Southern Nations, Nationalities and Peoples", "SNNP",
-                       NAME_1)) %>%
-  group_by(NAME_1) %>%
-  summarise() %>%
-  ungroup() %>%
-  st_as_sf()
-
-ethiopia_regions_sf
-
-
-## ----ggplot-ssnp-oromia, warning=FALSE, message=FALSE---------------------------------------------
-ggplot(data = ethiopia_regions_sf) +
-  geom_sf() +
-  labs(x = "Longitude",
-       y = "Latitude") +
-  theme_bw()
+          color = alpha("black", 0.35))
 
 
 ## ----filter-ssnp-oromia, warning=FALSE, message=FALSE---------------------------------------------
@@ -140,7 +119,7 @@ oromia_snnp_sf <- filter(
 )
 
 
-## ----plot ssnp-oromia-----------------------------------------------------------------------------
+## ----plot-ssnp-oromia-----------------------------------------------------------------------------
 ggplot() +
   geom_sf(data = ethiopia_simple_sf,
           col = NA) +
@@ -202,16 +181,22 @@ final_map <-
     labels = function(x)
       str_wrap(x, width = 5)
   ) +
-  scale_fill_brewer(palette = "Set3") + # this colours the zones, https://colorbrewer2.org/
-  xlab("Longitude") +
-  ylab("Latitude") +
+  scale_fill_brewer(palette = "Set3") # this colours the zones, https://colorbrewer2.org/
+
+final_map
+
+
+## ----final-map-labelling--------------------------------------------------------------------------
+final_map <- 
+  final_map +
   labs(
+    x = "Longitude",
+    y = "Latitude",
     title = "Ethiopian Coffee Leaf Rust Survey Sites",
     caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
     https://doi.org/10.17605/OSF.IO/XEJAZ",
     fill = "Zone",
-    linetype = "Region",
-    colour = ""
+    linetype = "Region"
   )
 
 final_map
