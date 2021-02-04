@@ -11,7 +11,7 @@
 
 
 
-<title>Welcome!</title>
+<title>Pre-Workshop Set Up</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,6 +34,79 @@
     </style>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { font-weight: bold; } /* Alert */
+code span.an { font-style: italic; } /* Annotation */
+code span.cf { font-weight: bold; } /* ControlFlow */
+code span.co { font-style: italic; } /* Comment */
+code span.cv { font-style: italic; } /* CommentVar */
+code span.do { font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.er { font-weight: bold; } /* Error */
+code span.in { font-style: italic; } /* Information */
+code span.kw { font-weight: bold; } /* Keyword */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.wa { font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -416,58 +489,76 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Welcome!</h1>
+<h1 class="title toc-ignore">Pre-Workshop Set Up</h1>
 
 </div>
 
 
-<div id="welcome-to-data-visualization-in-r" class="section level2">
-<h2>Welcome to Data Visualization in R</h2>
-<div id="workshop-organizers" class="section level3">
-<h3>Workshop Organizers:</h3>
+<p><br />
+</p>
+<p>To ensure that you can fully participate during the workshop, please make sure you have the most recent versions of R and R Studio installed on your computer. Even if you have installed R in the past, it will be important for you to make sure you have the latest version. We have prepared this workshop with R version 4.0.3.</p>
+<div id="to-r-download-r" class="section level4">
+<h4>To R download R:</h4>
+<ol style="list-style-type: decimal">
+<li>Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a><br />
+</li>
+<li>Click “Download R for Mac/Windows”<br />
+</li>
+<li>Download the appropriate file:
 <ul>
-<li>Kelsey Andersen Onofre, Kansas State University</li>
-<li>Felipe Dalla Lana, Penn State Univesity</li>
-<li>Adam Sparks, Department of Primary Industries and Regional Development &amp; University of Southern Queensland</li>
-<li>Mladen Cucak, Penn State University</li>
-<li>Rodrigo Onofre, Kansas State University</li>
-<li>Karen Garrett, University of Florida  </li>
+<li>Windows users click Base, and download the installer for the latest R version<br />
+</li>
+<li>Mac users select the file R-3.X.X that aligns with your OS version<br />
+</li>
+</ul></li>
+<li>Follow the instructions of the installer</li>
+</ol>
+</div>
+<div id="to-download-rstudio" class="section level4">
+<h4>To download RStudio:</h4>
+<ol style="list-style-type: decimal">
+<li>Go to RStudio for desktop <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a><br />
+</li>
+<li>Select the install file for your OS<br />
+</li>
+<li>Follow the instructions of the installer</li>
+</ol>
+<p>Also, it would be useful to download the following R packages prior to the workshop:</p>
+<ul>
+<li>here</li>
+<li>tidyverse</li>
+<li>ggplot2</li>
+<li>ggraph</li>
+<li>igraph</li>
+<li>ggsn</li>
+<li>patchwork</li>
+<li>ggsci</li>
+<li>library</li>
+</ul>
+<p>For new R useRs: open R studio and type the following code into the console, OR you can go over the “Packages” tab in the bottom right hand corner of RStudio, click “install”, and type in the names of the packages that you would like to install. Once you have installed a package on your computer, there is no need to install again. Instead, each time you need to use the package you use the <code>library()</code> code (as shown below).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;here&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;ggraph&quot;</span>, <span class="st">&quot;igraph&quot;</span>, <span class="st">&quot;ggsn&quot;</span>, <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;ggsci&quot;</span>, <span class="st">&quot;library&quot;</span>))</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(ggraph)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(ggsn)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">library</span>(ggsci)</a></code></pre></div>
+</div>
+<div id="workshop-code-and-data" class="section level2">
+<h2>Workshop code and data</h2>
+<p><br />
+</p>
+<div id="workshop-code-and-data-can-be-downloaded-here" class="section level3">
+<h3>Workshop code and data can be downloaded here:</h3>
+<ul>
+<li>The above file should be downloaded prior to the workshop</li>
+<li>Once R and rStudio are installed, the R project in this folder should be opened. All code should be avaiable to workshop participants for use during the workshop.<br />
+<br />
+<br />
+</li>
 </ul>
 </div>
-<div id="background" class="section level3">
-<h3>Background</h3>
-<p>High quality visualizations, such as graphs and maps, are critical for effectively communicating science. In this workshop participants will gain an understanding of the workflow and data-wrangling necessary for creating publication ready graphs and maps in R. Participants will become familiar with various graph types (including boxplots, scatterplots, networks, and heatmaps) and their best use cases through motivating, plant-pathology related examples and hand-on exercises. Participants will also be introduced to an overview of visualization packages. Attendees will learn the basics of not only selecting the correct graph, but also proper design elements such as labeling, sizing, legends, and coloring. Additionally, participants will be introduced to the basics of working with geospatial data in R. This workshop will be introductory level, previous R experience is welcome but not required. Participants are encouraged to have an up-to-date version of R installed prior to the workshop. Workshop material and additional pre-work will be provided in advance of the workshop.</p>
-<p>This workshop was designed to be part of the 2020 Plant Health annual meeting and has been adapted to an online format due to COVID19.</p>
-</div>
-<div id="learning-outcomes" class="section level3">
-<h3>Learning outcomes</h3>
-</div>
-</div>
-<div id="workshop-logistics" class="section level2">
-<h2>Workshop Logistics</h2>
-<p> </p>
-<div id="workshop-data-visualization-in-r" class="section level4">
-<h4>WORKSHOP: Data Visualization in R</h4>
-</div>
-<div id="date-and-time-tuesday-feb-9th-100pm-400pm-cst" class="section level4">
-<h4>DATE AND TIME: Tuesday, Feb 9th 1:00pm-4:00pm CST</h4>
-</div>
-<div id="location-zoom" class="section level4">
-<h4>LOCATION: Zoom</h4>
-<p> </p>
-</div>
-</div>
-<div id="workshop-sponsoring-institutions" class="section level2">
-<h2>Workshop Sponsoring Institutions</h2>
-<!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
-<center>
-<img src="image_files/KState_PlantPathology_C_P.png"alt="drawing" width="400" height="150"/>
-</center>
-<p><img src="image_files/USQ_international.png" style="padding:90.71px 90.71px 0 90.71px;"></p>
-<p><img src="image_files/DPIRD.png" style="padding:132px 132px 132px 132px;"></p>
-<center>
-<img src="image_files/UFPLANTPATH.png"alt="drawing"/>
-</center>
 </div>
 
 

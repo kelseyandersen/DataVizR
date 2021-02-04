@@ -5,6 +5,8 @@ navbar:
   left:
   - text: Welcome
     href: index.html
+  - text: Workshop Pre-Work
+    href: pre_work.html
   - text: Introduction to R
     menu: 
      - text: Slides
@@ -17,17 +19,20 @@ navbar:
        href: data_viz_Felipe.html
   - text: Network graphs
     menu:
-     - text: Resources
-       href:
+     - text: Slides
+       href: Code
   - text: Maps
     menu:
     - text: Slides
       href: mapping/slideshow/mapping_presentation.html
     - text: Code
       href: mapping.html
+  - text: Resources
+    href: resources.html
+
 output:
   html_document:
-    theme: flatly
+    theme: readable
     highlight: monochrome
     css: styles.css
     toc: yes

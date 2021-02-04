@@ -1,0 +1,24 @@
+---
+title: "Resources"
+---
+
+Here we provide additional resources for learning in R.  
+
+### Resources for learning R
+
+ * **swirl**: https://swirlstats.com/ 
+    - Swirl provides a way to learn R while working in R. 
+ * **R for Data Science**: https://r4ds.had.co.nz/
+ * **Cookbook for R**: http://www.cookbook-r.com/Graphs/ 
+ * APS past introduction to R workshop: https://everhartlab.github.io/IntroR_2019/index.html
+    
+### Resources for visualizations in R
+ 
+ * **Fundamentals of Data Visualization**: https://clauswilke.com/dataviz/
+ * **ggplot website**:  https://ggplot2.tidyverse.org/index.html 
+ * **ggplot cheatsheet**:https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf
+ * Top 50 ggplot visualizations:  http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+
+
+·  	Example of how you can make a custom ggplot2 theme for a university following the branding guidelines for colour, font and graph style: https://adamhsparks.github.io/theme.usq/
+
