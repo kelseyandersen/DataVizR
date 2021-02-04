@@ -5,19 +5,19 @@ navbar:
   left:
   - text: Welcome
     href: index.html
-  - text: Workshop Pre-Work
+  - text: Pre-Work
     href: pre_work.html
-  - text: Introduction to R
+  - text: Intro to R
     menu: 
      - text: Slides
        href: intro/presentation.html
      - text: Code
        href: Intro_R.html
-  - text: Intro to ggplot2
+  - text: ggplot2
     menu:
      - text: Slides
        href: data_viz_Felipe.html
-  - text: Network graphs
+  - text: Networks
     menu:
      - text: Slides
        href: Code
@@ -36,6 +36,7 @@ output:
     highlight: monochrome
     css: styles.css
     toc: yes
+    toc_depth: 3
     toc_float: yes
     lib_dir: site_libs
     self_contained: no
