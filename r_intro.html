@@ -497,8 +497,12 @@ div.tocify {
 </div>
 
 
-<div id="why-r" class="section level2">
-<h2>Why R?</h2>
+<p>Here we will go through some R basics, with an emphasis on skills that you will use later on in the workshop. Of course, we do not have time to cover everything here, so we encourage you to check out our “resources” section for more introductory R material.<br />
+<br />
+Additionally, everything in R can be done in a number of ways - we are showing only one way here.</p>
+<div id="why-r" class="section level1">
+<h1>Why R?</h1>
+<p>We recognize that there are many options when it comes to statistical and vizualization software. Here are a few reasons that we have chosen R for most applications.</p>
 <ul>
 <li><p><strong>Performance</strong>: stable, light and fast-parallelisation</p></li>
 <li><p><strong>Support network</strong>: documentation, community, developers</p></li>
@@ -506,18 +510,22 @@ div.tocify {
 <li><p><strong>Versatility</strong>: solutions for <em>almost</em> any numerical problem and extensive graphical capabilities graphical capabilities</p></li>
 <li><p><strong>Accessibility</strong>: free and open source</p></li>
 </ul>
-<p><a href="http://www.r-project.org/" class="uri">http://www.r-project.org/</a></p>
+</div>
+<div id="r-vs.rstudio" class="section level1">
+<h1>R vs. RStudio</h1>
+<p>R can be downloaded here: <a href="http://www.r-project.org/" class="uri">http://www.r-project.org/</a></p>
 <p>R console is basic…</p>
 <p><img src="intro/img/R.PNG" width="351" /></p>
-<div id="rstudio-ide" class="section level3">
-<h3>RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/></h3>
+<div id="rstudio-ide" class="section level2">
+<h2>RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/></h2>
 <ul>
 <li>Integrated Development Environment (IDE) for R,</li>
 <li>Separate program, developed by a company but also free and open source, and</li>
 <li>By far the best thing to use when learning R.</li>
 </ul>
-<div id="rstudio-orientation" class="section level4">
-<h4>RStudio orientation</h4>
+</div>
+<div id="rstudio-orientation" class="section level2">
+<h2>RStudio orientation</h2>
 <p>Four panes (positions can be changed)</p>
 <ul>
 <li>Scripts (top-left)</li>
@@ -526,34 +534,42 @@ div.tocify {
 <li>Files/plots/help/etc (bottom-right)</li>
 </ul>
 <p><img src="intro/img/RStudio-console.png" width="862" /></p>
-</div>
-</div>
 <div id="rstudio-projects" class="section level3">
 <h3>RStudio Projects</h3>
-<p>Projects in RStudio create a folder for storing all of our files (data, scripts, images)<br />
-Eliminates the need for setting our working directory with <code>setwd()</code><br />
-It is useful to created individual folders within the project for storing data, scripts, images, etc.<br />
-When you want to open your project to a new computer, just copy this entire folder onto the new machine</p>
+<ul>
+<li>Projects in RStudio create a folder for storing all of our files (data, scripts, images)<br />
+</li>
+<li>Eliminates the need for setting our working directory with <code>setwd()</code><br />
+</li>
+<li>It is useful to created individual folders within the project for storing data, scripts, images, etc.<br />
+</li>
+<li>When you want to open your project to a new computer, just copy this entire folder onto the new machine</li>
+</ul>
 </div>
 <div id="getting-help" class="section level3">
 <h3>Getting help</h3>
+<p>We all run into isssues and error codes when working in R. Google is your friend! Here are some helpful resources for when you get stuck:</p>
 <p>Help:<br />
 - <strong>Google</strong>: just add “with R” at the end of any search<br />
 - <strong>Stack Overflow</strong>: programming questions<br />
 - <strong>Cross Validated</strong>: scientific questions</p>
-<p>Learning:<br />
-- “R for Data Science” → <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a><br />
+<p>Additional references (more in the ‘references’ tab of our workshop website): - “R for Data Science” → <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a><br />
 - R4DS Learning Community → <a href="https://rfordatasci.com" class="uri">https://rfordatasci.com</a></p>
 </div>
 </div>
-<div id="basic-concepts" class="section level2">
-<h2>Basic concepts</h2>
-<p>In R, We have <em>objects</em>, where the data is stored.<br />
-<strong>Functions</strong> which are applied on objects or another functions (i.e. to analyze the data) We create scripts which are something like kitchen recipes.<br />
-This collection of recipes is stored in an R project.</p>
-<div id="objects" class="section level3">
-<h3>Objects</h3>
-<p>We can assign values to objects using the assignment operator, and use R to do useful things: You may come across code that assigns values using = instead of <code>&lt;-</code>, which can have some slight differences It is good practice to stick with <code>&lt;-</code> for assigning values</p>
+</div>
+<div id="basic-r-concepts" class="section level1">
+<h1>Basic R Concepts</h1>
+<ul>
+<li>In R, We have <em>objects</em>, where the data is stored.<br />
+<strong>Functions</strong> which are applied on objects or another functions (i.e. to analyze the data)</li>
+<li>We create scripts which are something like kitchen recipes.<br />
+</li>
+<li>This collection of recipes is stored in an R project.</li>
+</ul>
+<div id="objects" class="section level2">
+<h2>Objects</h2>
+<p>We can assign values to objects using the assignment operator, and use R to do useful things: You may come across code that assigns values using = instead of <code>&lt;-</code>, which can have some slight differences It is good practice to stick with <code>&lt;-</code> for assigning values.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="dv">1</span><span class="op">+</span><span class="dv">3</span></a></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="dv">1</span></a>
@@ -564,8 +580,8 @@ This collection of recipes is stored in an R project.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">x <span class="op">+</span><span class="st"> </span>Y <span class="co">#case sensitive</span></a></code></pre></div>
 <p><em>pro tip: Stick to small letters and underscores + avoid numbers when naming objects.</em></p>
 </div>
-<div id="functions" class="section level3">
-<h3>Functions</h3>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
 <p>Functions are “canned scripts” which automate series of commands on one or more inputs called arguments. Arguments can be anything (numbers, file names, variables), options are arguments that take on default values which can be altered by the user</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">addition &lt;-<span class="st"> </span><span class="cf">function</span>(argument_one, argument_two){ </a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  argument_one <span class="op">+</span><span class="st"> </span>argument_two </a>
@@ -585,7 +601,7 @@ This collection of recipes is stored in an R project.</p>
 <pre><code>## [1] 3</code></pre>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">round</span>(<span class="fl">3.14159</span>, <span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## [1] 3.14</code></pre>
-<p>Some useful functions</p>
+<p>Some useful functions:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">length</span>(x) <span class="co"># Counts the number of elements in the vector</span></a></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">class</span>(x) <span class="co"># Identifies the type of elements</span></a></code></pre></div>
@@ -593,9 +609,8 @@ This collection of recipes is stored in an R project.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">str</span>(x) <span class="co"># Display structure of object</span></a></code></pre></div>
 <pre><code>##  num 1</code></pre>
 </div>
-</div>
-<div id="workspace-environment" class="section level1">
-<h1>Workspace environment</h1>
+<div id="workspace-environment" class="section level2">
+<h2>Workspace environment</h2>
 <ul>
 <li>History tab will show your recent code</li>
 <li>To list and remove these objects from your global environment:</li>
@@ -605,11 +620,12 @@ This collection of recipes is stored in an R project.</p>
 <a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">## [1] &quot;D&quot; &quot;h&quot; &quot;K&quot; &quot;Q&quot;</span></a>
 <a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co"># remove a single object from Environment</span></a>
 <a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw">rm</span>(some_object)</a></code></pre></div>
-<div id="object-types" class="section level3">
-<h3>Object types</h3>
-<div id="vectors" class="section level4">
-<h4>Vectors</h4>
-<p>We can save multiple values into a single variable, called <strong>vector</strong>, using the <code>c()</code> function:</p>
+</div>
+<div id="object-types" class="section level2">
+<h2>Object types</h2>
+<div id="vectors" class="section level3">
+<h3>Vectors</h3>
+<p>We can save multiple values into a single variable, called a <strong>vector</strong>, using the <code>c()</code> function:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">num &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">65</span>) </a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">num</a></code></pre></div>
 <pre><code>## [1] 50 60 65</code></pre>
@@ -623,10 +639,10 @@ This collection of recipes is stored in an R project.</p>
 <a class="sourceLine" id="cb27-7" data-line-number="7">logical &lt;-<span class="st">  </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>) <span class="co"># only TRUE or FALSE</span></a></code></pre></div>
 <p>Note the quotation marks!</p>
 </div>
-<div id="data-frames" class="section level4">
-<h4>Data frames</h4>
+<div id="data-frames" class="section level3">
+<h3>Data frames</h3>
 <p>A <strong>data frame</strong> is the most common way of storing <strong>data</strong> in <strong>R</strong> and, generally, is the <strong>data</strong> structure most often used for <strong>data</strong> analyses. Under the hood, a <strong>data frame</strong> is a list of equal-length vectors. Each element of the list can be thought of as a column and the length of each element of the list is the number of rows.</p>
-<p>We can make our own data frames</p>
+<p>We can make our own data frames:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2">  <span class="dt">col_one =</span> num,</a>
 <a class="sourceLine" id="cb28-3" data-line-number="3">  <span class="dt">col_two =</span> char,</a>
@@ -651,10 +667,8 @@ This collection of recipes is stored in an R project.</p>
 <pre><code>## [1] &quot;mouse&quot; &quot;rat&quot;</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">num[num <span class="op">&gt;=</span><span class="st"> </span><span class="dv">30</span> <span class="op">&amp;</span><span class="st"> </span>num <span class="op">==</span><span class="st"> </span><span class="dv">21</span>]</a></code></pre></div>
 <pre><code>## numeric(0)</code></pre>
-</div>
-</div>
-<div id="indexing-and-subsetting-dataframes" class="section level3">
-<h3>Indexing and subsetting dataframes</h3>
+<div id="indexing-and-subsetting-dataframes" class="section level4">
+<h4>Indexing and subsetting dataframes</h4>
 <p>Dataframes are also subsetted or indexed with square brackets. We must specify rows then columns[row,column]:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">df[<span class="dv">1</span>, <span class="dv">1</span>] <span class="co"># first element in the first column of the data frame (as a vector)</span></a>
 <a class="sourceLine" id="cb36-2" data-line-number="2">df[<span class="dv">1</span>, <span class="dv">3</span>] <span class="co"># first element in the third column (as a vector)</span></a>
@@ -683,6 +697,8 @@ This collection of recipes is stored in an R project.</p>
 <pre><code>## [1] 50 60 65</code></pre>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">df<span class="op">$</span>col_one <span class="co"># Result is a vector</span></a></code></pre></div>
 <pre><code>## [1] 50 60 65</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div id="tidyverse" class="section level1">
@@ -839,8 +855,8 @@ pipe(%&gt;%) approach: <code>data %&gt;% function( ., argument_one, argument_two
 ## 4 Local    Sidama  35.2
 ## 5 Mixture  Sheka   29.5
 ## 6 Mixture  Sidama  18.6</code></pre>
-<p>Try some of functions.<br />
-<code>select()</code> to grab columns.</p>
+<p>Try some of these functions.<br />
+<code>select()</code> is used to grab columns.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">dt_small <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb54-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(cultivar, zone)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
@@ -852,7 +868,7 @@ pipe(%&gt;%) approach: <code>data %&gt;% function( ., argument_one, argument_two
 ## 4 Local    Sidama
 ## 5 Mixture  Sheka 
 ## 6 Mixture  Sidama</code></pre>
-<p><code>filter()</code> to grab rows.</p>
+<p><code>filter()</code> is used to to grab rows.</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">dt_small <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb56-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(cultivar<span class="op">==</span><span class="st"> &quot;Local&quot;</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
@@ -881,7 +897,7 @@ pipe(%&gt;%) approach: <code>data %&gt;% function( ., argument_one, argument_two
 ## * &lt;chr&gt;  &lt;int&gt;
 ## 1 Sheka      3
 ## 2 Sidama     3</code></pre>
-<p>Average inc by cultivar and remove missing values if there are any:</p>
+<p>Calculate average inc by cultivar and remove missing values if there are any:</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">dt_small <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb62-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(cultivar) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb62-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_inc =</span> <span class="kw">mean</span>(inc, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
@@ -950,28 +966,41 @@ Generates multiple columns from two columns:<br />
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] here_1.0.1      forcats_0.5.1   stringr_1.4.0   dplyr_1.0.3    
-##  [5] purrr_0.3.4     readr_1.4.0     tidyr_1.1.2     tibble_3.0.6   
-##  [9] ggplot2_3.3.3   tidyverse_1.3.0
+##  [1] sf_0.9-7        ggsn_0.5.0      here_1.0.1      ggthemes_4.2.4 
+##  [5] ggsci_2.9       forcats_0.5.1   stringr_1.4.0   dplyr_1.0.3    
+##  [9] purrr_0.3.4     readr_1.4.0     tidyr_1.1.2     tibble_3.0.6   
+## [13] ggplot2_3.3.3   tidyverse_1.3.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.1.0  xfun_0.20         haven_2.3.1       colorspace_2.0-0 
-##  [5] vctrs_0.3.6       generics_0.1.0    htmltools_0.5.1.1 yaml_2.2.1       
-##  [9] utf8_1.1.4        rlang_0.4.10      pillar_1.4.7      glue_1.4.2       
-## [13] withr_2.4.1       DBI_1.1.1         dbplyr_2.0.0      modelr_0.1.8     
-## [17] readxl_1.3.1      lifecycle_0.2.0   munsell_0.5.0     gtable_0.3.0     
-## [21] cellranger_1.1.0  rvest_0.3.6       evaluate_0.14     knitr_1.31       
-## [25] fansi_0.4.2       highr_0.8         broom_0.7.4       Rcpp_1.0.6       
-## [29] scales_1.1.1      backports_1.2.1   jsonlite_1.7.2    fs_1.5.0         
-## [33] hms_1.0.0         png_0.1-7         digest_0.6.27     stringi_1.5.3    
-## [37] grid_4.0.3        rprojroot_2.0.2   cli_2.3.0         tools_4.0.3      
-## [41] magrittr_2.0.1    crayon_1.4.0      pkgconfig_2.0.3   ellipsis_0.3.1   
-## [45] xml2_1.3.2        reprex_1.0.0      lubridate_1.7.9.2 assertthat_0.2.1 
-## [49] rmarkdown_2.6     httr_1.4.2        rstudioapi_0.13   R6_2.5.0         
-## [53] compiler_4.0.3</code></pre>
+##  [1] nlme_3.1-149        bitops_1.0-6        fs_1.5.0           
+##  [4] lubridate_1.7.9.2   RColorBrewer_1.1-2  httr_1.4.2         
+##  [7] rprojroot_2.0.2     tools_4.0.3         backports_1.2.1    
+## [10] utf8_1.1.4          R6_2.5.0            KernSmooth_2.23-17 
+## [13] DBI_1.1.1           mgcv_1.8-33         colorspace_2.0-0   
+## [16] withr_2.4.1         sp_1.4-5            tidyselect_1.1.0   
+## [19] compiler_4.0.3      cli_2.3.0           rvest_0.3.6        
+## [22] xml2_1.3.2          labeling_0.4.2      scales_1.1.1       
+## [25] classInt_0.4-3      digest_0.6.27       foreign_0.8-80     
+## [28] rmarkdown_2.6       jpeg_0.1-8.1        pkgconfig_2.0.3    
+## [31] htmltools_0.5.1.1   dbplyr_2.0.0        highr_0.8          
+## [34] rlang_0.4.10        readxl_1.3.1        rstudioapi_0.13    
+## [37] farver_2.0.3        generics_0.1.0      jsonlite_1.7.2     
+## [40] magrittr_2.0.1      Matrix_1.2-18       Rcpp_1.0.6         
+## [43] munsell_0.5.0       fansi_0.4.2         lifecycle_0.2.0    
+## [46] stringi_1.5.3       yaml_2.2.1          plyr_1.8.6         
+## [49] maptools_1.0-2      crayon_1.4.0        lattice_0.20-41    
+## [52] haven_2.3.1         splines_4.0.3       hms_1.0.0          
+## [55] knitr_1.31          pillar_1.4.7        rjson_0.2.20       
+## [58] reprex_1.0.0        glue_1.4.2          evaluate_0.14      
+## [61] modelr_0.1.8        png_0.1-7           vctrs_0.3.6        
+## [64] RgoogleMaps_1.4.5.3 cellranger_1.1.0    gtable_0.3.0       
+## [67] assertthat_0.2.1    xfun_0.20           broom_0.7.4        
+## [70] e1071_1.7-4         class_7.3-17        units_0.6-7        
+## [73] ggmap_3.0.0         ellipsis_0.3.1</code></pre>
 </div>
 </div>
 

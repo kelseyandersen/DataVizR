@@ -1,12 +1,19 @@
 ---
 title: "R intro!"
+output: html_document
 editor_options: 
   markdown: 
     wrap: 72
     toc: true
 ---
 
-## Why R?
+Here we will go through some R basics, with an emphasis on skills that you will use later on in the workshop. Of course, we do not have time to cover everything here, so we encourage you to check out our "resources" section for more introductory R material.\
+\
+Additionally, everything in R can be done in a number of ways - we are showing only one way here.
+
+# Why R?
+
+We recognize that there are many options when it comes to statistical and vizualization software. Here are a few reasons that we have chosen R for most applications.
 
 -   **Performance**: stable, light and fast-parallelisation 
 
@@ -18,7 +25,9 @@ editor_options:
 
 -   **Accessibility**: free and open source
 
-<http://www.r-project.org/>
+# R vs. RStudio
+
+R can be downloaded here: <http://www.r-project.org/>
 
 R console is basic...
 
@@ -26,13 +35,14 @@ R console is basic...
 knitr::include_graphics("intro/img/R.png")
 ```
 
-### RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
+
+## RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
 
 -   Integrated Development Environment (IDE) for R,
 -   Separate program, developed by a company but also free and open source, and
 -   By far the best thing to use when learning R.
 
-#### RStudio orientation
+## RStudio orientation
 
 Four panes (positions can be changed)
 
@@ -47,40 +57,42 @@ knitr::include_graphics("intro/img/RStudio-console.png")
 
 ### RStudio Projects
 
-Projects in RStudio create a folder for storing all of our files (data,
+-   Projects in RStudio create a folder for storing all of our files (data,
 scripts, images)\
-Eliminates the need for setting our working directory with `setwd()`\
-It is useful to created individual folders within the project for
+-   Eliminates the need for setting our working directory with `setwd()`\
+-   It is useful to created individual folders within the project for
 storing data, scripts, images, etc.\
-When you want to open your project to a new computer, just copy this
+-   When you want to open your project to a new computer, just copy this
 entire folder onto the new machine
 
 
 ### Getting help
 
+We all run into isssues and error codes when working in R. Google is your friend! Here are some helpful resources for when you get stuck:
+
 Help:  
-- **Google**: just add "with R" at the end of any search  
-- **Stack Overflow**: programming questions  
-- **Cross Validated**: scientific questions  
+-   **Google**: just add "with R" at the end of any search  
+-   **Stack Overflow**: programming questions  
+-   **Cross Validated**: scientific questions  
  
-Learning:  
-- "R for Data Science" → <https://r4ds.had.co.nz>  
-- R4DS Learning Community → <https://rfordatasci.com>  
+Additional references (more in the ‘references’ tab of our workshop website):
+-   "R for Data Science" → <https://r4ds.had.co.nz>  
+-   R4DS Learning Community → <https://rfordatasci.com>  
 
 
-## Basic concepts
+# Basic R Concepts
 
-In R, We have  *objects*, where the data is stored.  
+-   In R, We have  *objects*, where the data is stored.  
 **Functions** which are applied on objects or another functions (i.e. to analyze the data)
-We create scripts which are something like kitchen recipes.  
-This collection of recipes is stored in an R project.
+-   We create scripts which are something like kitchen recipes.  
+-   This collection of recipes is stored in an R project.
 
-### Objects
+## Objects
 
 We can assign values to objects using the assignment operator, and use R
 to do useful things: You may come across code that assigns values using
 = instead of `<-`, which can have some slight differences It is good
-practice to stick with `<-` for assigning values
+practice to stick with `<-` for assigning values.
 
 ```{r }
 1+3
@@ -95,7 +107,7 @@ x + Y #case sensitive
 
 *pro tip: Stick to small letters and underscores + avoid numbers when naming objects.*
 
-### Functions
+## Functions
 
 Functions are "canned scripts" which automate series of commands on one
 or more inputs called arguments. Arguments can be anything (numbers, file names, variables), options are arguments that take on default values which can be altered by the user
@@ -119,7 +131,7 @@ round(3.14159)
 round(3.14159, digits = 2)
 ```
 
-Some useful functions
+Some useful functions:
 
 ```{r}
 length(x) # Counts the number of elements in the vector
@@ -127,7 +139,7 @@ class(x) # Identifies the type of elements
 str(x) # Display structure of object
 ```
 
-# Workspace environment
+## Workspace environment
 
 -   History tab will show your recent code
 -   To list and remove these objects from your global environment:
@@ -140,10 +152,9 @@ ls()
 rm(some_object)
 ```
 
-### Object types  
-#### Vectors
-We can save multiple values into a single 
-variable, called **vector**, using the `c()` function:
+## Object types  
+### Vectors
+We can save multiple values into a single variable, called a **vector**, using the `c()` function:
 
 ```{r}
 num <- c(50, 60, 65) 
@@ -165,7 +176,7 @@ logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
 ```
 Note the quotation marks!  
 
-#### Data frames
+### Data frames
 
 
 A **data frame** is the most common way of storing **data** in **R**
@@ -174,7 +185,7 @@ analyses. Under the hood, a **data frame** is a list of equal-length
 vectors. Each element of the list can be thought of as a column and the
 length of each element of the list is the number of rows.
 
-We can make our own data frames
+We can make our own data frames:
 ```{r make_data_frame}
 df <- data.frame(
   col_one = num,
@@ -209,7 +220,7 @@ num[num >= 30 & num == 21]
 ```
 
 
-### Indexing and subsetting dataframes
+#### Indexing and subsetting dataframes
 
 Dataframes are also subsetted or indexed with square brackets. We
 must specify rows then columns[row,column]:
@@ -339,8 +350,8 @@ dt %>%
   ungroup()
 dt_small
 ```
-Try some of functions.   
-`select()` to grab columns.  
+Try some of these functions.   
+`select()` is used to grab columns.  
 
 ```{r select}
 dt_small %>% 
@@ -348,7 +359,7 @@ dt_small %>%
 ```
 
 
-`filter()` to grab rows.
+`filter()` is used to to grab rows.
 
 ```{r filter}
 dt_small %>% 
@@ -370,7 +381,7 @@ dt_small %>%
   tally()
 ```
 
-Average inc by cultivar and remove missing values if there are any:
+Calculate average inc by cultivar and remove missing values if there are any:
 
 ```{r}
 dt_small %>%
