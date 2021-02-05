@@ -156,7 +156,7 @@ ggplot(survey_data,  aes(x= inc))+
   geom_density()
 ```
 
-# Slide 11
+
 
 ```{r}
 ggplot(survey_data,aes(x= farm_management, y = inc))+
@@ -172,7 +172,6 @@ ggplot(survey_data, aes(x = inc, y = sev2))+
 
 # Aesthetics 
 
-# Slide 15
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc, 
                       shape = farm_management, 
@@ -185,7 +184,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(aes(color = farm_management),width = 0.2)
 ```
 
-# Slide 16
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_boxplot(outlier.alpha = 0) + 
@@ -198,7 +197,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               size = 3, alpha = 0.5)
 ```
 
-# Slide 17
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management))+
   geom_bar(aes(fill = cultivar)) 
@@ -208,7 +207,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               aes(fill = altitude ))
 ```
 
-# Slide 18
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 4,
@@ -219,14 +218,14 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               aes(size = sev2 ))
 ```
 
-# Slide 19
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 3, alpha = 0.8,
     aes(shape = farm_management))
 ```
 
-# slide 20
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 3, alpha = 0.8, shape = 21,
@@ -237,7 +236,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               aes(fill = farm_management))
 ```
 
-# slide 21
+
 ```{r}
 ggplot(survey_data, aes(x=inc , y = sev2))+
   geom_smooth(aes(linetype = cultivar), se = FALSE)
@@ -261,20 +260,20 @@ p + scale_y_continuous(name = "Incidence (%)",
                        breaks = c(0,25,50, 75, 100),
                        limits = c(0,100))
 ```
-# Slide 23
+
 ```{r}
 p + scale_color_manual(
         name = "Farm management",
         values = c("blue", "grey80", "#2ca25f", "#756bb120"))
 ```
 
-# Slide 24
+
 ```{r}
 p + scale_color_brewer(name = "Farm management",
           palette = "PRGn")
 ```
 
-# slide 25
+
 ```{r}
 p + ggsci::scale_color_npg()
 
@@ -282,7 +281,7 @@ p + ggsci::scale_color_aaas()
 ```
 
 
-# Slide 26
+
 ```{r}
 ggplot(survey_data, aes(x=inc , y = sev2))+
   geom_smooth(se = FALSE, aes(linetype = cultivar, color = cultivar))+
@@ -290,9 +289,9 @@ ggplot(survey_data, aes(x=inc , y = sev2))+
   scale_linetype_manual(values = c("solid","longdash", "991191"))
 ```
 
-Facet
+## Facets
 
-# Slide 27
+
 ```{r}
 head(survey_data)
 ```
@@ -328,19 +327,21 @@ p2
 # Slide 28
 ```{r}
 p2 + facet_wrap(~metric)
+```
 
+
+```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)
 ```
 
 # Slide 29
-```{r}
+```{r, fig.width=10, fig.height=12}
 p2 + facet_grid(shade~metric)
 ```
 
-Labels 
+# Labels 
 
-# Slide 30
-```{r}
+```{r, fig.width=6, fig.height=10}
   p2 + facet_wrap(~metric, ncol = 1)+
   
   labs(title = "Plot title", 
@@ -353,25 +354,22 @@ Labels
 
 # Themes 
 
-
-# Slide 31
-```{r}
+```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_bw()
 ```
 
-```{r}
+```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_classic()
 ```
 
-```{r}
+```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_minimal()
 ```
 
-# Slide 32
-```{r}
+```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   ggthemes::theme_wsj()
 
@@ -382,7 +380,7 @@ p2 + facet_wrap(~metric, ncol = 1)+
   ggthemes::theme_excel()
 ```
 
-# Slide 35
+
 ```{r}
   p2 + facet_wrap(~metric, ncol = 1)+
   labs(x = NULL, y = "Percent (%)", color = "Farm Management")+  
@@ -406,15 +404,14 @@ p2 + facet_wrap(~metric, ncol = 1)+
 
 # Save 
 
-# Slide 36
 ```{r}
   ggsave(filename = "graph/APS_plot.tiff",
          width =85, height = 140, units = "mm",
          dpi = 300)
 ```
   
-# Slide 37
-```{r} 
+
+```{r, fig.width=6, fig.height=10} 
  p3 =  p2 + facet_wrap(~metric, ncol = 1)+
       labs(x = NULL, y = "Percent (%)", color = "Farm Management")+  
     
@@ -466,9 +463,9 @@ p2 + facet_wrap(~metric, ncol = 1)+
          width =85, height = 140, units = "mm",
          dpi = 300)
 ``` 
-# Extra plots -------------------------------------------------------------
+# Extra plots
 
-# slide 39
+
 ```{r}
  demo_data =  
   survey_data %>% 
@@ -486,7 +483,7 @@ p2 + facet_wrap(~metric, ncol = 1)+
     geom_point()
 ```  
 
-# slide 40
+
 ```{r}
   ggplot(demo_data, aes(x = farm_management, y = inc_m))+
     geom_linerange(aes(ymin = lower, ymax = inc_m+inc_sd),
