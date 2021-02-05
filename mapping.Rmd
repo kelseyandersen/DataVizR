@@ -9,12 +9,12 @@ _ggplot2_ to create a map of Ethiopia and then a map of two regions highlighting
 Once we have the base maps of the country and regions we will add points and zones to the map to indicate survey sites.
 
 ```{r libraries, message=FALSE}
-library(dplyr)
-library(ggplot2)
-library(ggsn)
-library(readr)
-library(sf)
-library(stringr)
+library(dplyr) # Manipulate data in R
+library(ggplot2) # Create great plots in R!
+library(ggsn) # Add scale bars and north arrows to sf maps in R
+library(here) # Simplify file paths in R
+library(readr) # Import tabular data in R
+library(sf) # sf stands for "Simple Features", spatial data in R
 ```
 
 ## Create Country Level Map of Ethiopia
@@ -94,7 +94,7 @@ ethiopia_ggplot
 We can see that there are several zones, shown as the smaller polygons within the larger country outline, in this data set.
 It is possible to merge polygons so that we have an object with a different level of detail than what we started with.
 
-## Selecting Regions and Adding Labels
+## What's Available to Map?
 
 The GADM data have several columns to work with.
 You can find out what these are by using the `names()`.
@@ -165,10 +165,8 @@ Using the previously created `ethiopia_regions_sf` object, we will plot the loca
 We will download their CSV directly into our R session from the GitHub repository.
 
 ```{r coffee-sampling, message=FALSE}
-coffee_sampling <-
-  read_csv(
-    "https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv"
-  )
+coffee_survey <-
+  read_csv(here("data", "survey_clean.csv"))
 ```
 
 ### Converting Sites to an _sf_ Object
@@ -181,8 +179,8 @@ In this case we'll use EPSG:4326, which is only latitude and longitude values.
 While we won't go into projections here, the [_sf_ vignette](https://r-spatial.github.io/sf/articles/sf5.html#how-does-sf-project-geographic-coordinates) describes some of the ideas behind this and many more web resources exist to help you pick the right projection for your map.
 
 ```{r convert-coffee-to-sf, warning=FALSE, message=FALSE}
-coffee_sampling_sf <-
-  st_as_sf(coffee_sampling,
+coffee_survey_sf <-
+  st_as_sf(coffee_survey,
            coords = c("lon", "lat"),
            crs = 4326)
 ```
@@ -196,7 +194,7 @@ We'll use the existing `ethiopia_regions_ggplot` object and add a new layer of t
 
 ```{r add-points, message=FALSE}
 ethiopia_regions_ggplot +
-  geom_sf(data = coffee_sampling_sf,
+  geom_sf(data = coffee_survey_sf,
           size = 2,
           color = alpha("black", 0.35))
 ```
@@ -241,18 +239,16 @@ The second layer will be the layer that contains Oromia and SNNP based on the `e
 ```{r filter-ssnp-oromia, warning=FALSE, message=FALSE}
 # First layer, country outline
 ethiopia_simple_sf <-
-   ethiopia_sf %>%
-   group_by(NAME_0) %>%
-   summarise() %>%
-   ungroup() %>%
+  ethiopia_sf %>%
+  group_by(NAME_0) %>%
+  summarise() %>%
+  ungroup() %>%
   st_as_sf()
 
 # Second layer, regions we're interested in
-oromia_snnp_sf <- filter(
-  ethiopia_regions_sf,
-  NAME_1 == "Oromia" |
-    NAME_1 == "SNNP"
-)
+oromia_snnp_sf <- filter(ethiopia_regions_sf,
+                         NAME_1 == "Oromia" |
+                           NAME_1 == "SNNP")
 ```
 
 Plot the complete map.
@@ -316,7 +312,7 @@ final_map <- ggplot() +
   geom_sf(data = ethiopia_zones_sf, # add zones and fill by name
           aes(fill = NAME_2),
           colour = NA) + # no outline colour
-  geom_sf(data = coffee_sampling_sf,
+  geom_sf(data = coffee_survey_sf,
           # add sampling points
           size = 2,
           colour = alpha("black", 0.35))
@@ -332,10 +328,6 @@ Here we'll use `scale_fill_brewer()`, a built in _ggplot2_ colour scale that can
 ```{r final-map-legend}
 final_map <- 
   final_map +
-  scale_linetype( # define region outline linetype by region
-    labels = function(x)
-      str_wrap(x, width = 5)
-  ) +
   scale_fill_brewer(palette = "Set3") # this colours the zones, https://colorbrewer2.org/
 
 final_map
@@ -350,7 +342,7 @@ final_map <-
     x = "Longitude",
     y = "Latitude",
     title = "Ethiopian Coffee Leaf Rust Survey Sites",
-    caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
+    caption = "Data from GADM, https://gadm.org, and Del Ponte & Belachew, 2020,
     https://doi.org/10.17605/OSF.IO/XEJAZ",
     fill = "Zone",
     linetype = "Region"

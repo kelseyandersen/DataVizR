@@ -1,10 +1,10 @@
 ## ----libraries, message=FALSE---------------------------------------------------------------------
-library(dplyr)
-library(ggplot2)
-library(ggsn)
-library(readr)
-library(sf)
-library(stringr)
+library(dplyr) # Manipulate data in R
+library(ggplot2) # Create great plots in R!
+library(ggsn) # Add scale bars and north arrows to sf maps in R
+library(here) # Simplify file paths in R
+library(readr) # Import tabular data in R
+library(sf) # sf stands for "Simple Features", spatial data in R
 
 
 ## ----download-GADM, message=FALSE, warning=FALSE--------------------------------------------------
@@ -82,22 +82,20 @@ ethiopia_regions_ggplot
 
 
 ## ----coffee-sampling, message=FALSE---------------------------------------------------------------
-coffee_sampling <-
-  read_csv(
-    "https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv"
-  )
+coffee_survey <-
+  read_csv(here("data", "survey_clean.csv"))
 
 
 ## ----convert-coffee-to-sf, warning=FALSE, message=FALSE-------------------------------------------
-coffee_sampling_sf <-
-  st_as_sf(coffee_sampling,
+coffee_survey_sf <-
+  st_as_sf(coffee_survey,
            coords = c("lon", "lat"),
            crs = 4326)
 
 
-## ----add-points, warning=FALSE, message=FALSE-----------------------------------------------------
+## ----add-points, message=FALSE--------------------------------------------------------------------
 ethiopia_regions_ggplot +
-  geom_sf(data = coffee_sampling_sf,
+  geom_sf(data = coffee_survey_sf,
           size = 2,
           color = alpha("black", 0.35))
 
@@ -105,18 +103,16 @@ ethiopia_regions_ggplot +
 ## ----filter-ssnp-oromia, warning=FALSE, message=FALSE---------------------------------------------
 # First layer, country outline
 ethiopia_simple_sf <-
-   ethiopia_sf %>%
-   group_by(NAME_0) %>%
-   summarise() %>%
-   ungroup() %>%
+  ethiopia_sf %>%
+  group_by(NAME_0) %>%
+  summarise() %>%
+  ungroup() %>%
   st_as_sf()
 
 # Second layer, regions we're interested in
-oromia_snnp_sf <- filter(
-  ethiopia_regions_sf,
-  NAME_1 == "Oromia" |
-    NAME_1 == "SNNP"
-)
+oromia_snnp_sf <- filter(ethiopia_regions_sf,
+                         NAME_1 == "Oromia" |
+                           NAME_1 == "SNNP")
 
 
 ## ----plot-ssnp-oromia-----------------------------------------------------------------------------
@@ -166,7 +162,7 @@ final_map <- ggplot() +
   geom_sf(data = ethiopia_zones_sf, # add zones and fill by name
           aes(fill = NAME_2),
           colour = NA) + # no outline colour
-  geom_sf(data = coffee_sampling_sf,
+  geom_sf(data = coffee_survey_sf,
           # add sampling points
           size = 2,
           colour = alpha("black", 0.35))
@@ -177,10 +173,6 @@ final_map
 ## ----final-map-legend-----------------------------------------------------------------------------
 final_map <- 
   final_map +
-  scale_linetype( # define region outline linetype by region
-    labels = function(x)
-      str_wrap(x, width = 5)
-  ) +
   scale_fill_brewer(palette = "Set3") # this colours the zones, https://colorbrewer2.org/
 
 final_map
@@ -193,7 +185,7 @@ final_map <-
     x = "Longitude",
     y = "Latitude",
     title = "Ethiopian Coffee Leaf Rust Survey Sites",
-    caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
+    caption = "Data from GADM, https://gadm.org, and Del Ponte & Belachew, 2020,
     https://doi.org/10.17605/OSF.IO/XEJAZ",
     fill = "Zone",
     linetype = "Region"
