@@ -13,12 +13,12 @@ First, load the libraries needed for this work.
 
 
 ```r
-library(dplyr)
-library(ggplot2)
-library(ggsn)
-library(readr)
-library(sf)
-library(stringr)
+library(dplyr) # Manipulate data in R
+library(ggplot2) # Create great plots in R!
+library(ggsn) # Add scale bars and north arrows to sf maps in R
+library(here) # Simplify file paths in R
+library(readr) # Import tabular data in R
+library(sf) # sf stands for "Simple Features", spatial data in R
 ```
 
 Downloading the Map Data from GADM
@@ -90,7 +90,7 @@ ethiopia_ggplot
 
 ![plot of chunk ggplot-ethiopia](mapping_presentation-figure/ggplot-ethiopia-1.png)
 
-Selecting Regions and Adding Labels
+What's Available to Map?
 ========================================================
 
 We can see that there are several zones, shown as the smaller polygons within the larger country outline, in this data set.
@@ -107,7 +107,7 @@ names(ethiopia_sf)
 [13] "TYPE_3"    "ENGTYPE_3" "CC_3"      "HASC_3"    "geometry" 
 ```
 
-Labelling Regions
+Grouping by and Labelling Regions
 ========================================================
 
 We can group the GADM data using `dplyr::group_by()` to group the polygons into larger regions and add labels to them.
@@ -176,12 +176,8 @@ Now we will build on the maps we created by adding the survey location points th
 
 
 ```r
-u_remote <- "https://raw.githubusercontent.com/"
-p_remote <- "emdelponte/paper-coffee-rust-Ethiopia/master/data/"
-f_name <- "survey_clean.csv"
-
 coffee_survey <-
-  read_csv(paste0(u_remote, p_remote, f_name))
+  read_csv(here("data", "survey_clean.csv"))
 ```
 
 Convert Coffee Survey Location Data to sf
@@ -211,6 +207,17 @@ ethiopia_regions_ggplot +
 ```
 
 
+A Note on the Warning
+========================================================
+
+```r
+Warning message:
+In st_point_on_surface.sfc(sf::st_zm(x)) :
+  st_point_on_surface may not give correct results for longitude/latitude data
+```
+
+Ethiopia is very near the equator, the distortion is minimal and the approximation of a flat two-dimensional surface is reasonable, so the points will be accurately displayed and we can ignore the warning.
+
 ========================================================
 ![plot of chunk add-points-to-map_include](mapping_presentation-figure/add-points-to-map_include-1.png)
 
@@ -228,10 +235,10 @@ The second will be the regions we wish to highlight.
 ```r
 # First layer, country outline
 ethiopia_simple_sf <-
-   ethiopia_sf %>%
-   group_by(NAME_0) %>%
-   summarise() %>%
-   ungroup() %>%
+  ethiopia_sf %>%
+  group_by(NAME_0) %>%
+  summarise() %>%
+  ungroup() %>%
   st_as_sf()
 ```
 
@@ -241,11 +248,9 @@ Create object of regions only to be highlighted.
 
 ```r
 # Second layer, regions we're interested in
-oromia_snnp_sf <- filter(
-  ethiopia_regions_sf,
-  NAME_1 == "Oromia" |
-    NAME_1 == "SNNP"
-)
+oromia_snnp_sf <- filter(ethiopia_regions_sf,
+                         NAME_1 == "Oromia" |
+                           NAME_1 == "SNNP")
 ```
 
 Combining Layers to Highlight Regions
@@ -326,17 +331,13 @@ final_map <- ggplot() +
 ![plot of chunk final-map1-display](mapping_presentation-figure/final-map1-display-1.png)
 
 
-Add Linetype Definitions and Colours
+Add Zone Colours
 ========================================================
 
 
 ```r
 final_map <- 
   final_map +
-  scale_linetype( # define region outline linetype by region
-    labels = function(x)
-      str_wrap(x, width = 5)
-  ) +
   scale_fill_brewer(palette = "Set3") # this colours the zones, https://colorbrewer2.org/
 ```
 
@@ -356,7 +357,7 @@ final_map <-
     x = "Longitude",
     y = "Latitude",
     title = "Ethiopian Coffee Leaf Rust Survey Sites",
-    caption = "Data from GADM, gadm.org, and Del Ponte & Belachew (2020)
+    caption = "Data from GADM, https://gadm.org, and Del Ponte & Belachew, 2020,
     https://doi.org/10.17605/OSF.IO/XEJAZ",
     fill = "Zone",
     linetype = "Region"
