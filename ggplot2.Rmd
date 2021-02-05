@@ -2,8 +2,6 @@
 
 # Introduction to ggplot2 
 
-ggplot2 
-
 ## Packages
 
 These are the packages that will be used in this module. These packages should have been installed prior to the workshop. 
@@ -30,9 +28,9 @@ head(survey_data_long)
 
 ## Plotting 
 
-Here is the plot that we will eventually build today. We will show you the code here, and the finished product, but will walk through how to build this graph step-by-step. 
+Here is the plot that we will eventually build today. We will show you the code first, and the finished product, but will walk through how to build this graph step-by-step. 
 
-```{r, fig.width = 4, fig.height=8}
+```{r, fig.width=6, fig.height=10}
 ggplot(survey_data_long, aes(x= farm_management, y = rate))+
   
   geom_boxplot(outlier.alpha = 0)+
@@ -42,7 +40,7 @@ ggplot(survey_data_long, aes(x= farm_management, y = rate))+
   facet_wrap(~metric, ncol = 1)+
   scale_color_npg()+
   
-  labs(title = "Disease distribution\nacross farm mannagement", 
+  labs(title = "Disease distribution nacross farm mannagement", 
        x = NULL,
        y = "Percent (%)",
        color = "Farm management")+
@@ -91,8 +89,9 @@ ggplot(survey_data, aes(x= farm_management, y = inc))
 class(survey_data$farm_management)
 levels(survey_data$farm_management)
 ```
+BUT- we still didn't say anything about what type of plot we want. 
 
-
+Below we make sure that our data is in the correct form. For the graphs we would liek to make, the farm managemetn stratigies need to be set as factors. 
 ```{r}
 survey_data = survey_data  %>% 
   mutate(farm_management = factor(farm_management, 
@@ -106,42 +105,46 @@ class(survey_data$farm_management)
 levels(survey_data$farm_management)
 ```
 
-# Slide 7
+Now we can start adding the "meat and potatos" to the graph. 
+
+Here, we add the simple boxplot geometry: 
 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_boxplot()
 ```
+
+Alternatively, we can use the geom_point() geometry:
 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_point()
 ```
 
-# Slide 8
+Well, it's hard to see the individual points in the plot above, so lets "jitter" them from side to side with the jitter geometry: 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter()
 
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
-  geom_jitter(width = 0.2)
+  geom_jitter(width = 0.2) # make the width a bit smaller 
 ```
 
-# Slide 9
+It would be even better if we could see both the data points AND the summary information that is avaiable in a boxplot. Here we layer two geometries: geom_jitter and geom_boxplot. 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2)+
   geom_boxplot()
 ```
 
-
+See what happens when you reverse the order of those geometries: 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_boxplot(outlier.alpha = 0) + 
   geom_jitter(width = 0.2)
 ``` 
 
-# Slide 10
+Some other useful geometries include geom_violin, geom_histogram, and geom_density. These each give information about the distribution of our data: 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_violin()
