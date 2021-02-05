@@ -99,26 +99,20 @@ Topics
 - Basics of programming with R
 - Data analysis with `tidyverse`
  
-<br><br><br><br><br><br><br><br>
-These materials are based on the APS's "R for Plant Pathologists" ["R for Plant Pathologists"](https://everhartlab.github.io/APS_IntroR_2020/index.html)    
-Some inspiration from [J. Bryan's Stat545](https://stat545.com/) and  [B. Bohemke's Intro to R](https://github.com/uc-r)  
-<u>*All highly recommended*</u>
-
 
 
 Why R 
 ========================================================
   <br>
--   **Performance**: stable, light and fast
+-   **Performance**: stable, light and fast-parallelisation 
 
 -   **Support network**: documentation, community, developers
 
 -   **Reproducibility**: anyone anywhere can reproduce results
 
--   **Versatility**: unified solution to *almost* any numerical problem and 
-graphical capabilities
+-   **Versatility**: solutions for *almost* any numerical problem and extensive graphical capabilities 
 
--   **Ethics**: accessible to anyone as it is free and open source
+-   **Accessibility**: free and open source
 
 
 Be strong! 
@@ -139,7 +133,13 @@ Help:
 
 Learning:
   * "R for Data Science" → <https://r4ds.had.co.nz>
-  * R4DS Learning Community → <https://rfordatasci.com>
+  * R4DS Learning Community → <https://rfordatasci.com>  
+<br><br>
+
+These materials are based on the APSs ["R for Plant Pathologists"](https://everhartlab.github.io/APS_IntroR_2020/index.html)    
+Some inspiration from [J. Bryan's Stat545](https://stat545.com/) and  [B. Bohemke's Intro to R](https://github.com/uc-r)  
+<u>*All highly recommended*</u>
+
   
   Baby steps
 ====================================
@@ -170,19 +170,23 @@ Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
 ====================================
 transition: linear
 left: 50%
+<center>
 <br><br>
 **R** – Statistical programming language  
 <br><br>
+
 ![alt text](img/Rlogo.png)  
 <br>
 </http://www.r-project.org/>
-
+<center>
 ***
 <br><br>
+<center>
 **RStudio** – Integrated Development Environment (IDE) makes our life much easier
    
 ![alt text](img/Rstudio_logo.png)
 <https://rstudio.com/>
+<center>
 
 It may be described as...
 ====================================
@@ -212,17 +216,10 @@ R interface
 <img src="img/R.png" width=1000 height=800>
 </center>
 
-RStudio (IDE) 
-====================================
-<center>
-<img src="img/RStudio-console.png" width=1450 height=750>
-</center>
-
-
-Move onto some coding
+RStudio (IDE) and some coding
 ====================================
 <br><br>
-Move the cursor onto a line with R code and pres:
+Move the cursor onto a line with R code and press:
 - (Win)*Ctrl* + *Enter* or 
 - (MAC)*Cmd* + *Return*.  
 <br>
@@ -256,6 +253,8 @@ x + y
 the same result if: 
 
 ```r
+# I am a comment!!! 
+# Just here to help jog the memory later on...
 1+3
 ```
 
@@ -285,6 +284,8 @@ x + y
 the same result if: 
 
 ```r
+# I am a comment!!! 
+# Just here to help jog the memory later on...
 1+3
 ```
 
@@ -297,12 +298,10 @@ the same result if:
 **Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
 
 ```r
-# I am a comment!!! Just here to help jog the memory later on...
-# Let us make a function!
 addition <- function(argument_one,
                      argument_two){ 
   argument_one + argument_two # operations
-} # curly brackets define operations
+} # define function within curly brackets
 
 ls() # check content of the environment
 ```
@@ -322,7 +321,7 @@ addition(argument_one = x,
 
 R basics: In R, we have...
 ====================================
-left: 30%
+left: 35%
 class: small-code
 
 **Objects**, where the data is stored.  
@@ -341,6 +340,8 @@ x + y
 the same result if: 
 
 ```r
+# I am a comment!!! 
+# Just here to help jog the memory later on...
 1+3
 ```
 
@@ -352,10 +353,13 @@ the same result if:
 **Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
 
 ```r
-addition <- function(argument_one, argument_two){ 
-  argument_one + argument_two 
-} 
-addition(argument_one = x,argument_two = y)
+addition <- function(argument_one,
+                     argument_two){ 
+  argument_one + argument_two # operations
+} # define function within curly brackets
+
+addition(argument_one = x,
+         argument_two = y)
 ```
 
 ```
@@ -368,14 +372,6 @@ addition(x, y)# Notice the difference?!
 
 ```
 [1] 3
-```
-
-```r
-addition(x, y) == x+y #notice double "="
-```
-
-```
-[1] TRUE
 ```
 
 ```r
@@ -519,7 +515,7 @@ head(df,1)
 ```
 
 ***
-Same logic for indexing, just in 2 dimensions
+Same logic for subsetting, just in 2 dimensions
 
 ```r
 df[1, 1] # [rows, columns]
@@ -583,6 +579,44 @@ Think of something like Microsoft Office suite
 <center>
 <img src="img/tidyverse-process.png"></img>
 </center>
+All this could easily produce a loooot of files...
+
+Packages
+====================================
+To install
+
+```r
+install.packages("tidyverse")
+```
+To load
+
+```r
+library("tidyverse")
+library("here")
+```
+
+Rtudio projects
+====================================
+right: 70%
+
+Simple project: 
+<center>
+<img src="img/proj_folder.PNG" width = 450 height = 300></img>
+</center>
+***
+To print path to your project folder
+
+```r
+getwd()
+```
+
+Path to your our data
+
+```r
+here::here("data", "survey_clean.csv")
+```
+
+
 
 Data import
 ====================================
@@ -590,9 +624,8 @@ Several functions within `readr` and `readxl` for different types of files.
 For this workshop, we will use data on [coffee leaf rust from Ethiopia](https://osf.io/xejaz/)  
 
 
-
 ```r
-dt <- read_csv(here::here("data", "survey_clean.csv"))
+dt <- read_csv(file = here::here("data", "survey_clean.csv"))
 tibble::glimpse(dt, 70)
 ```
 
@@ -618,42 +651,27 @@ Del Ponte, E. M., & Belachew, K. (2020, June 14). Research Compendium: Altitude 
 </div>
 Data transformation
 ====================================
-left: 45
-`dplyr` **Functions**  
-<br>
-Six key `dplyr` functions that allow you to solve the vast majority of your data transformation challenges:
+left: 50%
+`dplyr` **Functions**  allow you to solve most of your data transformation challenges:
+- create and remove new variables
+- do operations on groups 
+- compute summaries
 
-|Function| Description|
-|:-------------------------:|-----------------------------|
-|`filter`| pick observations based on values|
-|`select`| pick variables|
-|`summarize`| compute statistical summaries|
-|`group_by`| perform operations at different levels of your data|
-|`arrange`| reorder data|
-|`mutate`| create new variables|
-***
 **Piping**  
 <br>
-From `magrittr` package.  
 Traditional approach:  
 
 ```r
 function(argument_one, argument_two,...)  
 ```
-pipe `%\>%` approach:  
+pipe `%>%` approach:  
 
 ```r
 argument_one %>% 
   function(., argument_two,...)  
 ```
-
-
-
-Lets test these
-====================================
-left: 50%
-
-Make small subset of data 
+***
+Make small subset of our data 
 
 ```r
 (dt_small <- 
@@ -677,6 +695,30 @@ dt %>%
 5 Mixture  Sheka   29.5
 6 Mixture  Sidama  18.6
 ```
+
+
+
+More examples
+====================================
+left: 50%
+
+
+```r
+dt_small 
+```
+
+```
+# A tibble: 6 x 3
+  cultivar zone     inc
+  <chr>    <chr>  <dbl>
+1 Improved Sheka   33.2
+2 Improved Sidama  16.5
+3 Local    Sheka   81.8
+4 Local    Sidama  35.2
+5 Mixture  Sheka   29.5
+6 Mixture  Sidama  18.6
+```
+
 ***
 
 ```r

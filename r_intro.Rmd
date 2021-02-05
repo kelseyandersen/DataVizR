@@ -1,40 +1,35 @@
-
 ---
-title: "Introduction to R"
+title: "R intro!"
+editor_options: 
+  markdown: 
+    wrap: 72
+    toc: true
 ---
-
-Things to note: Everything can be done in a number of ways - we are
-showing only one way here.
-
-data frame is a list
-
-
 
 ## Why R?
 
--   **Performance**: stable, light and fast
+-   **Performance**: stable, light and fast-parallelisation 
 
 -   **Support network**: documentation, community, developers
 
 -   **Reproducibility**: anyone anywhere can reproduce results
 
--   **Versatility**: unified solution to *almost* any numerical problem and 
-    graphical capabilities
+-   **Versatility**: solutions for *almost* any numerical problem and extensive graphical capabilities graphical capabilities
 
--   **Ethics**: open source, removes economic barrier to data analysis
+-   **Accessibility**: free and open source
 
 <http://www.r-project.org/>
 
 R console is basic...
 
 ```{r R, echo=FALSE,purl = FALSE}
-knitr::include_graphics("img/R.png")
+knitr::include_graphics("intro/img/R.png")
 ```
 
 ### RStudio (IDE) <img src="https://dfsuknfbz46oq.cloudfront.net/p/icons/rstudio.png" width="35" align="center"/>
 
--   Integrated Development Environment (IDE) for R
--   Separate program, developed by a company but also free and open source.
+-   Integrated Development Environment (IDE) for R,
+-   Separate program, developed by a company but also free and open source, and
 -   By far the best thing to use when learning R.
 
 #### RStudio orientation
@@ -47,18 +42,19 @@ Four panes (positions can be changed)
 -   Files/plots/help/etc (bottom-right)
 
 ```{r IDE, echo=FALSE,purl = FALSE}
-knitr::include_graphics("img/RStudio-console.png")
+knitr::include_graphics("intro/img/RStudio-console.png")
 ```
 
 ### RStudio Projects
 
 Projects in RStudio create a folder for storing all of our files (data,
 scripts, images)\
-Eliminates the need for setting our working directory with setwd()\
+Eliminates the need for setting our working directory with `setwd()`\
 It is useful to created individual folders within the project for
 storing data, scripts, images, etc.\
 When you want to open your project to a new computer, just copy this
 entire folder onto the new machine
+
 
 ### Getting help
 
@@ -81,20 +77,20 @@ This collection of recipes is stored in an R project.
 
 ### Objects
 
-We can assign values to objects using the assignment operator (AKA "gets arrow:), and use R
+We can assign values to objects using the assignment operator, and use R
 to do useful things: You may come across code that assigns values using
 = instead of `<-`, which can have some slight differences It is good
-practice to stick with `<-` for assigning values.
+practice to stick with `<-` for assigning values
 
 ```{r }
-1+3 # R is a fancy calculator
-x <- 1 # assign 1 to object x
-y <- 2 # assign 2 to object y
-x + y # add 1 and 2 together 
+1+3
+x <- 1
+y <- 2
+x + y
 ```
 But be careful...
 ```{r eval=FALSE}
-x + Y # R is case sensitive (this will not work)
+x + Y #case sensitive
 ```
 
 *pro tip: Stick to small letters and underscores + avoid numbers when naming objects.*
@@ -102,7 +98,8 @@ x + Y # R is case sensitive (this will not work)
 ### Functions
 
 Functions are "canned scripts" which automate series of commands on one
-or more inputs called arguments
+or more inputs called arguments. Arguments can be anything (numbers, file names, variables), options are arguments that take on default values which can be altered by the user
+
 
 ```{r custom_functions}
 addition <- function(argument_one, argument_two){ 
@@ -115,17 +112,14 @@ addition(x, y)
 addition(x, y) == x+y #notice double "="
 all.equal(addition(x, y), x+y) #Same as above, but pre-made
 ```
-Other useful functions. 
+Examples of functions and options.  
 
 ```{r functions}
 round(3.14159)
 round(3.14159, digits = 2)
 ```
-Arguments can be anything (numbers, file names, variables), options are
-arguments that take on default values which can be altered by the user
-It is also possible (and very useful) to create your own functions.
 
-Some useful functions:
+Some useful functions
 
 ```{r}
 length(x) # Counts the number of elements in the vector
@@ -133,13 +127,8 @@ class(x) # Identifies the type of elements
 str(x) # Display structure of object
 ```
 
-#### *Packages* are collections of funcitions
-
--   example of a package and how to install it. 
-
 # Workspace environment
 
--   You should now have 4 objects in your global environment
 -   History tab will show your recent code
 -   To list and remove these objects from your global environment:
 
@@ -197,7 +186,7 @@ head(df,1)
 ```
 Notice different data types in table header.
 Datatypes in R:
-int stands for integers.
+`int` stands for integers.
 
 `dbl` stands for doubles, or real numbers.
 
@@ -219,7 +208,6 @@ char[char == "mouse"|char == "rat"]
 num[num >= 30 & num == 21]
 ```
 
-Notice that we use == when subsetting instead of =.  
 
 ### Indexing and subsetting dataframes
 
@@ -257,13 +245,13 @@ df$col_one # Result is a vector
 `tidyverse` is a "package of packages" which includes several packages:
 
 ```{r what-is-tidyverse, echo=FALSE}
-knitr::include_graphics("img/tidyverse.png")
+knitr::include_graphics("intro/img/tidyverse.png")
 ```
 
 ...designed to make the data analysis easier.
 
 ```{r tidyverse-process, echo=FALSE}
-knitr::include_graphics("img/tidyverse-process.png")
+knitr::include_graphics("intro/img/tidyverse-process.png")
 ```
 
 Hence loading `tidyverse`
@@ -340,7 +328,7 @@ pipe(%>%) approach:
 
 
 ### Put this to practice
-`tidyverse` makes code readibility much easier, and you an write long sequences in a much freindlier manner than what we have seen above. We will take a smaller subset of our data to illustrate these concepts. As this is slightly more complicated example, we suggest comming back to this later to see if you can understand what was done. 
+`tidyverse` makes code readibility much easier, and you an write long sequences in a much freindlier manner thatn what we have seen above. We will take a smaller subset of our data to make explanation these concepts easier. As, this is slightly more complicated example, so move on and come back to this later to see if you can understand what was done. 
 ```{r}
 dt_small <- 
 dt %>%
