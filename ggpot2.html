@@ -500,7 +500,6 @@ div.tocify {
 </p>
 <div id="introduction-to-ggplot2" class="section level1">
 <h1>Introduction to ggplot2</h1>
-<p>ggplot2</p>
 <div id="packages" class="section level2">
 <h2>Packages</h2>
 <p>These are the packages that will be used in this module. These packages should have been installed prior to the workshop.</p>
@@ -518,7 +517,7 @@ div.tocify {
 </div>
 <div id="plotting" class="section level2">
 <h2>Plotting</h2>
-<p>Here is the plot that we will eventually build today. We will show you the code here, and the finished product, but will walk through how to build this graph step-by-step.</p>
+<p>Here is the plot that we will eventually build today. We will show you the code first, and the finished product, but will walk through how to build this graph step-by-step.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data_long, <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> rate))<span class="op">+</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.alpha =</span> <span class="dv">0</span>)<span class="op">+</span></a>
@@ -528,7 +527,7 @@ div.tocify {
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>metric, <span class="dt">ncol =</span> <span class="dv">1</span>)<span class="op">+</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw">scale_color_npg</span>()<span class="op">+</span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Disease distribution</span><span class="ch">\n</span><span class="st">across farm mannagement&quot;</span>, </a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Disease distribution nacross farm mannagement&quot;</span>, </a>
 <a class="sourceLine" id="cb6-11" data-line-number="11">       <span class="dt">x =</span> <span class="ot">NULL</span>,</a>
 <a class="sourceLine" id="cb6-12" data-line-number="12">       <span class="dt">y =</span> <span class="st">&quot;Percent (%)&quot;</span>,</a>
 <a class="sourceLine" id="cb6-13" data-line-number="13">       <span class="dt">color =</span> <span class="st">&quot;Farm management&quot;</span>)<span class="op">+</span></a>
@@ -548,7 +547,7 @@ div.tocify {
 <a class="sourceLine" id="cb6-27" data-line-number="27"></a>
 <a class="sourceLine" id="cb6-28" data-line-number="28">    <span class="dt">strip.text.x =</span>  <span class="kw">element_text</span>(<span class="dt">hjust =</span><span class="fl">0.01</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="dt">size =</span> <span class="dv">14</span>),</a>
 <a class="sourceLine" id="cb6-29" data-line-number="29">    <span class="dt">strip.background =</span>  <span class="kw">element_blank</span>())</a></code></pre></div>
-<p><img src="ggpot2_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
+<p><img src="ggpot2_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="st">&quot;graph/target.tiff&quot;</span>,  </a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">       <span class="dt">width =</span><span class="dv">140</span>, <span class="dt">height =</span> <span class="dv">200</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>, <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
 </div>
@@ -594,6 +593,8 @@ div.tocify {
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">levels</span>(survey_data<span class="op">$</span>farm_management)</a></code></pre></div>
 <pre><code>## NULL</code></pre>
+<p>BUT- we still didn’t say anything about what type of plot we want.</p>
+<p>Below we make sure that our data is in the correct form. For the graphs we would liek to make, the farm managemetn stratigies need to be set as factors.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">survey_data =<span class="st"> </span>survey_data  <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">farm_management =</span> <span class="kw">factor</span>(farm_management, </a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">              <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Unmanaged&quot;</span>, <span class="st">&quot;Minimal&quot;</span>, <span class="st">&quot;Moderate&quot;</span>, <span class="st">&quot;Intensive&quot;</span>))) </a>
@@ -614,39 +615,33 @@ div.tocify {
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">levels</span>(survey_data<span class="op">$</span>farm_management)</a></code></pre></div>
 <pre><code>## [1] &quot;Unmanaged&quot; &quot;Minimal&quot;   &quot;Moderate&quot;  &quot;Intensive&quot;</code></pre>
-</div>
-</div>
-<div id="slide-7" class="section level1">
-<h1>Slide 7</h1>
+<p>Now we can start adding the “meat and potatos” to the graph.</p>
+<p>Here, we add the simple boxplot geometry:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Alternatively, we can use the geom_point() geometry:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-</div>
-<div id="slide-8" class="section level1">
-<h1>Slide 8</h1>
+<p>Well, it’s hard to see the individual points in the plot above, so lets “jitter” them from side to side with the jitter geometry:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb27-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>) <span class="co"># make the width a bit smaller </span></a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
-</div>
-<div id="slide-9" class="section level1">
-<h1>Slide 9</h1>
+<p>It would be even better if we could see both the data points AND the summary information that is avaiable in a boxplot. Here we layer two geometries: geom_jitter and geom_boxplot.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb29-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>)<span class="op">+</span></a>
 <a class="sourceLine" id="cb29-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>See what happens when you reverse the order of those geometries:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb30-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.alpha =</span> <span class="dv">0</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb30-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>)</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-</div>
-<div id="slide-10" class="section level1">
-<h1>Slide 10</h1>
+<p>Some other useful geometries include geom_violin, geom_histogram, and geom_density. These each give information about the distribution of our data:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> farm_management, <span class="dt">y =</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb31-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_violin</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
@@ -657,6 +652,7 @@ div.tocify {
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">ggplot</span>(survey_data,  <span class="kw">aes</span>(<span class="dt">x=</span> inc))<span class="op">+</span></a>
 <a class="sourceLine" id="cb34-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_density</span>()</a></code></pre></div>
 <p><img src="ggpot2_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
+</div>
 </div>
 <div id="slide-11" class="section level1">
 <h1>Slide 11</h1>
