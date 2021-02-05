@@ -1,25 +1,506 @@
+\
 
+# Introduction to ggplot2 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+ggplot2 
+
+## Packages
+
+These are the packages that will be used in this module. These packages should have been installed prior to the workshop. 
+
+```{r }
+library(tidyverse)
+library(ggsci)
+library(ggthemes)
 ```
 
-## R Markdown
+```{r echo=FALSE, results='hide', message = FALSE}
+survey_data <- read_csv(here::here("data", "survey_clean.csv")) %>% select(-c(farm, region, zone, district, lon, lat))
+survey_data_long = survey_data  %>% 
+   pivot_longer(cols = c(inc, sev2), 
+               names_to = "metric", 
+               values_to = "rate") %>% 
+   
+   mutate(metric = factor(metric, 
+                         levels = c("inc", "sev2"), 
+                         labels = c("Incidence", "Severity")))
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+head(survey_data_long)
 ```
 
-## Including Plots
+## Plotting 
 
-You can also embed plots, for example:
+Here is the plot that we will eventually build today. We will show you the code here, and the finished product, but will walk through how to build this graph step-by-step. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, fig.width = 4, fig.height=8}
+ggplot(survey_data_long, aes(x= farm_management, y = rate))+
+  
+  geom_boxplot(outlier.alpha = 0)+
+  geom_jitter(aes(color = farm_management),
+              size = 3, width = 0.2, alpha = .5)+
+  
+  facet_wrap(~metric, ncol = 1)+
+  scale_color_npg()+
+  
+  labs(title = "Disease distribution\nacross farm mannagement", 
+       x = NULL,
+       y = "Percent (%)",
+       color = "Farm management")+
+  
+  theme(
+    panel.background = element_blank() ,
+    panel.grid.major = element_line(colour = "grey88") ,
+    panel.border     = element_rect(colour = "grey80", fill = NA) ,
+    
+    axis.text.y  = element_text(colour = "black"),
+    axis.text.x  = element_blank(),
+    title = element_text(face = "bold", size = 13),
+    
+    legend.position = c(0.70, .37),
+    legend.key = element_rect(fill = "white"),
+    legend.text = element_text(colour = "black", size=12),
+
+    strip.text.x =  element_text(hjust =0.01, face = "bold", size = 14),
+    strip.background =  element_blank())
+
+ggsave("graph/target.tiff",  
+       width =140, height = 200, units = "mm", dpi = 300)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## ggplot2 basics
+\
+### Data organization
+
+```{r}
+survey_data <- read_csv(here::here("data", "survey_clean.csv")) %>% select(-c(farm, region, zone, district, lon, lat)) ### read in data that was described in the previous module, and select the columns that we would like to use
+
+head(survey_data) ## check the top lines of data 
+```
+
+Let's get started with ggplot. What happens if we only run ggplot() without any additional information? 
+
+```{r}
+ggplot() 
+```
+
+Not much! We need to be sure to specify the data (survey_data) and aestetic elements (y and x axes). 
+
+```{r}
+ggplot(survey_data, aes(x= farm_management, y = inc))
+
+class(survey_data$farm_management)
+levels(survey_data$farm_management)
+```
+
+
+```{r}
+survey_data = survey_data  %>% 
+  mutate(farm_management = factor(farm_management, 
+              levels = c("Unmanaged", "Minimal", "Moderate", "Intensive"))) 
+  
+head(survey_data)
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))
+
+class(survey_data$farm_management)
+levels(survey_data$farm_management)
+```
+
+# Slide 7
+
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot()
+```
+
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_point()
+```
+
+# Slide 8
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter()
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2)
+```
+
+# Slide 9
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2)+
+  geom_boxplot()
+```
+
+
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(width = 0.2)
+``` 
+
+# Slide 10
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_violin()
+
+ggplot(survey_data,  aes(x= inc))+
+  geom_histogram()
+
+ggplot(survey_data,  aes(x= inc))+
+  geom_density()
+```
+
+# Slide 11
+
+```{r}
+ggplot(survey_data,aes(x= farm_management, y = inc))+
+geom_dotplot(binaxis = "y", 
+             stackdir = "center", binwidth = 1.2)
+
+ggplot(survey_data, aes(x = inc, y = sev2))+
+  geom_point()
+
+ggplot(survey_data, aes(x = inc, y = sev2))+
+  geom_point()+ geom_smooth() + geom_rug()
+```
+
+# Aesthetics 
+
+# Slide 15
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc, 
+                      shape = farm_management, 
+                      color = farm_management))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(width = 0.2)
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(color = farm_management),width = 0.2)
+```
+
+# Slide 16
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(color = farm_management),width = 0.2,
+              size = 3)
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(colour = farm_management),width = 0.2,
+              size = 3, alpha = 0.5)
+```
+
+# Slide 17
+```{r}
+ggplot(survey_data,  aes(x= farm_management))+
+  geom_bar(aes(fill = cultivar)) 
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, size = 4, shape = 21,
+              aes(fill = altitude ))
+```
+
+# Slide 18
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, size = 4,
+              aes(alpha = sev2 ))
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, shape = 21, fill = "grey",
+              aes(size = sev2 ))
+```
+
+# Slide 19
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, size = 3, alpha = 0.8,
+    aes(shape = farm_management))
+```
+
+# slide 20
+```{r}
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, size = 3, alpha = 0.8, shape = 21,
+              aes(color = farm_management))
+
+ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_jitter(width = 0.2, size = 3, alpha = 0.8, shape = 21,
+              aes(fill = farm_management))
+```
+
+# slide 21
+```{r}
+ggplot(survey_data, aes(x=inc , y = sev2))+
+  geom_smooth(aes(linetype = cultivar), se = FALSE)
+
+ggplot(survey_data, aes(x=inc , y = sev2, color = cultivar))+
+  geom_point(alpha = 0.2)+
+  geom_smooth(aes(linetype = cultivar), se = FALSE)+
+  geom_rug()
+``` 
+
+# Scales 
+
+# slide 22
+```{r}
+p = ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(colour = farm_management), 
+              width = 0.2,size = 3)
+
+p + scale_y_continuous(name = "Incidence (%)",
+                       breaks = c(0,25,50, 75, 100),
+                       limits = c(0,100))
+```
+# Slide 23
+```{r}
+p + scale_color_manual(
+        name = "Farm management",
+        values = c("blue", "grey80", "#2ca25f", "#756bb120"))
+```
+
+# Slide 24
+```{r}
+p + scale_color_brewer(name = "Farm management",
+          palette = "PRGn")
+```
+
+# slide 25
+```{r}
+p + ggsci::scale_color_npg()
+
+p + ggsci::scale_color_aaas()
+```
+
+
+# Slide 26
+```{r}
+ggplot(survey_data, aes(x=inc , y = sev2))+
+  geom_smooth(se = FALSE, aes(linetype = cultivar, color = cultivar))+
+  # scale_linetype_manual(values = c(1,2,4)) + 
+  scale_linetype_manual(values = c("solid","longdash", "991191"))
+```
+
+Facet
+
+# Slide 27
+```{r}
+head(survey_data)
+```
+
+
+```{r}
+survey_data_long = survey_data  %>% 
+   pivot_longer(cols = c(inc, sev2), 
+               names_to = "metric", 
+               values_to = "rate") %>% 
+   
+   mutate(metric = factor(metric, 
+                         levels = c("inc", "sev2"), 
+                         labels = c("Incidence", "Severity")))
+
+head(survey_data_long)
+```
+
+```{r}
+p2 = ggplot(survey_data_long, aes(x= farm_management, y = rate))+
+  
+  geom_boxplot(outlier.alpha = 0)+
+  geom_jitter(aes(color = farm_management),
+              size = 3, width = 0.2, alpha = .5)+
+  
+  scale_y_continuous(breaks = seq(0,100,25),
+                     limits = c(0,100))+
+  scale_color_npg()
+
+p2
+```
+
+# Slide 28
+```{r}
+p2 + facet_wrap(~metric)
+
+p2 + facet_wrap(~metric, ncol = 1)
+```
+
+# Slide 29
+```{r}
+p2 + facet_grid(shade~metric)
+```
+
+Labels 
+
+# Slide 30
+```{r}
+  p2 + facet_wrap(~metric, ncol = 1)+
+  
+  labs(title = "Plot title", 
+       subtitle = "Here is a subtitle",
+       x = NULL, # suppress x-axis title
+       y = "y-axis title",
+       color = "Legend title", 
+       caption = "Hey!!! This can be a footnote")
+```
+
+# Themes 
+
+
+# Slide 31
+```{r}
+p2 + facet_wrap(~metric, ncol = 1)+
+  theme_bw()
+```
+
+```{r}
+p2 + facet_wrap(~metric, ncol = 1)+
+  theme_classic()
+```
+
+```{r}
+p2 + facet_wrap(~metric, ncol = 1)+
+  theme_minimal()
+```
+
+# Slide 32
+```{r}
+p2 + facet_wrap(~metric, ncol = 1)+
+  ggthemes::theme_wsj()
+
+p2 + facet_wrap(~metric, ncol = 1)+
+  ggthemes::theme_economist()
+
+p2 + facet_wrap(~metric, ncol = 1)+
+  ggthemes::theme_excel()
+```
+
+# Slide 35
+```{r}
+  p2 + facet_wrap(~metric, ncol = 1)+
+  labs(x = NULL, y = "Percent (%)", color = "Farm Management")+  
+  
+  theme(
+    panel.background = element_blank() ,
+    panel.grid.major = element_line(colour = "grey88") ,
+    panel.border     = element_rect(colour = "grey80", fill = NA),
+    
+    axis.text.y  = element_text(colour = "black"),
+    axis.text.x  = element_blank(),
+    title = element_text(colour = "black", size = 12, face = "bold"),
+
+    legend.position = c(0.85, .39),
+    legend.key = element_rect(fill = "white"),
+    legend.text = element_text(colour = "black", size = 12),
+    
+    strip.text.x =  element_text(hjust =0.01, face = "bold", size = 14),
+    strip.background =  element_blank())
+```
+
+# Save 
+
+# Slide 36
+```{r}
+  ggsave(filename = "graph/APS_plot.tiff",
+         width =85, height = 140, units = "mm",
+         dpi = 300)
+```
+  
+# Slide 37
+```{r} 
+ p3 =  p2 + facet_wrap(~metric, ncol = 1)+
+      labs(x = NULL, y = "Percent (%)", color = "Farm Management")+  
+    
+    theme(
+      panel.background = element_blank() ,
+      panel.grid.major = element_line(colour = "grey88") ,
+      panel.border     = element_rect(colour = "grey80", fill = NA),
+      
+      axis.text.y  = element_text(colour = "black"),
+      axis.text.x  = element_blank(),
+      title = element_text(colour = "black", face = "bold"),
+      
+      legend.position = c(0.72, .33),
+      legend.key = element_rect(fill = "white"),
+      legend.text = element_text(colour = "black"),
+      
+      strip.text.x =  element_text(hjust =0.01, face = "bold"),
+      strip.background =  element_blank())
+  
+   ggsave(plot = p3, filename = "graph/APS_plot_2.tiff",
+         width =85, height = 140, units = "mm",
+         dpi = 300)
+``` 
+   
+# Slide 38
+```{r}
+  p4 = 
+    ggplot(survey_data_long, aes(x= farm_management, y = rate))+
+    geom_boxplot(outlier.alpha = 0)+
+    geom_jitter(aes(color = farm_management),
+                size = 1.5, width = 0.3, alpha = .5)+
+    scale_y_continuous(breaks = seq(0,100,25),
+                       limits = c(0,100))+
+    scale_color_npg()+
+    facet_wrap(~metric, ncol = 1)+
+    labs(x = NULL, y = "Percent (%)")+  
+    theme(
+      panel.background = element_blank() ,
+      panel.grid.major = element_line(colour = "grey88") ,
+      panel.border     = element_rect(colour = "grey80", fill = NA),
+      axis.text  = element_text(colour = "black"),
+      title = element_text(colour = "black", face = "bold"),
+      legend.position = "none",
+      strip.text.x =  element_text(hjust =0.01, face = "bold"),
+      strip.background =  element_blank())
+
+
+  ggsave(plot = p4, filename = "graph/APS_plot_3.tiff",
+         width =85, height = 140, units = "mm",
+         dpi = 300)
+``` 
+# Extra plots -------------------------------------------------------------
+
+# slide 39
+```{r}
+ demo_data =  
+  survey_data %>% 
+    group_by(farm_management) %>% 
+    summarise(inc_m = mean(inc), 
+              inc_sd = sd(inc), 
+              lower = inc_m-inc_sd, 
+              upper = inc_m+inc_sd)
+  
+  demo_data
+  
+  ggplot(demo_data, aes(x = farm_management, y = inc_m))+
+    geom_errorbar(aes(ymin = lower, ymax = inc_m+inc_sd), width=.1)+
+    
+    geom_point()
+```  
+
+# slide 40
+```{r}
+  ggplot(demo_data, aes(x = farm_management, y = inc_m))+
+    geom_linerange(aes(ymin = lower, ymax = inc_m+inc_sd),
+                   color = "grey", size = 2)+
+    geom_point(size=2)+
+    
+    coord_flip()
+  
+  ggplot(data = demo_data, aes(x = farm_management, y = inc_m))+
+    
+    geom_jitter(data = survey_data, aes(x = farm_management, y = inc),
+                width = 0.3, alpha = 0.2)+
+    
+    geom_linerange( aes(ymin = inc_m-inc_sd, ymax = inc_m+inc_sd), 
+                    color = "black", size = 2, alpha = 0.6)+
+    
+    geom_point(size=4, shape = 18, color = "red") + coord_flip()
+```  
+  
+  
