@@ -1,72 +1,61 @@
 ---
-title: "Welcome!"
+title: "  "
 ---
-**Workshop Organizers:** Kelsey Andersen Onofre, Rodrigo Onofre, Karen Garrett, Felipe Dalla Lana, Adam Sparks, Mladen Cucak
 
+\
 
-## Welcome to Data Visualization in R
-
-
-Introductory paragraph
-
-## Workshop Logistics   
-\  
-
+## Data Visualization in R
+ 
+\ 
+ 
 #### WORKSHOP: Data Visualization in R
-#### Tuesday, Feb 9th 1:00pm-4:00pm  CST
+#### DATE AND TIME: Tuesday, Feb 9th 1:00pm-4:00pm  CST
+#### LOCATION: Zoom 
 
+
+***
+
+### Workshop Organizers: 
+
+ * Kelsey Andersen Onofre, Kansas State University
+ * Felipe Dalla Lana, Penn State Univesity 
+ * Adam Sparks, Department of Primary Industries and Regional Development & University of Southern Queensland
+ * Mladen Cucak, Penn State University
+ * Rodrigo Onofre, Kansas State University
+ * Karen Garrett, University of Florida
+\ 
+
+*** 
+
+### Background 
+
+High quality visualizations, such as graphs and maps, are critical for effectively communicating science. In this workshop participants will gain an understanding of the workflow and data-wrangling necessary for creating publication ready graphs and maps in R. Participants will become familiar with various graph types (including boxplots, scatterplots, networks, and heatmaps) and their best use cases through motivating, plant-pathology related examples and hand-on exercises. Participants will also be introduced to an overview of visualization packages. Attendees will learn the basics of not only selecting the correct graph, but also proper design elements such as labeling, sizing, legends, and coloring. Additionally, participants will be introduced to the basics of working with geospatial data in R. This workshop will be introductory level, previous R experience is welcome but not required. Participants are encouraged to have an up-to-date version of R installed prior to the workshop. Workshop material and additional pre-work will be provided in advance of the workshop.
+
+This workshop was designed to be part of the 2020 Plant Health annual meeting and has been adapted to an online format due to COVID19. 
+
+### Learning outcomes
+
+
+*** 
 \  
 
-## Pre-Workshop Set Up
+## Workshop Sponsoring Institutions
 
-Make sure you have the most recent versions of R and R Studio installed on your computer.  
-
-To download R:  
-1. Go to https://cran.r-project.org/  
-2. Click "Download R for Mac/Windows"  
-3. Download the appropriate file:  
-   - Windows users click Base, and download the installer for the latest R version  
-   - Mac users select the file R-3.X.X that aligns with your OS version  
-4. Follow the instructions of the installer   
-
-To download RStudio:  
-1. Go to RStudio for desktop https://www.rstudio.com/products/rstudio/download/#download  
-2. Select the install file for your OS  
-3. Follow the instructions of the installer  
-
-Also, it would be useful to download the following R packages prior to the workshop:  
-
-*	here
-*	ggpubr
-*	ggraph
-* ggsn
-*	patchwork
-*	sf
-*	tidyverse
-*	packages for choosing color themes
-*	...
-
-
-For new R useRs: open R studio and type the following code into the console, OR you can go over the "Packages" tab in the bottom right hand corner of RStudio, click "install", and type in the names of the packages that you would like to install. Once you have installed a package on your computer, there is no need to install again. Instead, each time you need to use the package you use the `library()` code (as shown below).
-
-```r
-install.packages("igraph")
-
-library(igraph) 
-
-install.packages("Hmisc")
-
-library(Hmisc) 
-
-install.packages("Matrix")
-
-library(Matrix)
-```
-
-## Sponsoring Institutions
+\
+\
 
 <!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
+<center>
+<img src="image_files/KState_PlantPathology_C_P.png"alt="drawing" width="400" height="150"/>
+</center>
+
 
 <img src="image_files/USQ_international.png" style="padding:90.71px 90.71px 0 90.71px;">
 
 <img src="image_files/DPIRD.png" style="padding:132px 132px 132px 132px;">
+
+<center>
+<img src="image_files/UFPLANTPATH.png"alt="drawing"/>
+</center>
+
+***

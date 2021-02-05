@@ -11,12 +11,12 @@
 
 
 
-<title>Welcome!</title>
+<title>index.utf8</title>
 
 <script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -35,81 +35,6 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { font-weight: bold; } /* Alert */
-code span.an { font-style: italic; } /* Annotation */
-code span.cf { font-weight: bold; } /* ControlFlow */
-code span.co { font-style: italic; } /* Comment */
-code span.cv { font-style: italic; } /* CommentVar */
-code span.do { font-style: italic; } /* Documentation */
-code span.dt { text-decoration: underline; } /* DataType */
-code span.er { font-weight: bold; } /* Error */
-code span.in { font-style: italic; } /* Information */
-code span.kw { font-weight: bold; } /* Keyword */
-code span.pp { font-weight: bold; } /* Preprocessor */
-code span.wa { font-style: italic; } /* Warning */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 <style type="text/css">
@@ -175,33 +100,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 60px;
+  padding-top: 66px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .dropdown-submenu {
   position: relative;
@@ -420,9 +345,12 @@ div.tocify {
         <li>
   <a href="index.html">Welcome</a>
 </li>
+<li>
+  <a href="pre_work.html">Pre-Work</a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Introduction to R
+    Intro to R
      
     <span class="caret"></span>
   </a>
@@ -437,24 +365,29 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Data Visualization - ggplot
+    ggplot2
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Structure of ggplots</li>
-    <li class="dropdown-header">Plot types</li>
-    <li class="dropdown-header">Combining plots and saving</li>
+    <li>
+      <a href="data_viz_Felipe.html">Slides</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">Code</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Network graphs
+    Networks
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Resources</li>
+    <li>
+      <a href="Code">Slides</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -468,9 +401,12 @@ div.tocify {
       <a href="mapping/slideshow/mapping_presentation.html">Slides</a>
     </li>
     <li>
-      <a href="mapping/mapping.html">Code</a>
+      <a href="mapping.html">Code</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -484,71 +420,63 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Welcome!</h1>
 
 </div>
 
 
-<p><strong>Workshop Organizers:</strong> Kelsey Andersen Onofre, Rodrigo Onofre, Karen Garrett, Felipe Dalla Lana, Adam Sparks, Mladen Cucak</p>
-<div id="welcome-to-data-visualization-in-r" class="section level2">
-<h2>Welcome to Data Visualization in R</h2>
-<p>Introductory paragraph</p>
-</div>
-<div id="workshop-logistics" class="section level2">
-<h2>Workshop Logistics</h2>
+<p><br />
+</p>
+<div id="data-visualization-in-r" class="section level2">
+<h2>Data Visualization in R</h2>
 <p> </p>
 <div id="workshop-data-visualization-in-r" class="section level4">
 <h4>WORKSHOP: Data Visualization in R</h4>
 </div>
-<div id="tuesday-feb-9th-100pm-400pm-cst" class="section level4">
-<h4>Tuesday, Feb 9th 1:00pm-4:00pm CST</h4>
+<div id="date-and-time-tuesday-feb-9th-100pm-400pm-cst" class="section level4">
+<h4>DATE AND TIME: Tuesday, Feb 9th 1:00pm-4:00pm CST</h4>
+</div>
+<div id="location-zoom" class="section level4">
+<h4>LOCATION: Zoom</h4>
+<hr />
+</div>
+<div id="workshop-organizers" class="section level3">
+<h3>Workshop Organizers:</h3>
+<ul>
+<li>Kelsey Andersen Onofre, Kansas State University</li>
+<li>Felipe Dalla Lana, Penn State Univesity</li>
+<li>Adam Sparks, Department of Primary Industries and Regional Development &amp; University of Southern Queensland</li>
+<li>Mladen Cucak, Penn State University</li>
+<li>Rodrigo Onofre, Kansas State University</li>
+<li>Karen Garrett, University of Florida  </li>
+</ul>
+<hr />
+</div>
+<div id="background" class="section level3">
+<h3>Background</h3>
+<p>High quality visualizations, such as graphs and maps, are critical for effectively communicating science. In this workshop participants will gain an understanding of the workflow and data-wrangling necessary for creating publication ready graphs and maps in R. Participants will become familiar with various graph types (including boxplots, scatterplots, networks, and heatmaps) and their best use cases through motivating, plant-pathology related examples and hand-on exercises. Participants will also be introduced to an overview of visualization packages. Attendees will learn the basics of not only selecting the correct graph, but also proper design elements such as labeling, sizing, legends, and coloring. Additionally, participants will be introduced to the basics of working with geospatial data in R. This workshop will be introductory level, previous R experience is welcome but not required. Participants are encouraged to have an up-to-date version of R installed prior to the workshop. Workshop material and additional pre-work will be provided in advance of the workshop.</p>
+<p>This workshop was designed to be part of the 2020 Plant Health annual meeting and has been adapted to an online format due to COVID19.</p>
+</div>
+<div id="learning-outcomes" class="section level3">
+<h3>Learning outcomes</h3>
+<hr />
 <p> </p>
 </div>
 </div>
-<div id="pre-workshop-set-up" class="section level2">
-<h2>Pre-Workshop Set Up</h2>
-<p>Make sure you have the most recent versions of R and R Studio installed on your computer.</p>
-<p>To download R:<br />
-1. Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a><br />
-2. Click “Download R for Mac/Windows”<br />
-3. Download the appropriate file:<br />
-- Windows users click Base, and download the installer for the latest R version<br />
-- Mac users select the file R-3.X.X that aligns with your OS version<br />
-4. Follow the instructions of the installer</p>
-<p>To download RStudio:<br />
-1. Go to RStudio for desktop <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a><br />
-2. Select the install file for your OS<br />
-3. Follow the instructions of the installer</p>
-<p>Also, it would be useful to download the following R packages prior to the workshop:</p>
-<ul>
-<li>here</li>
-<li>ggpubr</li>
-<li>ggraph</li>
-<li>ggsn</li>
-<li>patchwork</li>
-<li>sf</li>
-<li>tidyverse</li>
-<li>packages for choosing color themes</li>
-<li>…</li>
-</ul>
-<p>For new R useRs: open R studio and type the following code into the console, OR you can go over the “Packages” tab in the bottom right hand corner of RStudio, click “install”, and type in the names of the packages that you would like to install. Once you have installed a package on your computer, there is no need to install again. Instead, each time you need to use the package you use the <code>library()</code> code (as shown below).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;igraph&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph) </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Hmisc&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Hmisc) </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;Matrix&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span></code></pre></div>
-</div>
-<div id="sponsoring-institutions" class="section level2">
-<h2>Sponsoring Institutions</h2>
+<div id="workshop-sponsoring-institutions" class="section level2">
+<h2>Workshop Sponsoring Institutions</h2>
+<p><br />
+<br />
+</p>
 <!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
+<center>
+<img src="image_files/KState_PlantPathology_C_P.png"alt="drawing" width="400" height="150"/>
+</center>
 <p><img src="image_files/USQ_international.png" style="padding:90.71px 90.71px 0 90.71px;"></p>
 <p><img src="image_files/DPIRD.png" style="padding:132px 132px 132px 132px;"></p>
+<center>
+<img src="image_files/UFPLANTPATH.png"alt="drawing"/>
+</center>
+<hr />
 </div>
 
 

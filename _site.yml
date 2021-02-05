@@ -5,36 +5,40 @@ navbar:
   left:
   - text: Welcome
     href: index.html
-  - text: Introduction to R
+  - text: Pre-Work
+    href: pre_work.html
+  - text: Intro to R
     menu: 
      - text: Slides
        href: intro/presentation.html
      - text: Code
        href: Intro_R.html
-  - text: Data Visualization - ggplot
+  - text: ggplot2
     menu:
-     - text: Structure of ggplots 
-       href: 
-     - text: Plot types
-       href: 
-     - text: Combining plots and saving
-       href: 
-  - text: Network graphs
+     - text: Slides
+       href: data_viz_Felipe.html
+     - text: Code
+       href: ggplot2.html
+  - text: Networks
     menu:
-     - text: Resources
-       href:
+     - text: Slides
+       href: Code
   - text: Maps
     menu:
     - text: Slides
       href: mapping/slideshow/mapping_presentation.html
     - text: Code
       href: mapping.html
+  - text: Resources
+    href: resources.html
+
 output:
   html_document:
-    theme: flatly
+    theme: readable
     highlight: monochrome
     css: styles.css
     toc: yes
+    toc_depth: 3
     toc_float: yes
     lib_dir: site_libs
     self_contained: no
