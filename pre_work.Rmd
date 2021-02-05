@@ -29,13 +29,13 @@ Also, it would be useful to download the following R packages prior to the works
 * ggsn
 *	patchwork
 * ggsci
-* library
+* sf
 
 
 For new R useRs: open R studio and type the following code into the console, OR you can go over the "Packages" tab in the bottom right hand corner of RStudio, click "install", and type in the names of the packages that you would like to install. Once you have installed a package on your computer, there is no need to install again. Instead, each time you need to use the package you use the `library()` code (as shown below).
 
 ```r
-install.packages(c("here", "tidyverse", "ggplot2", "ggraph", "igraph", "ggsn", "patchwork", "ggsci", "library"))
+install.packages(c("here", "tidyverse", "ggplot2", "ggraph", "igraph", "ggsn", "patchwork", "ggsci", "library", "sf"))
 library(tidyverse)
 library(ggplot2)
 library(ggraph)
@@ -43,6 +43,7 @@ library(igraph)
 library(ggsn)
 library(patchwork)
 library(ggsci)
+library(sf)
 ```
 
 ## Workshop code and data
@@ -56,3 +57,5 @@ library(ggsci)
 \
 \
 \
+
+*** 

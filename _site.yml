@@ -17,6 +17,8 @@ navbar:
     menu:
      - text: Slides
        href: data_viz_Felipe.html
+     - text: Code
+       href: ggplot2.html
   - text: Networks
     menu:
      - text: Slides

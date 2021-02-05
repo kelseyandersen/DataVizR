@@ -1,8 +1,19 @@
 ---
-title: "Welcome!"
+title: "  "
 ---
 
-## Welcome to Data Visualization in R
+\
+
+## Data Visualization in R
+ 
+\ 
+ 
+#### WORKSHOP: Data Visualization in R
+#### DATE AND TIME: Tuesday, Feb 9th 1:00pm-4:00pm  CST
+#### LOCATION: Zoom 
+
+
+***
 
 ### Workshop Organizers: 
 
@@ -14,6 +25,8 @@ title: "Welcome!"
  * Karen Garrett, University of Florida
 \ 
 
+*** 
+
 ### Background 
 
 High quality visualizations, such as graphs and maps, are critical for effectively communicating science. In this workshop participants will gain an understanding of the workflow and data-wrangling necessary for creating publication ready graphs and maps in R. Participants will become familiar with various graph types (including boxplots, scatterplots, networks, and heatmaps) and their best use cases through motivating, plant-pathology related examples and hand-on exercises. Participants will also be introduced to an overview of visualization packages. Attendees will learn the basics of not only selecting the correct graph, but also proper design elements such as labeling, sizing, legends, and coloring. Additionally, participants will be introduced to the basics of working with geospatial data in R. This workshop will be introductory level, previous R experience is welcome but not required. Participants are encouraged to have an up-to-date version of R installed prior to the workshop. Workshop material and additional pre-work will be provided in advance of the workshop.
@@ -23,16 +36,13 @@ This workshop was designed to be part of the 2020 Plant Health annual meeting an
 ### Learning outcomes
 
 
-## Workshop Logistics   
-\  
-
-#### WORKSHOP: Data Visualization in R
-#### DATE AND TIME: Tuesday, Feb 9th 1:00pm-4:00pm  CST
-#### LOCATION: Zoom 
-
+*** 
 \  
 
 ## Workshop Sponsoring Institutions
+
+\
+\
 
 <!-- The padding set in these follows the style guidelines for both orgs, do not modify -->
 <center>
@@ -47,3 +57,5 @@ This workshop was designed to be part of the 2020 Plant Health annual meeting an
 <center>
 <img src="image_files/UFPLANTPATH.png"alt="drawing"/>
 </center>
+
+***
