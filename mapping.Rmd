@@ -194,37 +194,12 @@ Now we're ready to add the new _sf_ object of sampling points to the map!
 Adding the points to the map works in the same fashion as adding layers in other _ggplot2_ objects.
 We'll use the existing `ethiopia_regions_ggplot` object and add a new layer of the point data.
 
-```{r add-points, message=FALSE}
+```{r add-points, warning=FALSE, message=FALSE}
 ethiopia_regions_ggplot +
   geom_sf(data = coffee_sampling_sf,
           size = 2,
           color = alpha("black", 0.35))
 ```
-
-Noting the warning that is emitted by R here.
-
-```r
-Warning message:
-In st_point_on_surface.sfc(sf::st_zm(x)) :
-  st_point_on_surface may not give correct results for longitude/latitude data
-```
-
-Firstly, remember in R, warnings are not errors.
-If you have an error, R will stop because it cannot continue.
-A warning indicates that R has done what you asked, but the results may not be what you wanted or expected and so you should be double check and be aware of what is going on to be sure it did what you actually want done.
-
-The [ggplot2 book explains the reason](https://ggplot2-book.org/maps.html#geom_sf_label) for this warning and why we can safely ignore it here.
-
->The warning message is worth noting. Internally geom_sf_label() uses the function st_point_on_surface() from the sf package to place labels, and the warning message occurs because most algorithms used by sf to compute geometric quantities (e.g., centroids, interior points) are based on an assumption that the points lie in on a flat two dimensional surface and parameterised with Cartesian co-ordinates. This assumption is not strictly warranted, and in some cases (e.g., regions near the poles) calculations that treat longitude and latitude in this way will give erroneous answers. For this reason, the sf package produces warning messages when it relies on this approximation.
-
-In our case, we're using the `st_point_on_surface()` from the _sf_ package functionality when we add the points using `geom_sf()`, we don't have any labels associated with the points in this example, but the process is the same.
-Ethiopia is very near the equator, the distortion is minimal and the approximation of a flat two-dimensional surface is reasonable, so the points will be accurately displayed and we can ignore the warning.
-If we were near the poles and adding points it would be a very different issue that we would need to pay close attention to and address using different methods.
-In most cases since we tend to work between -60 and 60° in agriculture, most of our points will be fine with this assumption.
-The labels for the regions do not receive this warning because they are displayed in the centroid of the polygon, which is not a latitude and longitudinal value that we supplied to represent a point on the Earth's surface.
-
-
-
 
 ## Highlighting Regions
 
