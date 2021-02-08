@@ -1,19 +1,23 @@
-\
-
-# Introduction to ggplot2 
+---
+title: Introduction to ggplot2
+---
+#### This part of the workshop was organized by Felipe Dalla Lana
 
 ## Packages
 
 These are the packages that will be used in this module. These packages should have been installed prior to the workshop. 
 
-```{r }
+```{r, results='hide', message=FALSE}
 library(tidyverse)
 library(ggsci)
 library(ggthemes)
+library(ggpubr)
 ```
 
 ```{r echo=FALSE, results='hide', message = FALSE}
-survey_data <- read_csv(here::here("data", "survey_clean.csv")) %>% select(-c(farm, region, zone, district, lon, lat))
+survey_data <- read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv") %>% 
+  select(-c(farm, region, zone, district, lon, lat))
+
 survey_data_long = survey_data  %>% 
    pivot_longer(cols = c(inc, sev2), 
                names_to = "metric", 
@@ -40,7 +44,7 @@ ggplot(survey_data_long, aes(x= farm_management, y = rate))+
   facet_wrap(~metric, ncol = 1)+
   scale_color_npg()+
   
-  labs(title = "Disease distribution nacross farm mannagement", 
+  labs(title = "Disease distribution across farm management", 
        x = NULL,
        y = "Percent (%)",
        color = "Farm management")+
@@ -66,7 +70,9 @@ ggsave("graph/target.tiff",
 ```
 
 ## ggplot2 basics
+
 \
+
 ### Data organization
 
 ```{r}
@@ -81,7 +87,7 @@ Let's get started with ggplot. What happens if we only run ggplot() without any 
 ggplot() 
 ```
 
-Not much! We need to be sure to specify the data (survey_data) and aestetic elements (y and x axes). 
+Not much! We need to be sure to specify the data (survey_data) and aesthetic elements (y and x axes). 
 
 ```{r}
 ggplot(survey_data, aes(x= farm_management, y = inc))
@@ -91,7 +97,7 @@ levels(survey_data$farm_management)
 ```
 BUT- we still didn't say anything about what type of plot we want. 
 
-Below we make sure that our data is in the correct form. For the graphs we would liek to make, the farm managemetn stratigies need to be set as factors. 
+Below we make sure that our data is in the correct form. For the graphs we would like to make, the farm management stratifies need to be set as factors. 
 ```{r}
 survey_data = survey_data  %>% 
   mutate(farm_management = factor(farm_management, 
@@ -105,9 +111,9 @@ class(survey_data$farm_management)
 levels(survey_data$farm_management)
 ```
 
-Now we can start adding the "meat and potatos" to the graph. 
+Now we can start adding the "meat and potatoes" to the graph. 
 
-Here, we add the simple boxplot geometry: 
+Here, we add the simple box plot geometry: 
 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
@@ -130,7 +136,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2) # make the width a bit smaller 
 ```
 
-It would be even better if we could see both the data points AND the summary information that is avaiable in a boxplot. Here we layer two geometries: geom_jitter and geom_boxplot. 
+It would be even better if we could see both the data points AND the summary information that is available in a boxplot. Here we layer two geometries: geom_jitter and geom_boxplot. 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2)+
@@ -156,7 +162,7 @@ ggplot(survey_data,  aes(x= inc))+
   geom_density()
 ```
 
-
+Here we look at geom_dotplot and geom_point(). Adding geom_smooth() and geom_rug() to geom_point() allow you to present additional information about the smoothed mean and distribution of data points. 
 
 ```{r}
 ggplot(survey_data,aes(x= farm_management, y = inc))+
@@ -172,6 +178,8 @@ ggplot(survey_data, aes(x = inc, y = sev2))+
 
 # Aesthetics 
 
+Choosing aesthetics is critical for communicating the message of a plot. Colors, for example can be used strategically to convey information. Here we color by farm management type: 
+
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc, 
                       shape = farm_management, 
@@ -184,6 +192,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(aes(color = farm_management),width = 0.2)
 ```
 
+We can change the size of points as well as the transparency. 
 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
@@ -197,6 +206,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               size = 3, alpha = 0.5)
 ```
 
+'fill' will apply color to the variable you indicate: 
 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management))+
@@ -207,7 +217,7 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               aes(fill = altitude ))
 ```
 
-
+Size of points as well as transparency can be changed by setting 'size' or 'alpha' equal to the continuous variable that you would like to use. 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 4,
@@ -218,14 +228,14 @@ ggplot(survey_data,  aes(x= farm_management, y = inc))+
               aes(size = sev2 ))
 ```
 
-
+Change the shapes of each level (a good option if a figure will be black and white). 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 3, alpha = 0.8,
     aes(shape = farm_management))
 ```
 
-
+You can also adjust the border color of points: 
 ```{r}
 ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_jitter(width = 0.2, size = 3, alpha = 0.8, shape = 21,
@@ -249,7 +259,7 @@ ggplot(survey_data, aes(x=inc , y = sev2, color = cultivar))+
 
 # Scales 
 
-# slide 22
+You can manually adjust the x and y axis scales. This can be very useful when creating publication ready plots. 
 ```{r}
 p = ggplot(survey_data,  aes(x= farm_management, y = inc))+
   geom_boxplot(outlier.alpha = 0) + 
@@ -261,17 +271,20 @@ p + scale_y_continuous(name = "Incidence (%)",
                        limits = c(0,100))
 ```
 
+You can also manually change the colors of factor levels. 
 ```{r}
 p + scale_color_manual(
         name = "Farm management",
         values = c("blue", "grey80", "#2ca25f", "#756bb120"))
 ```
 
-
+There are pre-defined color palettes in scale_color_brewer:
 ```{r}
 p + scale_color_brewer(name = "Farm management",
           palette = "PRGn")
 ```
+
+**ggsci** is a  package that offers a collection of color palettes inspired by colors used in scientific journals, data visualization libraries, science fiction movies, and TV shows. 
 
 
 ```{r}
@@ -281,7 +294,7 @@ p + ggsci::scale_color_aaas()
 ```
 
 
-
+Lines can also be changed in ggplot, here is an example where we manually changed the type of line for each level. This graph shows incidence vs. severity. 
 ```{r}
 ggplot(survey_data, aes(x=inc , y = sev2))+
   geom_smooth(se = FALSE, aes(linetype = cultivar, color = cultivar))+
@@ -289,14 +302,14 @@ ggplot(survey_data, aes(x=inc , y = sev2))+
   scale_linetype_manual(values = c("solid","longdash", "991191"))
 ```
 
-## Facets
+# Facets
 
-
+Faceting is an easy way to break data into multipe plots with the same themes. 
 ```{r}
 head(survey_data)
 ```
 
-
+Here we need to make sure our data is correctly organized. This will help us visualize incicence and severity side-by-side. We also rename inc to "Incidence" and sev2 to "Severity" because these will be the labels of our facet plots. 
 ```{r}
 survey_data_long = survey_data  %>% 
    pivot_longer(cols = c(inc, sev2), 
@@ -310,6 +323,8 @@ survey_data_long = survey_data  %>%
 head(survey_data_long)
 ```
 
+
+Save plot as 'p2' and plot 'p2'. 
 ```{r}
 p2 = ggplot(survey_data_long, aes(x= farm_management, y = rate))+
   
@@ -323,24 +338,23 @@ p2 = ggplot(survey_data_long, aes(x= farm_management, y = rate))+
 
 p2
 ```
-
-# Slide 28
+Here we facet_wrap by metric (incidence and severity are our metrics):
 ```{r}
 p2 + facet_wrap(~metric)
 ```
 
-
+If we specify the number of columns (ncol) as 1, the plots will be stacked into a single column. 
 ```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)
 ```
 
-# Slide 29
+facet_grid() allows us to create a grid of plots. 
 ```{r, fig.width=10, fig.height=12}
 p2 + facet_grid(shade~metric)
 ```
 
 # Labels 
-
+Here we can add custom titles, subtitles, and footnotes. 
 ```{r, fig.width=6, fig.height=10}
   p2 + facet_wrap(~metric, ncol = 1)+
   
@@ -354,34 +368,37 @@ p2 + facet_grid(shade~metric)
 
 # Themes 
 
+Themes are pre-defined themes that are built into ggplot and can be slightly modified. 
 ```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_bw()
 ```
 
+Here is theme classic: 
 ```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_classic()
 ```
 
+Here is theme minimal:
 ```{r, fig.width=6, fig.height=10}
 p2 + facet_wrap(~metric, ncol = 1)+
   theme_minimal()
 ```
 
+Here is theme Economist and theme Excel. 
 ```{r, fig.width=6, fig.height=10}
-p2 + facet_wrap(~metric, ncol = 1)+
-  ggthemes::theme_wsj()
 
 p2 + facet_wrap(~metric, ncol = 1)+
-  ggthemes::theme_economist()
+  ggthemes::theme_economist() 
 
 p2 + facet_wrap(~metric, ncol = 1)+
   ggthemes::theme_excel()
 ```
 
+We can individually edit components of a theme. This can be particularly useful for making graphs for publications. 
 
-```{r}
+```{r, fig.width=6, fig.height=10}
   p2 + facet_wrap(~metric, ncol = 1)+
   labs(x = NULL, y = "Percent (%)", color = "Farm Management")+  
   
@@ -403,6 +420,8 @@ p2 + facet_wrap(~metric, ncol = 1)+
 ```
 
 # Save 
+
+Saving according to the size that you would like can be tricky, we recommend using ggsave. 
 
 ```{r}
   ggsave(filename = "graph/APS_plot.tiff",
@@ -434,10 +453,11 @@ p2 + facet_wrap(~metric, ncol = 1)+
    ggsave(plot = p3, filename = "graph/APS_plot_2.tiff",
          width =85, height = 140, units = "mm",
          dpi = 300)
+   p3
 ``` 
    
-# Slide 38
-```{r}
+
+```{r, fig.width=6, fig.height=10}
   p4 = 
     ggplot(survey_data_long, aes(x= farm_management, y = rate))+
     geom_boxplot(outlier.alpha = 0)+
@@ -462,10 +482,11 @@ p2 + facet_wrap(~metric, ncol = 1)+
   ggsave(plot = p4, filename = "graph/APS_plot_3.tiff",
          width =85, height = 140, units = "mm",
          dpi = 300)
+  p4
 ``` 
 # Extra plots
 
-
+Here we explore using geom_errorbar()
 ```{r}
  demo_data =  
   survey_data %>% 
@@ -479,12 +500,12 @@ p2 + facet_wrap(~metric, ncol = 1)+
   
   ggplot(demo_data, aes(x = farm_management, y = inc_m))+
     geom_errorbar(aes(ymin = lower, ymax = inc_m+inc_sd), width=.1)+
-    
     geom_point()
+
 ```  
 
 
-```{r}
+```{r, }
   ggplot(demo_data, aes(x = farm_management, y = inc_m))+
     geom_linerange(aes(ymin = lower, ymax = inc_m+inc_sd),
                    color = "grey", size = 2)+
@@ -503,4 +524,44 @@ p2 + facet_wrap(~metric, ncol = 1)+
     geom_point(size=4, shape = 18, color = "red") + coord_flip()
 ```  
   
+
+# Combining multiple plots
+
+There are several packages that can be used to combine multiple plots, one that we like is "ggpubr". 
+
+```{r}
+p5 = ggplot(survey_data,  aes(x= farm_management, y = inc))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(colour = farm_management), 
+              width = 0.2,size = 3)+ 
+  scale_y_continuous(name = "Incidence (%)",
+                       breaks = c(0,25,50, 75, 100),
+                       limits = c(0,100)) + 
+  labs(color='Farm Management') + 
+  xlab("") + 
+  theme_minimal()
+
+p5
+
+p6 = ggplot(survey_data,  aes(x= farm_management, y = sev2))+
+  geom_boxplot(outlier.alpha = 0) + 
+  geom_jitter(aes(colour = farm_management), 
+              width = 0.2,size = 3) + 
+  scale_y_continuous(name = "Incidence (%)",
+                       breaks = c(0,25,50, 75, 100),
+                       limits = c(0,100)) + 
+  labs(color='Farm Management') +
+  xlab("Farm Management") +
+   theme_minimal()
+
+p6
+
+```
   
+
+  
+```{r, fig.width=8, fig.height=8}
+
+ggarrange(p5, p6, ncol = 1, nrow = 2, common.legend = T, legend = "right", labels = c("A", "B"))
+
+```

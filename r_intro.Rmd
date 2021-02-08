@@ -7,6 +7,8 @@ editor_options:
     toc: true
 ---
 
+#### This portion of the workshop was organized by **Mladen Cucak**
+
 Here we will go through some R basics, with an emphasis on skills that you will use later on in the workshop. Of course, we do not have time to cover everything here, so we encourage you to check out our "resources" section for more introductory R material.\
 \
 Additionally, everything in R can be done in a number of ways - we are showing only one way here.

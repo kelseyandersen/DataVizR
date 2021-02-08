@@ -2,6 +2,8 @@
 title: "Creating Maps with ggplot2"
 ---
 
+#### This portion of the workshop was organized by **Adam Sparks**
+
 ## Introduction
 
 In this exercise we will use [_simple features_](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) and

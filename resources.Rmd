@@ -2,7 +2,7 @@
 title: "Resources"
 ---
 
-Here we provide additional resources for learning in R.  
+Here we provide additional resources for learning in R. There are many online resources avaiable, but these are some that the workshop authors find most useful. 
 
 ### Resources for learning R
 
@@ -18,7 +18,12 @@ Here we provide additional resources for learning in R.
  * **ggplot website**:  https://ggplot2.tidyverse.org/index.html 
  * **ggplot cheatsheet**:https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf
  * Top 50 ggplot visualizations:  http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+ * Example of how you can make a custom ggplot2 theme for a university following the branding guidelines for colour, font and graph style: https://adamhsparks.github.io/theme.usq/
+
+### Resources for networks in R
 
 
-·  	Example of how you can make a custom ggplot2 theme for a university following the branding guidelines for colour, font and graph style: https://adamhsparks.github.io/theme.usq/
+
+
+### Resources for mapping in R
 

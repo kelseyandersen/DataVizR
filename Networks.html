@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Kelsey Andersen, Robin Choudhury" />
+
+
+<title>Visualizing Networks</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { font-weight: bold; } /* Alert */
+code span.an { font-style: italic; } /* Annotation */
+code span.cf { font-weight: bold; } /* ControlFlow */
+code span.co { font-style: italic; } /* Comment */
+code span.cv { font-style: italic; } /* CommentVar */
+code span.do { font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.er { font-weight: bold; } /* Error */
+code span.in { font-style: italic; } /* Information */
+code span.kw { font-weight: bold; } /* Keyword */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.wa { font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Visualization in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Welcome</a>
+</li>
+<li>
+  <a href="pre_work.html">Pre-Work</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Intro to R
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="intro/presentation.html">Slides</a>
+    </li>
+    <li>
+      <a href="r_intro.html">Code</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    ggplot2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="data_viz_Felipe.html">Slides</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">Code</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Networks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Slides</li>
+    <li>
+      <a href="Networks.html">Code</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Maps
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mapping/slideshow/mapping_presentation.html">Slides</a>
+    </li>
+    <li>
+      <a href="mapping.html">Code</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Visualizing Networks</h1>
+<h4 class="author">Kelsey Andersen, Robin Choudhury</h4>
+
+</div>
+
+
+<p>For this portion of the workshop, we will use the following packages:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div id="networks-with-igraph" class="section level1">
+<h1>Networks with igraph</h1>
+<div id="simple-networks" class="section level2">
+<h2>Simple Networks</h2>
+<p>First, let’s create a simple adjacency matrix with three rows and three columns:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mat1 &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>,<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">3</span>) <span class="co">### matrix function </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">mat1</a></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    0    0    1
+## [2,]    1    0    0
+## [3,]    0    1    0</code></pre>
+<p>Use the igraph function <em>graph_from_adjacency_matrix()</em> to create a network object from your graph, then use the <em>plot()</em> function to plot. Use edge.arrow.size to set the size of the arrows.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mat2 &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</span>(mat1)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(mat2, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>) <span class="co">## set the size of the arrows </span></a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-3-1.png" width="672" />  </p>
+<p>Alternatively, create the same network by telling igraph what links you would like and how many nodes you would like to establish. We also want to tell igraph if our network is directed (with arrows) or undirected.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mat3 &lt;-<span class="st"> </span><span class="kw">graph</span>(<span class="dt">edges=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>, <span class="dv">3</span>,<span class="dv">2</span>, <span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">n=</span><span class="dv">3</span>, <span class="dt">directed=</span>T ) <span class="co"># use graph function and list edges </span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-4-1.png" width="672" />   # Network Aestetics<br />
+Many parts of a network can be sized and colored to help communicate results more clearly.<br />
+Here, for example, we color the nodes and change the size and position of the labels using <em>vertex.color =</em> and <em>vertex.label.dist =</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="labels" class="section level2">
+<h2>Labels</h2>
+<p>Here we use <em>vertex.label.cex</em> to make our labels slightly bigger, and we use <em>vertex.label.dist</em> to move the labels off the network. This can be useful, particularly when we have large networks.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="curved-edges" class="section level2">
+<h2>Curved edges</h2>
+<p>Sometimes it is useful to curve edges of our network:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="colors" class="section level2">
+<h2>Colors</h2>
+<p>Here we color the node borders the same color as the nodes themselves, but this could be modified to a different color that gives additional information about the node:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">plot</span>(mat3, </a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">     <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, </a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">     <span class="dt">vertex.frame.color=</span><span class="st">&quot;purple&quot;</span>,</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">     <span class="dt">vertex.size =</span> <span class="dv">25</span>, </a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">     <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">     <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>, </a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">     <span class="dt">edge.curved =</span> <span class="fl">.2</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>We can also change edge colors. This can be useful when edges mean different things.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(mat3, </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">     <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, </a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">     <span class="dt">vertex.frame.color=</span><span class="st">&quot;purple&quot;</span>,</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">     <span class="dt">vertex.size =</span> <span class="dv">25</span>, </a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">     <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">     <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>, </a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">     <span class="dt">edge.curved =</span> <span class="fl">.2</span>,</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">     <span class="dt">edge.color=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="other-ways-to-change-aesthetics" class="section level2">
+<h2>Other ways to change aesthetics</h2>
+<p>We can also adjust plot aesthetics by applying changes directly to the verticies <em>V()</em> or edges <em>E()</em> of our plots.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">V</span>(mat3)<span class="op">$</span>color &lt;-<span class="st"> &#39;purple&#39;</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">V</span>(mat3)<span class="op">$</span>size &lt;-<span class="st"> </span><span class="dv">25</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">E</span>(mat3)<span class="op">$</span>color &lt;-<span class="st"> &#39;purple&#39;</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">E</span>(mat3)<span class="op">$</span>arrow.size &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="kw">V</span>(mat3)<span class="op">$</span>frame.color &lt;-<span class="st"> &#39;purple&#39;</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">plot</span>(mat3)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+<div id="network-data-types" class="section level1">
+<h1>Network data types</h1>
+<div id="adjacency-matrices-vs-node-lists" class="section level2">
+<h2>Adjacency matrices vs node lists</h2>
+<p>  You can read in your data directly as an adjacency matrix, but likely this is not the way that you have your data organized. Instead, it might be easier to have two files: a <em>node</em> file and an <em>edge</em> file.</p>
+<p>In a node file, the first two columns are all of your from:to links. Column 1 is always <em>from</em>, Column 2 is always <em>to</em> (less important for undirected networks). The columns after that are your edge attributes (such as weight of link, volume, probability, name etc).<br />
+ </p>
+<p>Here is an example of a simple node list, where all of the nodes are farmers and links are communication. We include attributes about the <em>node</em> like age, gender, and number of years farming.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">Nodelist &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">                    <span class="dt">Names =</span><span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Michelle&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Tim&quot;</span>, </a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">                            <span class="st">&quot;Jess&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Jill&quot;</span>, <span class="st">&quot;Cam&quot;</span>, <span class="st">&quot;Kate&quot;</span>) ,</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">                    <span class="dt">YearsFarming =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="fl">6.5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">6</span>) , </a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">                    <span class="dt">Age =</span> <span class="kw">c</span>(<span class="dv">27</span>, <span class="dv">52</span>, <span class="dv">49</span>, <span class="dv">32</span>, <span class="dv">65</span>, <span class="dv">72</span>, <span class="dv">42</span>, <span class="dv">67</span>, <span class="dv">48</span>, <span class="dv">33</span>, <span class="dv">67</span>, <span class="dv">75</span>, <span class="dv">39</span>) , </a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">                    <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">Nodelist       </a></code></pre></div>
+<pre><code>##       Names YearsFarming Age Gender
+## 1       Jim          8.5  27   Male
+## 2    Carole          6.5  52 Female
+## 3       Joe          4.0  49   Male
+## 4  Michelle          1.0  32 Female
+## 5       Jen          3.0  65 Female
+## 6      Pete         10.0  72   Male
+## 7      Paul          5.0  42   Male
+## 8       Tim          5.0  67   Male
+## 9      Jess          5.0  48 Female
+## 10     Mark          1.0  33   Male
+## 11     Jill          1.0  67 Female
+## 12      Cam          6.0  75   Male
+## 13     Kate          6.0  39 Female</code></pre>
+<p> </p>
+<p>Now we can create an edgelist data frame- Who shared information in the 2019 growing season? How frequently?</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">Edgelist &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">                  <span class="dt">From =</span> <span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jill&quot;</span>, <span class="st">&quot;Kate&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Jess&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Pete&quot;</span>),</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                  <span class="dt">To =</span> <span class="kw">c</span>(<span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Cam&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Tim&quot;</span>),</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                  <span class="dt">Times =</span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">)</a></code></pre></div>
+</div>
+</div>
+<div id="igraph-objects" class="section level1">
+<h1>igraph objects</h1>
+<p>Let’s make our farmer communication network!</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">FarmNetwork &lt;-<span class="st"> </span><span class="kw">graph_from_data_frame</span>(<span class="dt">d =</span> Edgelist, <span class="dt">vertices =</span> Nodelist, <span class="dt">directed =</span> T)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">FarmNetwork</a></code></pre></div>
+<pre><code>## IGRAPH 7442d93 DN-- 13 11 -- 
+## + attr: name (v/c), YearsFarming (v/n), Age (v/n), Gender (v/c), Times
+## | (e/n)
+## + edges from 7442d93 (vertex names):
+##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
+##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
+## [11] Pete-&gt;Tim</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">E</span>(FarmNetwork) <span class="co"># view edges</span></a></code></pre></div>
+<pre><code>## + 11/11 edges from 7442d93 (vertex names):
+##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
+##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
+## [11] Pete-&gt;Tim</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork) <span class="co"># view nodes</span></a></code></pre></div>
+<pre><code>## + 13/13 vertices, named, from 7442d93:
+##  [1] Jim      Carole   Joe      Michelle Jen      Pete     Paul     Tim     
+##  [9] Jess     Mark     Jill     Cam      Kate</code></pre>
+<p>Plot!</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;plum&quot;</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div id="node-colors" class="section level2">
+<h2>Node colors</h2>
+<p>Much more information about making beautiful networks in R using igraph can be found at <a href="http://kateto.net/networks-r-igraph">Katya Ognyanova’s Site</a>. But briefly:<br />
+  Let’s color our nodes based on gender</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>color &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">V</span>(FarmNetwork)<span class="op">$</span>Gender <span class="op">==</span><span class="st"> &quot;Male&quot;</span>, <span class="st">&quot;#4682B4&quot;</span>, <span class="st">&quot;#C83200&quot;</span>)</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>frame.color &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">V</span>(FarmNetwork)<span class="op">$</span>Gender <span class="op">==</span><span class="st"> &quot;Male&quot;</span>, <span class="st">&quot;#4682B4&quot;</span>, <span class="st">&quot;#C83200&quot;</span>)</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-15-1.png" width="672" /> ## Layouts</p>
+<p>You will notice that evertime that you run the above code, the layout changes. Here we will show you layout options, and how to “fix” a layout once you have chosen one that you like.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">Layout1 &lt;-<span class="st"> </span><span class="kw">layout_in_circle</span>(FarmNetwork)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">layout =</span> Layout1)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">Layout2 &lt;-<span class="st"> </span><span class="kw">layout_as_star</span>(FarmNetwork)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">layout =</span> Layout2)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Layout based on the Kamada-Kawai layout algorithm which places the nodes on a plan based on a physical model of springs.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">Layout3 &lt;-<span class="st"> </span><span class="kw">layout_with_kk</span>(FarmNetwork)</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">layout =</span> Layout3)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">Layout4&lt;-<span class="st"> </span><span class="kw">layout_with_fr</span>(FarmNetwork)</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">layout =</span> Layout4)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>  You can also size your nodes based on attributes:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>size &lt;-<span class="st"> </span><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>YearsFarming <span class="co"># size the nodes by number of years farming</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+<div id="node-size" class="section level2">
+<h2>Node size</h2>
+<p>Scale the node size up a bit..</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>size &lt;-<span class="st"> </span><span class="kw">V</span>(FarmNetwork)<span class="op">$</span>YearsFarming <span class="op">*</span><span class="dv">2</span> <span class="co">## scale by multiplying by 2</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>We can also adjust the size of the links. Here we will size them based on the number of times any two farmers communicated.</p>
+</div>
+<div id="link-size" class="section level2">
+<h2>Link size</h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">E</span>(FarmNetwork)<span class="op">$</span>width &lt;-<span class="st"> </span><span class="kw">E</span>(FarmNetwork)<span class="op">$</span>Times<span class="op">/</span><span class="fl">1.5</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>, <span class="dt">layout =</span> Layout2)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="legends" class="section level2">
+<h2>Legends</h2>
+<p>Finally, let’s add a legend so we understand what our colors mean.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>, <span class="dt">layout =</span> Layout1)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">legend</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">1.5</span>, <span class="dt">y=</span><span class="op">-</span><span class="fl">1.1</span>, <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>), <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">pt.bg=</span><span class="kw">c</span>(<span class="st">&quot;#4682B4&quot;</span>, <span class="st">&quot;#C83200&quot;</span>), <span class="dt">pt.cex=</span><span class="dv">2</span>, <span class="dt">cex=</span>.<span class="dv">8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="saving" class="section level2">
+<h2>Saving</h2>
+<p>We can save our networks in a similar was as our ggplots, using ggsave. The only change that we need to make is to “wrap” ggsave around our final network.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">       <span class="dt">filename =</span> <span class="st">&quot;graph/Network.tiff&quot;</span>, <span class="dt">width =</span><span class="dv">150</span>, <span class="dt">height =</span> <span class="dv">150</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>,</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">         <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

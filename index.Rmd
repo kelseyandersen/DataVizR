@@ -20,8 +20,9 @@ title: "  "
  * Kelsey Andersen Onofre, Kansas State University
  * Felipe Dalla Lana, Penn State Univesity 
  * Adam Sparks, Department of Primary Industries and Regional Development & University of Southern Queensland
- * Mladen Cucak, Penn State University
+ * Mladen Cucak, Independent Researcher
  * Rodrigo Onofre, Kansas State University
+ * Robin Choudhury, University of Texas Rio Grande Valley
  * Karen Garrett, University of Florida
 \ 
 

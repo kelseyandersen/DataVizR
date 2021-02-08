@@ -457,8 +457,9 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Slides</li>
     <li>
-      <a href="Code">Slides</a>
+      <a href="Networks.html">Code</a>
     </li>
   </ul>
 </li>
@@ -497,9 +498,12 @@ div.tocify {
 </div>
 
 
+<div id="this-portion-of-the-workshop-was-organized-by-mladen-cucak" class="section level4">
+<h4>This portion of the workshop was organized by <strong>Mladen Cucak</strong></h4>
 <p>Here we will go through some R basics, with an emphasis on skills that you will use later on in the workshop. Of course, we do not have time to cover everything here, so we encourage you to check out our “resources” section for more introductory R material.<br />
 <br />
 Additionally, everything in R can be done in a number of ways - we are showing only one way here.</p>
+</div>
 <div id="why-r" class="section level1">
 <h1>Why R?</h1>
 <p>We recognize that there are many options when it comes to statistical and vizualization software. Here are a few reasons that we have chosen R for most applications.</p>
@@ -966,28 +970,45 @@ Generates multiple columns from two columns:<br />
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] here_1.0.1      forcats_0.5.1   stringr_1.4.0   dplyr_1.0.3    
-##  [5] purrr_0.3.4     readr_1.4.0     tidyr_1.1.2     tibble_3.0.6   
-##  [9] ggplot2_3.3.3   tidyverse_1.3.0
+##  [1] igraph_1.2.6    sf_0.9-7        ggsn_0.5.0      here_1.0.1     
+##  [5] ggpubr_0.4.0    ggthemes_4.2.4  ggsci_2.9       forcats_0.5.1  
+##  [9] stringr_1.4.0   dplyr_1.0.3     purrr_0.3.4     readr_1.4.0    
+## [13] tidyr_1.1.2     tibble_3.0.6    ggplot2_3.3.3   tidyverse_1.3.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.1.0  xfun_0.20         haven_2.3.1       colorspace_2.0-0 
-##  [5] vctrs_0.3.6       generics_0.1.0    htmltools_0.5.1.1 yaml_2.2.1       
-##  [9] utf8_1.1.4        rlang_0.4.10      pillar_1.4.7      glue_1.4.2       
-## [13] withr_2.4.1       DBI_1.1.1         dbplyr_2.0.0      modelr_0.1.8     
-## [17] readxl_1.3.1      lifecycle_0.2.0   munsell_0.5.0     gtable_0.3.0     
-## [21] cellranger_1.1.0  rvest_0.3.6       evaluate_0.14     knitr_1.31       
-## [25] curl_4.3          fansi_0.4.2       highr_0.8         broom_0.7.4      
-## [29] Rcpp_1.0.6        scales_1.1.1      backports_1.2.1   jsonlite_1.7.2   
-## [33] fs_1.5.0          hms_1.0.0         png_0.1-7         digest_0.6.27    
-## [37] stringi_1.5.3     grid_4.0.3        rprojroot_2.0.2   cli_2.3.0        
-## [41] tools_4.0.3       magrittr_2.0.1    crayon_1.4.0      pkgconfig_2.0.3  
-## [45] ellipsis_0.3.1    xml2_1.3.2        reprex_1.0.0      lubridate_1.7.9.2
-## [49] assertthat_0.2.1  rmarkdown_2.6     httr_1.4.2        rstudioapi_0.13  
-## [53] R6_2.5.0          compiler_4.0.3</code></pre>
+##  [1] nlme_3.1-149        bitops_1.0-6        fs_1.5.0           
+##  [4] lubridate_1.7.9.2   RColorBrewer_1.1-2  httr_1.4.2         
+##  [7] rprojroot_2.0.2     tools_4.0.3         backports_1.2.1    
+## [10] utf8_1.1.4          R6_2.5.0            KernSmooth_2.23-17 
+## [13] DBI_1.1.1           mgcv_1.8-33         colorspace_2.0-0   
+## [16] sp_1.4-5            withr_2.4.1         tidyselect_1.1.0   
+## [19] gridExtra_2.3       curl_4.3            compiler_4.0.3     
+## [22] cli_2.3.0           rvest_0.3.6         xml2_1.3.2         
+## [25] labeling_0.4.2      scales_1.1.1        classInt_0.4-3     
+## [28] digest_0.6.27       foreign_0.8-80      rmarkdown_2.6      
+## [31] rio_0.5.16          jpeg_0.1-8.1        pkgconfig_2.0.3    
+## [34] htmltools_0.5.1.1   dbplyr_2.0.0        highr_0.8          
+## [37] rlang_0.4.10        readxl_1.3.1        rstudioapi_0.13    
+## [40] farver_2.0.3        generics_0.1.0      jsonlite_1.7.2     
+## [43] zip_2.1.1           car_3.0-10          magrittr_2.0.1     
+## [46] Matrix_1.2-18       Rcpp_1.0.6          munsell_0.5.0      
+## [49] fansi_0.4.2         abind_1.4-5         lifecycle_0.2.0    
+## [52] stringi_1.5.3       yaml_2.2.1          carData_3.0-4      
+## [55] plyr_1.8.6          maptools_1.0-2      crayon_1.4.0       
+## [58] lattice_0.20-41     haven_2.3.1         cowplot_1.1.1      
+## [61] splines_4.0.3       hms_1.0.0           knitr_1.31         
+## [64] pillar_1.4.7        rjson_0.2.20        ggsignif_0.6.0     
+## [67] reprex_1.0.0        glue_1.4.2          evaluate_0.14      
+## [70] data.table_1.13.6   modelr_0.1.8        vctrs_0.3.6        
+## [73] png_0.1-7           RgoogleMaps_1.4.5.3 cellranger_1.1.0   
+## [76] gtable_0.3.0        assertthat_0.2.1    xfun_0.20          
+## [79] openxlsx_4.2.3      broom_0.7.4         e1071_1.7-4        
+## [82] rstatix_0.6.0       class_7.3-17        units_0.6-7        
+## [85] ggmap_3.0.0         ellipsis_0.3.1</code></pre>
 </div>
 </div>
 

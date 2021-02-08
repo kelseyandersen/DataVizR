@@ -22,7 +22,9 @@ navbar:
   - text: Networks
     menu:
      - text: Slides
-       href: Code
+       href:
+     - text: Code
+       href: Networks.html
   - text: Maps
     menu:
     - text: Slides
