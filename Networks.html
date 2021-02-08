@@ -618,20 +618,20 @@ Here, for example, we color the nodes and change the size and position of the la
 <p>Let’s make our farmer communication network!</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">FarmNetwork &lt;-<span class="st"> </span><span class="kw">graph_from_data_frame</span>(<span class="dt">d =</span> Edgelist, <span class="dt">vertices =</span> Nodelist, <span class="dt">directed =</span> T)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">FarmNetwork</a></code></pre></div>
-<pre><code>## IGRAPH e11d535 DN-- 13 11 -- 
+<pre><code>## IGRAPH 63bf41c DN-- 13 11 -- 
 ## + attr: name (v/c), YearsFarming (v/n), Age (v/n), Gender (v/c), Times
 ## | (e/n)
-## + edges from e11d535 (vertex names):
+## + edges from 63bf41c (vertex names):
 ##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
 ##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
 ## [11] Pete-&gt;Tim</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">E</span>(FarmNetwork) <span class="co"># view edges</span></a></code></pre></div>
-<pre><code>## + 11/11 edges from e11d535 (vertex names):
+<pre><code>## + 11/11 edges from 63bf41c (vertex names):
 ##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
 ##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
 ## [11] Pete-&gt;Tim</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork) <span class="co"># view nodes</span></a></code></pre></div>
-<pre><code>## + 13/13 vertices, named, from e11d535:
+<pre><code>## + 13/13 vertices, named, from 63bf41c:
 ##  [1] Jim      Carole   Joe      Michelle Jen      Pete     Paul     Tim     
 ##  [9] Jess     Mark     Jill     Cam      Kate</code></pre>
 <p>Plot!</p>
