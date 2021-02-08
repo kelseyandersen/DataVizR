@@ -44,14 +44,19 @@ library(sf)
 library(ggthemes)
 ```
 
-## Workshop code and data
+### Workshop code and data for download
 
-\
+All workshop material is avaiable on this website (https://kelseyandersen.github.io/DataVizR/). If you would like to download the r code (organized so you can simply run the code on your computer) prior to the workshop, that code can be found here: https://github.com/kelseyandersen/DataVizCode. 
 
-### Workshop code and data can be downloaded here: 
+When you click on that link, you should be directed to this repository: 
 
- * The above file should be downloaded prior to the workshop
- * Once R and rStudio are installed, the R project in this folder should    be opened. All code should be avaiable to workshop participants for     use during the workshop. 
+![](image_files/codedownload.png)
+
+Simply click on the green "code" button in the top right corner of the page and select "download zip". Once you have downloaded the folder, there will be a file called "DataVizCode.Rproj". Click to open that file and you will open an RStudio window with code in the "files" tab that you can use to follow along during the workshop. 
+
+Alternatively, you can follow along by copying and pasting the information on the website during the presentations. 
+
+
 \
 \
 \
