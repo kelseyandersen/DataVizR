@@ -291,7 +291,7 @@ For this workshop, we will use [coffee leaf rust data from Ethiopia](https://osf
 
 ```{r load_workshop_data, echo=FALSE, warning=FALSE, message = FALSE}
 library("here")
-dt <- read_csv(here::here("data", "survey_clean.csv"))
+dt <- read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv") 
 head(dt)
 ```
 
