@@ -508,8 +508,9 @@ div.tocify {
 <div id="simple-networks" class="section level2">
 <h2>Simple Networks</h2>
 <p>First, let’s create a simple adjacency matrix with three rows and three columns:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mat1 &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>,<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">3</span>) <span class="co">### matrix function </span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">mat1</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mat1 &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>,<span class="dv">0</span>, <span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">               <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">3</span>) <span class="co">### matrix function </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">mat1</a></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    0    0    1
 ## [2,]    1    0    0
@@ -521,22 +522,40 @@ div.tocify {
 <p>Alternatively, create the same network by telling igraph what links you would like and how many nodes you would like to establish. We also want to tell igraph if our network is directed (with arrows) or undirected.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mat3 &lt;-<span class="st"> </span><span class="kw">graph</span>(<span class="dt">edges=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>, <span class="dv">3</span>,<span class="dv">2</span>, <span class="dv">2</span>,<span class="dv">1</span>), <span class="dt">n=</span><span class="dv">3</span>, <span class="dt">directed=</span>T ) <span class="co"># use graph function and list edges </span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="Networks_files/figure-html/unnamed-chunk-4-1.png" width="672" />   # Network Aestetics<br />
-Many parts of a network can be sized and colored to help communicate results more clearly.<br />
-Here, for example, we color the nodes and change the size and position of the labels using <em>vertex.color =</em> and <em>vertex.label.dist =</em></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="Networks_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="Networks_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
+</div>
+<div id="network-aesthetics" class="section level1">
+<h1>Network Aesthetics</h1>
+<p>Many parts of a network can be sized and colored to help communicate results more clearly.<br />
+Here, for example, we color the nodes and change the size and position of the labels using <em>vertex.color =</em> and <em>vertex.label.dist =</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot</span>(mat3, </a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">     <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">     <span class="dt">vertex.size =</span> <span class="dv">25</span>, </a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">     <span class="dt">vertex.label.cex =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="Networks_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <div id="labels" class="section level2">
 <h2>Labels</h2>
 <p>Here we use <em>vertex.label.cex</em> to make our labels slightly bigger, and we use <em>vertex.label.dist</em> to move the labels off the network. This can be useful, particularly when we have large networks.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(mat3, </a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">     <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, </a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">     <span class="dt">vertex.size =</span> <span class="dv">25</span>, </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">     <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">     <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>)</a></code></pre></div>
 <p><img src="Networks_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="curved-edges" class="section level2">
 <h2>Curved edges</h2>
 <p>Sometimes it is useful to curve edges of our network:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(mat3, <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">vertex.size =</span> <span class="dv">25</span>, <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(mat3, </a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">     <span class="dt">vertex.color =</span> <span class="st">&quot;purple&quot;</span>, </a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">     <span class="dt">vertex.size =</span> <span class="dv">25</span>, </a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">     <span class="dt">vertex.label.cex =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">     <span class="dt">vertex.label.dist =</span> <span class="fl">3.5</span>, </a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">     <span class="dt">edge.curved =</span> <span class="fl">.2</span>)</a></code></pre></div>
 <p><img src="Networks_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="colors" class="section level2">
@@ -584,12 +603,13 @@ Here, for example, we color the nodes and change the size and position of the la
  </p>
 <p>Here is an example of a simple node list, where all of the nodes are farmers and links are communication. We include attributes about the <em>node</em> like age, gender, and number of years farming.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">Nodelist &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">                    <span class="dt">Names =</span><span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Michelle&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Tim&quot;</span>, </a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">                <span class="dt">Names =</span><span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Michelle&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Tim&quot;</span>, </a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">                            <span class="st">&quot;Jess&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Jill&quot;</span>, <span class="st">&quot;Cam&quot;</span>, <span class="st">&quot;Kate&quot;</span>) ,</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">                    <span class="dt">YearsFarming =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="fl">6.5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">6</span>) , </a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">                    <span class="dt">Age =</span> <span class="kw">c</span>(<span class="dv">27</span>, <span class="dv">52</span>, <span class="dv">49</span>, <span class="dv">32</span>, <span class="dv">65</span>, <span class="dv">72</span>, <span class="dv">42</span>, <span class="dv">67</span>, <span class="dv">48</span>, <span class="dv">33</span>, <span class="dv">67</span>, <span class="dv">75</span>, <span class="dv">39</span>) , </a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">                    <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">Nodelist       </a></code></pre></div>
+<a class="sourceLine" id="cb12-4" data-line-number="4">                <span class="dt">YearsFarming =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="fl">6.5</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">6</span>) , </a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">                <span class="dt">Age =</span> <span class="kw">c</span>(<span class="dv">27</span>, <span class="dv">52</span>, <span class="dv">49</span>, <span class="dv">32</span>, <span class="dv">65</span>, <span class="dv">72</span>, <span class="dv">42</span>, <span class="dv">67</span>, <span class="dv">48</span>, <span class="dv">33</span>, <span class="dv">67</span>, <span class="dv">75</span>, <span class="dv">39</span>) , </a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">                <span class="dt">Gender =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>,</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">                           <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">Nodelist       </a></code></pre></div>
 <pre><code>##       Names YearsFarming Age Gender
 ## 1       Jim          8.5  27   Male
 ## 2    Carole          6.5  52 Female
@@ -607,10 +627,12 @@ Here, for example, we color the nodes and change the size and position of the la
 <p> </p>
 <p>Now we can create an edgelist data frame- Who shared information in the 2019 growing season? How frequently?</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">Edgelist &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">                  <span class="dt">From =</span> <span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jill&quot;</span>, <span class="st">&quot;Kate&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Jess&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Pete&quot;</span>),</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">                  <span class="dt">To =</span> <span class="kw">c</span>(<span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Cam&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Tim&quot;</span>),</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">                  <span class="dt">Times =</span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">)</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" data-line-number="2">                  <span class="dt">From =</span> <span class="kw">c</span>(<span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jill&quot;</span>, <span class="st">&quot;Kate&quot;</span>, <span class="st">&quot;Pete&quot;</span>, </a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                           <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Jess&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;Pete&quot;</span>),</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                  <span class="dt">To =</span> <span class="kw">c</span>(<span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Jen&quot;</span>, <span class="st">&quot;Pete&quot;</span>, <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Joe&quot;</span>, </a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                         <span class="st">&quot;Carole&quot;</span>, <span class="st">&quot;Paul&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Cam&quot;</span>, <span class="st">&quot;Mark&quot;</span>, <span class="st">&quot;Tim&quot;</span>),</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">                  <span class="dt">Times =</span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">)</a></code></pre></div>
 </div>
 </div>
 <div id="igraph-objects" class="section level1">
@@ -618,20 +640,20 @@ Here, for example, we color the nodes and change the size and position of the la
 <p>Let’s make our farmer communication network!</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">FarmNetwork &lt;-<span class="st"> </span><span class="kw">graph_from_data_frame</span>(<span class="dt">d =</span> Edgelist, <span class="dt">vertices =</span> Nodelist, <span class="dt">directed =</span> T)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">FarmNetwork</a></code></pre></div>
-<pre><code>## IGRAPH 63bf41c DN-- 13 11 -- 
+<pre><code>## IGRAPH f2061bc DN-- 13 11 -- 
 ## + attr: name (v/c), YearsFarming (v/n), Age (v/n), Gender (v/c), Times
 ## | (e/n)
-## + edges from 63bf41c (vertex names):
+## + edges from f2061bc (vertex names):
 ##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
 ##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
 ## [11] Pete-&gt;Tim</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">E</span>(FarmNetwork) <span class="co"># view edges</span></a></code></pre></div>
-<pre><code>## + 11/11 edges from 63bf41c (vertex names):
+<pre><code>## + 11/11 edges from f2061bc (vertex names):
 ##  [1] Jim -&gt;Carole Jim -&gt;Jen    Jim -&gt;Pete   Jill-&gt;Carole Kate-&gt;Joe   
 ##  [6] Pete-&gt;Carole Pete-&gt;Paul   Jess-&gt;Mark   Jim -&gt;Cam    Jim -&gt;Mark  
 ## [11] Pete-&gt;Tim</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">V</span>(FarmNetwork) <span class="co"># view nodes</span></a></code></pre></div>
-<pre><code>## + 13/13 vertices, named, from 63bf41c:
+<pre><code>## + 13/13 vertices, named, from f2061bc:
 ##  [1] Jim      Carole   Joe      Michelle Jen      Pete     Paul     Tim     
 ##  [9] Jess     Mark     Jill     Cam      Kate</code></pre>
 <p>Plot!</p>
@@ -675,22 +697,40 @@ Here, for example, we color the nodes and change the size and position of the la
 <div id="link-size" class="section level2">
 <h2>Link size</h2>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">E</span>(FarmNetwork)<span class="op">$</span>width &lt;-<span class="st"> </span><span class="kw">E</span>(FarmNetwork)<span class="op">$</span>Times<span class="op">/</span><span class="fl">1.5</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>, <span class="dt">layout =</span> Layout2)</a></code></pre></div>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">plot</span>(FarmNetwork, </a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">     <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, </a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">     <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, </a>
+<a class="sourceLine" id="cb29-5" data-line-number="5">     <span class="dt">edge.curved =</span> <span class="fl">.2</span>, </a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">     <span class="dt">layout =</span> Layout2)</a></code></pre></div>
 <p><img src="Networks_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 <div id="legends" class="section level2">
 <h2>Legends</h2>
 <p>Finally, let’s add a legend so we understand what our colors mean.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, <span class="dt">edge.curved =</span> <span class="fl">.2</span>, <span class="dt">layout =</span> Layout1)</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">legend</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">1.5</span>, <span class="dt">y=</span><span class="op">-</span><span class="fl">1.1</span>, <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>), <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">pt.bg=</span><span class="kw">c</span>(<span class="st">&quot;#4682B4&quot;</span>, <span class="st">&quot;#C83200&quot;</span>), <span class="dt">pt.cex=</span><span class="dv">2</span>, <span class="dt">cex=</span>.<span class="dv">8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">plot</span>(FarmNetwork, </a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">     <span class="dt">edge.arrow.size =</span> <span class="fl">.7</span>, </a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">     <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>, </a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">     <span class="dt">edge.curved =</span> <span class="fl">.2</span>, </a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">     <span class="dt">layout =</span> Layout1)</a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="kw">legend</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">1.5</span>, </a>
+<a class="sourceLine" id="cb30-7" data-line-number="7">       <span class="dt">y=</span><span class="op">-</span><span class="fl">1.1</span>, </a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">       <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>), </a>
+<a class="sourceLine" id="cb30-9" data-line-number="9">       <span class="dt">pch=</span><span class="dv">21</span>, </a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">       <span class="dt">pt.bg=</span><span class="kw">c</span>(<span class="st">&quot;#4682B4&quot;</span>, <span class="st">&quot;#C83200&quot;</span>),</a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">       <span class="dt">pt.cex=</span><span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb30-12" data-line-number="12">       <span class="dt">cex=</span>.<span class="dv">8</span>, </a>
+<a class="sourceLine" id="cb30-13" data-line-number="13">       <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, </a>
+<a class="sourceLine" id="cb30-14" data-line-number="14">       <span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="Networks_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 <div id="saving" class="section level2">
 <h2>Saving</h2>
 <p>We can save our networks in a similar was as our ggplots, using ggsave. The only change that we need to make is to “wrap” ggsave around our final network.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="kw">plot</span>(FarmNetwork, <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>),</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">       <span class="dt">filename =</span> <span class="st">&quot;graph/Network.tiff&quot;</span>, <span class="dt">width =</span><span class="dv">150</span>, <span class="dt">height =</span> <span class="dv">150</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>,</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">         <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">ggsave</span>(<span class="kw">plot</span>(FarmNetwork, </a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">            <span class="dt">edge.arrow.size =</span> <span class="fl">.5</span>, </a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">            <span class="dt">vertex.label.dist =</span> <span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">       <span class="dt">filename =</span> <span class="st">&quot;graph/Network.tiff&quot;</span>, <span class="dt">width =</span><span class="dv">150</span>, <span class="dt">height =</span> <span class="dv">150</span>, <span class="dt">units =</span> <span class="st">&quot;mm&quot;</span>,</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5">         <span class="dt">dpi =</span> <span class="dv">300</span>)</a></code></pre></div>
 </div>
 </div>
 
