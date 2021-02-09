@@ -26,6 +26,7 @@ addition(argument_one = x,
 
 addition(x, y)# Notice the difference?!
 
+
 all.equal(addition(x, y), x+y) #Same as above, but pre-made
 
 
@@ -79,7 +80,10 @@ list.files(getwd())
 here::here("data", "survey_clean.csv")
 
 ## --------------------------------------------------------------------------------------------
-dt <- read_csv(file = here::here("data", "survey_clean.csv"))
+dt <- 
+  survey_data <- 
+  read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv")
+  
 tibble::glimpse(dt, 70)
 
 

@@ -234,8 +234,7 @@ Tips for later:
 
 R basics: In R, we have...
 ====================================
-left: 35%
-class: small-code
+left: 35%class: small-code
 
 **Objects**, where the data is stored.  
 <br>
@@ -595,7 +594,7 @@ library("tidyverse")
 library("here")
 ```
 
-Rtudio projects
+RStudio projects
 ====================================
 right: 70%
 
@@ -610,7 +609,7 @@ To print path to your project folder
 getwd()
 ```
 
-Path to your our data
+Path to your our data when importing locally 
 
 ```r
 here::here("data", "survey_clean.csv")
@@ -625,7 +624,7 @@ For this workshop, we will use data on [coffee leaf rust from Ethiopia](https://
 
 
 ```r
-dt <- read_csv(file = here::here("data", "survey_clean.csv"))
+dt <- read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv")
 tibble::glimpse(dt, 70)
 ```
 
@@ -649,6 +648,7 @@ $ sev2            <dbl> 55.57986, 17.90349, 8.25120, 46.10154, 12...
 <div class="footer" style="font-size: .7em": "> 
 Del Ponte, E. M., & Belachew, K. (2020, June 14). Research Compendium: Altitude is the main driver of coffee leaf rust epidemic - a large-scale survey in Ethiopia. https://doi.org/10.17605/OSF.IO/XEJAZ
 </div>
+
 Data transformation
 ====================================
 left: 50%
@@ -696,6 +696,11 @@ dt %>%
 6 Mixture  Sidama  18.6
 ```
 
+Once again, your new best friends
+====================================
+autosize: small
+Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
+<center><img src="img/cheatsheet.PNG" width = 1200></center>
 
 
 More examples
