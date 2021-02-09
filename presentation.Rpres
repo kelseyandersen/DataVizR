@@ -1,0 +1,618 @@
+<style>
+.reveal h1, .reveal h2, .reveal h3 {
+  word-wrap: normal;
+  -moz-hyphens: none;
+}
+
+/* code */
+.small-code pre code {
+  font-size: 1.4em;
+}
+.font50 {
+  font-size: 50%;
+}
+/* footer */
+.footer {
+    font-size: 0.3em;
+    color: black; 
+    background: #E8E8E8;
+    position: fixed; 
+    top: 100%;
+    text-align:center; 
+    width:100%;
+}
+.midcenter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+/* first slide titles */
+.title {
+  font-size: 0.3em;
+  font-style: italic;
+  color: white;
+  text-align: center;
+}
+.section .reveal h1, h2{
+    color: black;
+    font-weight: bold;
+  }
+
+/* first slide titles */
+.centeremp {
+  font-size: 0.3em;
+  font-style: italic;
+  color: red;
+  text-align: center;
+}
+
+/* slide titles */
+.reveal h3 { 
+  font-size: 160%;
+  color: gray;
+  top: 150%;
+  font-family: 'Montserrat';
+  line-height: 105%;
+}
+/* body text, ordered and unordered list styles */
+.reveal ul, 
+.reveal ol, 
+.reveal p{
+    font-size: 120%;
+    line-height: 105%;
+    list-style-type: disc;
+}
+/* first slide titles */
+.empred {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+  font-size: 0.3em;
+  font-style: bold;
+  color: red;
+  text-align: center;
+}
+</style>
+
+========================================================
+author: 
+class: title-slide
+font-family: 'Helvetica'
+css: custom.css
+width: 1540
+height: 900
+
+<br><br><br><br>
+<div class="title" style="font-size: .8em;">A very brief..</div>
+
+<div class="title" style="font-size: 2.5em": ">Intro to R</div>
+
+<br><br><br><br><br>
+<hr />
+<p style="text-align: center;"><a href="https://github.com/mladencucak/">Mladen Čučak</a></p>
+<p style="text-align: center;"><span style="color: #808080;"><em>mladencucak@gmail.com</em></span></p>
+
+
+
+Topics
+========================================================
+- About R/RStudio
+- Basics of programming with R
+- Data analysis with `tidyverse`
+ 
+
+
+Why R 
+========================================================
+  <br>
+-   **Performance**: stable, light and fast-parallelisation 
+
+-   **Support network**: documentation, community, developers
+
+-   **Reproducibility**: anyone anywhere can reproduce results
+
+-   **Versatility**: solutions for *almost* any numerical problem and extensive graphical capabilities 
+
+-   **Accessibility**: free and open source
+
+
+Be strong! 
+====================================
+  Transition from "point and click" is tough but rewarding
+
+<div align="center">
+  <img src="img/progres_curves.png" width=1450 height=750>
+  </div>
+  
+  Baby steps
+====================================
+<!-- I am decent programmer now. I know what to type in search box! -->
+Help:
+* **Google**: just add "with R" at the end of any search
+* **Stack Overflow**: programming questions
+* **Cross Validated**: scientific questions  
+
+Learning:
+  * "R for Data Science" → <https://r4ds.had.co.nz>
+  * R4DS Learning Community → <https://rfordatasci.com>  
+<br><br>
+
+These materials are based on the APSs ["R for Plant Pathologists"](https://everhartlab.github.io/APS_IntroR_2020/index.html)    
+Some inspiration from [J. Bryan's Stat545](https://stat545.com/) and  [B. Bohemke's Intro to R](https://github.com/uc-r)  
+<u>*All highly recommended*</u>
+
+  
+  Baby steps
+====================================
+<!-- I am decent programmer now. I know what to type in search box! -->
+Help:
+* **Google**: just add "with R" at the end of any search
+* **Stack Overflow**: programming questions
+* **Cross Validated**: scientific questions  
+
+Learning:
+  * "R for Data Science" → <https://r4ds.had.co.nz>
+  * R4DS Learning Community → <https://rfordatasci.com>
+  <br><br>
+  <div class="centeremp" style="font-size: 1.1em;">
+  There are (too) many resources! So...
+<br><br>Stay focused! <br><br>
+  Don't get overwhelmed!
+</div>
+
+
+Your new best friends
+====================================
+autosize: small
+Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
+<center><img src="img/cheatsheet.PNG" width = 1200></center>
+
+
+====================================
+transition: linear
+left: 50%
+<center>
+<br><br>
+**R** – Statistical programming language  
+<br><br>
+
+![alt text](img/Rlogo.png)  
+<br>
+</http://www.r-project.org/>
+<center>
+***
+<br><br>
+<center>
+**RStudio** – Integrated Development Environment (IDE) makes our life much easier
+   
+![alt text](img/Rstudio_logo.png)
+<https://rstudio.com/>
+<center>
+
+It may be described as...
+====================================
+left: 45%
+<br>
+<center>
+**R** – Engine  
+<br>
+<center>
+ ![](https://media.giphy.com/media/lrDKaXdgYqwKwArGUA/giphy.gif)
+<center>
+
+***
+<br>
+<center>
+
+**RStudio** – Dashboard 
+<br><br><br><br>
+ ![](https://media.giphy.com/media/MCcKeI1d0NE7wQdUt3/giphy.gif)
+<center>
+
+R interface 
+====================================
+<center>
+...*is not the friendliest one*...
+<center>
+<img src="img/R.png" width=1000 height=800>
+</center>
+
+RStudio (IDE) and some coding
+====================================
+<br><br>
+Move the cursor onto a line with R code and press:
+- (Win)*Ctrl* + *Enter* or 
+- (MAC)*Cmd* + *Return*.  
+<br>
+<div align="justify">
+*Challenge: Do it with one hand you are not using to hold the mouse!*
+<div>
+<br><br>
+Tips for later:
+- Many other keyboard shortcuts in RStudio (Win)*Alt*+*Shift*+*K* or (MAC)*Option*+*Shift*+*K*
+- For example, to run an entire script (Win)*Ctrl* + *Shift* + *Enter* or (MAC)*Cmd* + *Shift* +
+*Return*
+
+R basics: In R, we have...
+====================================
+left: 35%class: small-code
+
+**Objects**, where the data is stored.  
+<br>
+Assign with `<-`
+```{r }
+x <- 1
+y <- 2
+x + y
+```
+the same result if: 
+```{r}
+# I am a comment!!! 
+# Just here to help jog the memory later on...
+1+3
+```
+***
+
+R basics: In R, we have...
+====================================
+left: 35%
+class: small-code
+
+**Objects**, where the data is stored.  
+<br>
+Assign with `<-`
+```{r }
+x <- 1
+y <- 2
+x + y
+```
+the same result if: 
+```{r}
+# I am a comment!!! 
+# Just here to help jog the memory later on...
+1+3
+```
+
+
+***
+**Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
+```{r custom_functions}
+addition <- function(argument_one,
+                     argument_two){ 
+  argument_one + argument_two # operations
+} # define function within curly brackets
+
+ls() # check content of the environment
+addition(argument_one = x,
+         argument_two = y)
+```
+
+R basics: In R, we have...
+====================================
+left: 35%
+class: small-code
+
+**Objects**, where the data is stored.  
+<br>
+Assign with `<-`
+```{r }
+x <- 1
+y <- 2
+x + y
+```
+the same result if: 
+```{r}
+# I am a comment!!! 
+# Just here to help jog the memory later on...
+1+3
+```
+
+***
+**Functions** which are applied on objects or another functions (i.e. to analyze the data): <u>round brackets</u>!
+```{r }
+addition <- function(argument_one,
+                     argument_two){ 
+  argument_one + argument_two # operations
+} # define function within curly brackets
+
+addition(argument_one = x,
+         argument_two = y)
+addition(x, y)# Notice the difference?!
+all.equal(addition(x, y), x+y) #Same as above, but pre-made
+```
+
+
+Objects: Vectors
+====================================
+left: 47%
+class: small-code
+
+*Vectors* store data of the same type  
+(a column of an excel table)
+<center>
+<img src="img/vector.png" width=90 height=60>
+</center>
+Types of data:
+```{r}
+num <- c(50, 60, 65) 
+
+char <- c("mouse", "rat", "dog") 
+
+fct <- factor("low", "med", "high")
+
+dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
+
+logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
+```
+
+***
+
+
+Objects: Vectors
+====================================
+left: 47%
+class: small-code
+
+*Vectors* store data of the same type  
+(a column of an excel table)
+<center>
+<img src="img/vector.png" width=90 height=60>
+</center>
+Types of data:
+```{r}
+num <- c(50, 60, 65) 
+
+char <- c("mouse", "rat", "dog") 
+
+fct <- factor("low", "med", "high")
+
+dates <- as.Date(c("02/27/92", "02/27/92", "01/14/92"), "%m/%d/%y")
+
+logical <-  c(FALSE, FALSE, TRUE) # only TRUE or FALSE
+```
+
+***
+Subsetting - <u>square brackets</u>
+```{r}
+num[1] # 1st element
+num[num >= 60] # More than or equal
+char == "dog" # see logical on the left
+char[logical]
+char[char == "dog"]
+```
+
+
+
+
+
+Objects: Dataframes
+====================================
+left: 44%
+class: small-code
+
+*Dataframe* is a set of vectors of same length(an entire excel table) 
+<center>
+<img src="img/dataframes.png" width=210 height=110>
+</center>
+Creating and viewing data frames
+```{r}
+df <- data.frame(col_one = num,
+                 col_two = char)
+print(df)
+head(df,1)
+```
+
+***
+Same logic for subsetting, just in 2 dimensions
+```{r}
+df[1, 1] # [rows, columns]
+df[, 1] # 1st column in the data frame
+df[, -2] # Exclude 2nd column
+df[2:3, "col_two"] 
+df$col_two
+```
+
+
+
+R packages 
+====================================
+Pre-made set of functions for common (and not so common) tasks
+<center>
+<img src="img/Rand_apps.png"></img>
+</center>
+
+A package of R packages: tidyverse
+====================================
+Think of something like Microsoft Office suite
+<center>
+<img src="img/tidyverse.png"></img>
+</center>
+
+
+====================================
+`tidyverse` and data analysis cycle
+<center>
+<img src="img/tidyverse-process.png"></img>
+</center>
+All this could easily produce a loooot of files...
+
+Packages
+====================================
+To install
+```{r eval = FALSE}
+install.packages("tidyverse")
+```
+To load
+```{r libs }
+library("tidyverse")
+library("here")
+```
+
+RStudio projects
+====================================
+right: 70%
+
+Simple project: 
+<center>
+<img src="img/proj_folder.PNG" width = 450 height = 300></img>
+</center>
+***
+To print path to your project folder
+```{r eval = FALSE}
+getwd()
+```
+
+Path to your our data when importing locally 
+```{r eval = FALSE}
+here::here("data", "survey_clean.csv")
+
+ 
+```
+
+
+
+Data import
+====================================
+Several functions within `readr` and `readxl` for different types of files.  
+For this workshop, we will use data on [coffee leaf rust from Ethiopia](https://osf.io/xejaz/)  
+
+```{r}
+dt <- read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv")
+tibble::glimpse(dt, 70)
+```
+<div class="footer" style="font-size: .7em": "> 
+Del Ponte, E. M., & Belachew, K. (2020, June 14). Research Compendium: Altitude is the main driver of coffee leaf rust epidemic - a large-scale survey in Ethiopia. https://doi.org/10.17605/OSF.IO/XEJAZ
+</div>
+
+Data transformation
+====================================
+left: 50%
+`dplyr` **Functions**  allow you to solve most of your data transformation challenges:
+- create and remove new variables
+- do operations on groups 
+- compute summaries
+
+**Piping**  
+<br>
+Traditional approach:  
+```{r eval = FALSE}
+function(argument_one, argument_two,...)  
+```
+pipe `%>%` approach:  
+```{r eval = FALSE}
+argument_one %>% 
+  function(., argument_two,...)  
+```
+***
+Make small subset of our data 
+```{r }
+(dt_small <- 
+dt %>%
+  select(cultivar, zone, inc) %>% 
+  group_by(cultivar, zone) %>%
+  slice(head(row_number(), 1)) %>% 
+  filter(
+    zone =="Sheka" |zone ==  "Sidama") %>% 
+  ungroup())
+```
+
+Once again, your new best friends
+====================================
+autosize: small
+Cheatsheets → <https://rstudio.com/resources/cheatsheets/>
+<center><img src="img/cheatsheet.PNG" width = 1200></center>
+
+
+More examples
+====================================
+left: 50%
+
+```{r smalldata}
+dt_small 
+
+```
+
+***
+```{r select}
+dt_small %>% 
+  select(cultivar, inc) %>% 
+  filter(inc <= 17)
+```
+
+```{r}
+dt_small %>%
+  group_by(cultivar) %>%
+  summarize(mean_inc = mean(inc),
+            min_weight = min(inc)) %>%
+    arrange(desc(mean_inc))
+```
+
+Reshaping data: wide
+====================================
+left:45%
+
+__Important__ for data visualization  
+<br>
+Our data subset is in __long format__
+<br>
+```{r}
+dt_small
+```
+
+***
+
+
+Reshaping data: wide
+====================================
+left:45%
+
+__Important__ for data visualization  
+<br>
+Our data subset is in __long format__
+<br>
+```{r}
+dt_small
+```
+
+***
+Change it to **wide** format with `tidyr`   
+- `names_from`: column to columnS
+- `values_from`: column to values
+```{r}
+(dt_small_wide <- 
+dt_small %>%
+  pivot_wider(names_from = "zone", 
+              values_from = "inc"))
+```
+
+Reshaping data: long
+====================================
+left:40%
+<br><br><br>
+Can we do it the other way around? 
+```{r}
+dt_small_wide 
+```
+
+***
+Change it to **long** format with `pivot_longer()`   
+- `cols`: columns to column 
+- `values_from`: values to columns
+```{r}
+dt_small_wide %>% 
+  pivot_longer(cols = 
+                 c("Sheka", "Sidama"), 
+               names_to = "zone",
+               values_to = "inc")
+
+```
+
+====================================
+<br><br><br><br>
+<div class="empred" style="font-size: 2em": ">Congratulations!! </div>
+
+<center>
+ ![](https://media.giphy.com/media/YbXtbKoi2ZUOc/giphy.gif)
+
+So, the painful part is done, enjoy the rest! 
+<center>
+

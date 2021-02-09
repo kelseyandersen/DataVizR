@@ -10,7 +10,7 @@ navbar:
   - text: Intro to R
     menu: 
      - text: Slides
-       href: intro/presentation.html
+       href: presentation.html
      - text: Code
        href: r_intro.html
   - text: ggplot2
