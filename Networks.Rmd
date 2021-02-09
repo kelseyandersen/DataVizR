@@ -132,12 +132,13 @@ In a node file, the first two columns are all of your from:to links. Column 1 is
 Here is an example of a simple node list, where all of the nodes are farmers and links are communication. We include attributes about the *node* like age, gender, and number of years farming.  
 ```{r}
 Nodelist <- data.frame(
-                Names =c("Jim", "Carole", "Joe", "Michelle", "Jen", "Pete", "Paul", "Tim", 
-                            "Jess", "Mark", "Jill", "Cam", "Kate") ,
+                Names =c("Jim", "Carole", "Joe", "Michelle", "Jen", "Pete", "Paul", 
+                         "Tim", "Jess", "Mark", "Jill", "Cam", "Kate") ,
                 YearsFarming = c(8.5, 6.5, 4, 1, 3, 10, 5, 5, 5, 1, 1, 6, 6) , 
                 Age = c(27, 52, 49, 32, 65, 72, 42, 67, 48, 33, 67, 75, 39) , 
-                Gender = c("Male", "Female", "Male", "Female", "Female", "Male","Male","Male", "Female",
-                           "Male", "Female", "Male", "Female"))
+                Gender = c("Male", "Female", "Male", "Female", "Female", "Male",
+                           "Male","Male", "Female", "Male", "Female", "Male", 
+                           "Female"))
 Nodelist       
 ```
 \  
