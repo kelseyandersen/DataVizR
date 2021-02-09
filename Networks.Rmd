@@ -106,6 +106,41 @@ plot(mat3,
      edge.color="purple")
 ```
 
+## Shapes
+
+You can change the shape of your nodes, which can be useful if you are going to shape nodes based on a categorical variable. 
+```{r}
+plot(mat3, 
+     edge.arrow.size = 1, 
+     vertex.color = "purple", 
+     vertex.frame.color="purple",
+     vertex.size = 25, 
+     vertex.label.cex = 2, 
+     vertex.label.dist = 3.5, 
+     edge.curved = .2,
+     vertex.shape = "square", 
+     edge.color="purple")
+
+# shape options are circle, square, 
+# csquare, rectangle, crectangle, none
+```
+
+You can also change the type of line that is used: 
+```{r}
+plot(mat3, 
+     edge.arrow.size = 1, 
+     vertex.color = "purple", 
+     vertex.frame.color="purple",
+     vertex.size = 25, 
+     vertex.label.cex = 2, 
+     vertex.label.dist = 3.5, 
+     edge.curved = .2,
+     vertex.shape = "square",
+     edge.lty = 2, 
+     edge.color="purple")
+```
+
+
 ## Other ways to change aesthetics
 
 We can also adjust plot aesthetics by applying changes directly to the verticies *V()* or edges *E()* of our plots. 
@@ -183,6 +218,7 @@ Let's color our nodes based on gender
 ```{r}
 V(FarmNetwork)$color <- ifelse(V(FarmNetwork)$Gender == "Male", "#4682B4", "#C83200")
 V(FarmNetwork)$frame.color <- ifelse(V(FarmNetwork)$Gender == "Male", "#4682B4", "#C83200")
+
 plot(FarmNetwork, 
      edge.arrow.size = .5, 
      vertex.label.dist = 2.5, 
@@ -195,6 +231,7 @@ plot(FarmNetwork,
 You will notice that evertime that you run the above code, the layout changes. Here we will show you layout options, and how to "fix" a layout once you have chosen one that you like. 
 ```{r}
 Layout1 <- layout_in_circle(FarmNetwork)
+
 plot(FarmNetwork, 
      edge.arrow.size = .5, 
      vertex.label.dist = 2.5, 
@@ -203,6 +240,7 @@ plot(FarmNetwork,
 
 ```{r}
 Layout2 <- layout_as_star(FarmNetwork)
+
 plot(FarmNetwork, 
      edge.arrow.size = .5, 
      vertex.label.dist = 2.5, 
@@ -213,6 +251,7 @@ plot(FarmNetwork,
 Layout based on the Kamada-Kawai layout algorithm which places the nodes on a plan based on a physical model of springs. 
 ```{r}
 Layout3 <- layout_with_kk(FarmNetwork)
+
 plot(FarmNetwork, 
      edge.arrow.size = .5, 
      vertex.label.dist = 2.5, 
@@ -222,6 +261,7 @@ plot(FarmNetwork,
 
 ```{r}
 Layout4<- layout_with_fr(FarmNetwork)
+
 plot(FarmNetwork, edge.arrow.size = .5, vertex.label.dist = 2.5, layout = Layout4)
 ```
 
@@ -231,10 +271,10 @@ You can also size your nodes based on attributes:
 
 V(FarmNetwork)$size <- V(FarmNetwork)$YearsFarming 
                 # size the nodes by number of years farming
+
 plot(FarmNetwork, 
      edge.arrow.size = .5, 
      vertex.label.dist = 2.5)
-
 ```
 
 ## Node size
@@ -243,8 +283,8 @@ Scale the node size up a bit..
 
 V(FarmNetwork)$size <- V(FarmNetwork)$YearsFarming *2 
       ## scale by multiplying by 2
-plot(FarmNetwork, edge.arrow.size = .5, vertex.label.dist = 2.5)
 
+plot(FarmNetwork, edge.arrow.size = .5, vertex.label.dist = 2.5)
 ```
 
 We can also adjust the size of the links. Here we will size them based on the number of times any two farmers communicated. 
@@ -253,6 +293,7 @@ We can also adjust the size of the links. Here we will size them based on the nu
 
 ```{r}
 E(FarmNetwork)$width <- E(FarmNetwork)$Times/1.5
+
 plot(FarmNetwork, 
      edge.arrow.size = .7, 
      vertex.label.dist = 2.5, 
@@ -279,7 +320,6 @@ legend(x=-1.5,
        cex=.8, 
        bty="n", 
        ncol=1)
-
 ```
 
 ## Saving 
