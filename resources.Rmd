@@ -25,5 +25,6 @@ Here we provide additional resources for learning in R. There are many online re
  * **Network visualization in R** https://kateto.net/sunbelt2019
  * **igraph documentation**: https://igraph.org/python/doc/tutorial/tutorial.html
  * **Network workshop offered at ICPP**: https://kelseyandersen.github.io/NetworksPlantPathology/
+ * Network Visualization Cookbook: https://bit.ly/3aK1DfH 
 
 

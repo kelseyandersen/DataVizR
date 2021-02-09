@@ -34,7 +34,6 @@ High quality visualizations, such as graphs and maps, are critical for effective
 
 This workshop was designed to be part of the 2020 Plant Health annual meeting and has been adapted to an online format due to COVID19. 
 
-### Learning outcomes
 
 
 *** 
