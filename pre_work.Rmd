@@ -11,7 +11,7 @@ To ensure that you can fully participate during the workshop, please make sure y
 2. Click "Download R for Mac/Windows"  
 3. Download the appropriate file:  
    - Windows users click Base, and download the installer for the latest R version  
-   - Mac users select the file R-3.X.X that aligns with your OS version  
+   - Mac users select the file R-4.0.3 that aligns with your OS version  
 4. Follow the instructions of the installer   
 
 #### To download RStudio:  
