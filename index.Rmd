@@ -58,4 +58,24 @@ This workshop was designed to be part of the 2020 Plant Health annual meeting an
 <img src="image_files/UFPLANTPATH.png"alt="drawing"/>
 </center>
 
+<br>
+<br>
+<br>
+
+
+
+<center>
+<img src="image_files/OSU.png"alt="drawing" width="800" height="150"/>
+</center>
+
+<br>
+<br>
+<br>
+
+<center>
+<img src="image_files/PSU.jpg"alt="drawing" width="500" height="150"/>
+</center>
+
+
+
 ***
